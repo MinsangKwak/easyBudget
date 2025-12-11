@@ -1,0 +1,37 @@
+// components/Screen/ScreenCertSelect/ScreenCertSelect.jsx
+
+import Screen from "../../../Layout/Screen";
+import Title from "../../../Content/Title";
+import Inner from "../../../Content/Inner";
+import BaseList from "../../../Content/List";
+import BaseButton from "../../../Form/BaseButton";
+
+// bankList: { woori: {name, bankType}, kb: {...}, ... }
+// onSelectBank: (key) => void
+const ScreenCertSelect = ({ bankList, onSelectBank }) => {
+  return (
+    <Screen className="screen_cert">
+      <Title>
+        회원가입에 사용할 <br />
+        인증서를 선택해주세요
+      </Title>
+
+      <Inner>
+        <BaseList
+          className="list_cert"
+          items={Object.entries(bankList)} // [["woori", {}], ["kb", {}], ...]
+          renderItem={([key, item]) => (
+            <BaseButton
+              className={`btn_bank btn_bank__${item.bankType}`}
+              onClick={() => onSelectBank(key)}
+            >
+              {item.name}인증서
+            </BaseButton>
+          )}
+        />
+      </Inner>
+    </Screen>
+  );
+};
+
+export default ScreenCertSelect;
