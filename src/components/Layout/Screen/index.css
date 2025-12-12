@@ -1,12 +1,12 @@
 .screen {
   width: min(720px, 100%);
   margin: 0 auto;
-  padding: 2.75rem 1.75rem;
+  padding: 2rem 1.6rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
-  border-radius: 26px;
+  border-radius: 10px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 0.12) inset;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(14px);
 }
 

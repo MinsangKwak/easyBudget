@@ -6,11 +6,11 @@
   width: 100%;
   min-height: 48px;
   padding: 0.85rem 1rem;
-  border-radius: 16px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.1);
   color: #f8fafc;
-  font-size: 1rem;
+  font-size: 1.6rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease,
@@ -41,7 +41,7 @@
 
 .btn_solid__primary {
   background: linear-gradient(135deg, #38bdf8, #6366f1);
-  color: #0f172a;
+  color: #FFFFFF;
   border-color: rgba(255, 255, 255, 0.4);
 }
 

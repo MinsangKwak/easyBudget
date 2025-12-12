@@ -34,7 +34,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail, onClickGoogle }) => {
           <li>
             <Button
               type="button"
-              variant="line__primary"
+              variant="line__black"
               onClick={onClickCert}
             >
               금융인증서로 가입하기
