@@ -26,6 +26,40 @@ npm run dev   # 개발 서버 실행 (기본: http://localhost:5173)
 npm run build # 프로덕션 번들 빌드
 ```
 
+## GitHub Pages 배포 가이드
+
+현재 환경에서는 GitHub 계정/토큰에 접근할 수 없어 직접 배포 URL을 제공해 드리기 어렵습니다. 아래 단계를 통해 저장소에서 바로 GitHub Pages로 배포할 수 있습니다.
+
+1. `vite.config.js`에 저장소 이름을 기준으로 베이스 경로를 설정합니다. 예를 들어 저장소 이름이 `auth-demo`라면 다음과 같이 수정합니다.
+
+   ```js
+   // vite.config.js
+   export default defineConfig({
+     base: "/auth-demo/",
+     plugins: [react()],
+   });
+   ```
+
+2. 빌드 아티팩트 생성:
+
+   ```bash
+   npm run build
+   ```
+
+3. GitHub Pages용 브랜치에 `dist/`를 배포합니다.
+
+   - 첫 배포 예시:
+
+     ```bash
+     git add dist
+     git commit -m "chore: deploy to gh-pages"
+     git subtree push --prefix dist origin gh-pages
+     ```
+
+   - 이후 업데이트 시에는 최신 `main` 브랜치에서 위 명령을 반복하면 됩니다.
+
+4. GitHub 저장소 → **Settings** → **Pages**에서 배포 브랜치로 `gh-pages`/`(root)`를 선택하면, 잠시 후 `https://<GitHubID>.github.io/<repo>/` 주소로 접속할 수 있습니다.
+
 ## 금융인증서 플로우 동작 요약
 
 1. **은행 선택**: `bankList`의 은행 중 하나를 선택하면 다음 단계로 이동하며 입력값과 캡차가 초기화됩니다.
