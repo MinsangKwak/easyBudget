@@ -51,6 +51,7 @@ const ScreenJoinGoogle = ({ onSignUpComplete }) => {
     window.google.accounts.id.prompt();
   };
 
+
   return (
     <Screen className="screen_google_join">
       <div className="screen_visual">
