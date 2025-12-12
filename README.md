@@ -28,37 +28,17 @@ npm run build # 프로덕션 번들 빌드
 
 ## GitHub Pages 배포 가이드
 
-현재 환경에서는 GitHub 계정/토큰에 접근할 수 없어 직접 배포 URL을 제공해 드리기 어렵습니다. 아래 단계를 통해 저장소에서 바로 GitHub Pages로 배포할 수 있습니다.
+GitHub Actions 워크플로를 추가해 `main` 브랜치 푸시 시 자동으로 GitHub Pages에 배포하도록 설정했습니다. Pages 빌드 환경의 `GITHUB_REPOSITORY` 값을 이용해 Vite `base` 경로가 자동으로 `/저장소명/`으로 맞춰집니다.
 
-1. `vite.config.js`에 저장소 이름을 기준으로 베이스 경로를 설정합니다. 예를 들어 저장소 이름이 `auth-demo`라면 다음과 같이 수정합니다.
-
-   ```js
-   // vite.config.js
-   export default defineConfig({
-     base: "/auth-demo/",
-     plugins: [react()],
-   });
-   ```
-
-2. 빌드 아티팩트 생성:
+1. GitHub 저장소에서 **Settings → Pages**로 이동해 **Source**를 “GitHub Actions”로 설정합니다.
+2. `main` 브랜치로 코드를 푸시하면 자동으로 빌드 및 배포가 진행됩니다. 수동으로 실행하려면 Actions 탭에서 “Deploy to GitHub Pages” 워크플로를 선택해 **Run workflow**를 눌러 실행할 수 있습니다.
+3. 배포가 완료되면 워크플로 출력의 `page_url` 또는 `https://<GitHubID>.github.io/<repo>/` 주소로 접속합니다.
+4. 로컬에서 배포 결과를 확인하려면 아래 명령으로 프로덕션 번들을 생성한 뒤 `dist/`를 `npm run preview`로 확인할 수 있습니다.
 
    ```bash
    npm run build
+   npm run preview
    ```
-
-3. GitHub Pages용 브랜치에 `dist/`를 배포합니다.
-
-   - 첫 배포 예시:
-
-     ```bash
-     git add dist
-     git commit -m "chore: deploy to gh-pages"
-     git subtree push --prefix dist origin gh-pages
-     ```
-
-   - 이후 업데이트 시에는 최신 `main` 브랜치에서 위 명령을 반복하면 됩니다.
-
-4. GitHub 저장소 → **Settings** → **Pages**에서 배포 브랜치로 `gh-pages`/`(root)`를 선택하면, 잠시 후 `https://<GitHubID>.github.io/<repo>/` 주소로 접속할 수 있습니다.
 
 ## 금융인증서 플로우 동작 요약
 
