@@ -1,35 +1,49 @@
 import { useEffect } from "react";
 
 const ScreenJoinGoogle = ({ onSignUpComplete }) => {
+  // ✅ Vercel API 베이스 (예: https://auth-xxxx.vercel.app)
+  const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  console.log("GOOGLE_CLIENT_ID:", GOOGLE_CLIENT_ID);
+
   useEffect(() => {
     if (!window.google) return;
 
     window.google.accounts.id.initialize({
-      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      client_id: GOOGLE_CLIENT_ID,
       callback: async ({ credential }) => {
-        // 1) 구글 id_token(credential) -> 백엔드로 전달
-        const res = await fetch("/api/auth/google", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ idToken: credential }),
-        });
+        try {
+          const url = API_BASE
+            ? `${API_BASE}/api/auth/google`
+            : "/api/auth/google";
 
-        if (!res.ok) {
-          alert("구글 로그인 실패");
-          return;
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken: credential }),
+          });
+
+          if (!res.ok) {
+            const errText = await res.text().catch(() => "");
+            console.error("Google auth failed:", res.status, errText);
+            alert("구글 로그인 실패");
+            return;
+          }
+
+          const data = await res.json(); // { accessToken, user }
+          localStorage.setItem("accessToken", data.accessToken);
+
+          onSignUpComplete?.();
+        } catch (e) {
+          console.error(e);
+          alert("네트워크 오류");
         }
-
-        const data = await res.json(); // { accessToken, user }
-        // 2) 우리 서비스 토큰 저장(예: localStorage) — 또는 httpOnly 쿠키 권장
-        localStorage.setItem("accessToken", data.accessToken);
-
-        onSignUpComplete?.();
       },
     });
-  }, []);
+  }, [API_BASE, GOOGLE_CLIENT_ID, onSignUpComplete]);
 
   const handleClickGoogle = () => {
-    window.google.accounts.id.prompt(); // 팝업
+    window.google.accounts.id.prompt();
   };
 
   return (
