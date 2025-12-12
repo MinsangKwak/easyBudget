@@ -1,0 +1,17 @@
+.content_title {
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.4;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.title_inner {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.text_primary {
+  color: #2563eb;
+}
