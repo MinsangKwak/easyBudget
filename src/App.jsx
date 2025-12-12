@@ -19,8 +19,8 @@ const App = () => {
 
   // JOIN → 각 플로우
   const handleGoCertFlow = () => setScreen(SCREEN_NAMES.CERT_FLOW);
-  const handleGoEmailFlow = () => setScreen(SCREEN_NAMES.EMAIL_JOIN);
-  const handleGoGoogleFlow = () => setScreen(SCREEN_NAMES.GOOGLE_JOIN);
+  const handleGoEmailFlow = () => setScreen(SCREEN_NAMES.EMAIL_FLOW);
+  const handleGoGoogleFlow = () => setScreen(SCREEN_NAMES.GOOGLE_FLOW);
 
   // 플로우 종료 → WELCOME
   const handleFlowComplete = () => setScreen(SCREEN_NAMES.WELCOME);
@@ -31,15 +31,15 @@ const App = () => {
   // 상단 뒤로가기: INTRO/JOIN 수준만 관리
   const showBackButton =
     screen === SCREEN_NAMES.JOIN ||
-    screen === SCREEN_NAMES.EMAIL_JOIN ||
-    screen === SCREEN_NAMES.GOOGLE_JOIN;
+    screen === SCREEN_NAMES.EMAIL_FLOW ||
+    screen === SCREEN_NAMES.GOOGLE_FLOW;
 
   const handlePrev = () => {
     if (screen === SCREEN_NAMES.JOIN) {
       setScreen(SCREEN_NAMES.INTRO);
     } else if (
-      screen === SCREEN_NAMES.EMAIL_JOIN ||
-      screen === SCREEN_NAMES.GOOGLE_JOIN
+      screen === SCREEN_NAMES.EMAIL_FLOW ||
+      screen === SCREEN_NAMES.GOOGLE_FLOW
     ) {
       setScreen(SCREEN_NAMES.JOIN);
     }
@@ -72,11 +72,11 @@ const App = () => {
         />
       )}
 
-      {screen === SCREEN_NAMES.EMAIL_JOIN && (
+      {screen === SCREEN_NAMES.EMAIL_FLOW && (
         <ScreenJoinEmail onSignUpComplete={handleFlowComplete} />
       )}
 
-      {screen === SCREEN_NAMES.GOOGLE_JOIN && (
+      {screen === SCREEN_NAMES.GOOGLE_FLOW && (
         <ScreenJoinGoogle onSignUpComplete={handleFlowComplete} />
       )}
 
