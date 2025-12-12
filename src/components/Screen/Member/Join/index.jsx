@@ -3,10 +3,18 @@ import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
 import Inner from "../../../Content/Inner";
 import Button from "../../../Form/Button";
+import LottieIcon from "../../../Common/LottieIcon";
+import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
 
 const ScreenJoin = ({ onClickCert, onClickEmail, onClickGoogle }) => {
   return (
     <Screen className="screen_join">
+      <div className="screen_visual">
+        <LottieIcon
+          src={LOTTIE_SOURCES.joinGlow}
+          ariaLabel="가입 방식 선택 애니메이션"
+        />
+      </div>
       <Title>어떤 방식으로 진행할까요?</Title>
 
       <Inner>

@@ -3,6 +3,9 @@ import { useEffect } from "react";
 import Screen from "../../../Layout/Screen";
 import Inner from "../../../Content/Inner";
 import Button from "../../../Form/Button";
+import Title from "../../../Content/Title";
+import LottieIcon from "../../../Common/LottieIcon";
+import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
 
 const ScreenJoinGoogle = ({ onSignUpComplete }) => {
   const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -50,6 +53,14 @@ const ScreenJoinGoogle = ({ onSignUpComplete }) => {
 
   return (
     <Screen className="screen_google_join">
+      <div className="screen_visual">
+        <LottieIcon
+          src={LOTTIE_SOURCES.socialOrbit}
+          ariaLabel="소셜 로그인 애니메이션"
+          size={150}
+        />
+      </div>
+      <Title>Google 계정으로 가입</Title>
       <Inner>
         <div className="btn_container">
           <Button
