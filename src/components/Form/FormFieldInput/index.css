@@ -1,0 +1,47 @@
+.form_field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input_container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form_label {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.form_field__input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  font-size: 1rem;
+  color: #111827;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form_field__input:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form_field__clear {
+  align-self: flex-end;
+  color: #6b7280;
+  font-size: 0.9rem;
+  cursor: pointer;
+  visibility: visible;
+  padding: 0;
+}
+
+.form_field__clear[hidden] {
+  display: none;
+}

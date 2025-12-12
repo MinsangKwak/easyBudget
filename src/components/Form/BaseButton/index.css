@@ -1,0 +1,156 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background-color: #f1f3f5;
+  color: #111;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn_inline {
+  width: auto;
+  min-height: auto;
+  padding: 0.4rem 0.65rem;
+}
+
+.btn_ghost {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.btn:hover {
+  background-color: #e7eaee;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn_solid__primary {
+  background: linear-gradient(135deg, #2f7bff, #275bff);
+  color: #fff;
+  border-color: #2f7bff;
+}
+
+.btn_solid__primary:hover {
+  background: linear-gradient(135deg, #387fff, #2e66ff);
+}
+
+.btn_line__black {
+  background-color: #fff;
+  border-color: #151515;
+  color: #151515;
+}
+
+.btn_line__primary {
+  background-color: #fff;
+  border-color: #2f7bff;
+  color: #2f7bff;
+}
+
+.btn_captcha {
+  min-height: auto;
+  width: auto;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background-color: #f8fafc;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  font-size: 0.85rem;
+}
+
+.btn_captcha__refresh::before {
+  content: "\21bb";
+  margin-right: 0.35rem;
+}
+
+.btn_captcha__audio::before {
+  content: "\1F50A";
+  margin-right: 0.35rem;
+}
+
+.btn_back {
+  width: auto;
+  min-height: auto;
+  padding: 0.35rem 0.8rem;
+  border-radius: 10px;
+  background-color: transparent;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn_bank {
+  justify-content: space-between;
+  background-color: #fff;
+  color: #111;
+  border: 1px solid #e5e7eb;
+  padding: 1rem 1.25rem;
+  text-align: left;
+}
+
+.btn_bank__woori {
+  border-color: #2d9cff;
+}
+
+.btn_bank__kb {
+  border-color: #ffcc00;
+}
+
+.btn_bank__shinhan {
+  border-color: #2a5bd7;
+}
+
+.btn_bank__hana {
+  border-color: #00a887;
+}
+
+.btn_bank__nh {
+  border-color: #00b9ff;
+}
+
+.btn_bank__ibk {
+  border-color: #1f4fa8;
+}
+
+.btn_bank__kakao {
+  border-color: #ffde00;
+}
+
+.btn_wait__complete {
+  margin-bottom: 0.75rem;
+}
+
+.btn_cert__ask_auth {
+  background-color: #fff;
+}
+
+.btn_cert__back {
+  background-color: #fff;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+.btn_email_join_submit,
+.btn_google_join {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.btn_text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
