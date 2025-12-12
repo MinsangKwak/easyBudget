@@ -18,12 +18,30 @@ const mockUser = {
   phone: "01012345678",
 };
 
+const generateCaptchaCode = () => {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
+
+  return Array.from({ length: 6 })
+    .map(() => chars[Math.floor(Math.random() * chars.length)])
+    .join("");
+};
+
 const CertFlow = ({ onComplete, onExit }) => {
   const [step, setStep] = useState(CERT_STEPS.STEP1);
   const [selectedBank, setSelectedBank] = useState(null);
+  const [userInfo, setUserInfo] = useState(mockUser);
+  const [captchaValue, setCaptchaValue] = useState("");
+  const [captchaCode, setCaptchaCode] = useState(generateCaptchaCode);
+
+  const handleChangeUserField = (field, value) => {
+    setUserInfo((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSelectBank = (bankKey) => {
     setSelectedBank(bankList[bankKey]);
+    setCaptchaCode(generateCaptchaCode());
+    setCaptchaValue("");
+    setUserInfo(mockUser);
     setStep(CERT_STEPS.STEP2);
   };
 
@@ -45,6 +63,11 @@ const CertFlow = ({ onComplete, onExit }) => {
     }
   };
 
+  const handleRefreshCaptcha = () => {
+    setCaptchaCode(generateCaptchaCode());
+    setCaptchaValue("");
+  };
+
   return (
     <div className="cert_flow_root">
       <div className="cert_flow__header">
@@ -59,9 +82,15 @@ const CertFlow = ({ onComplete, onExit }) => {
 
       {step === CERT_STEPS.STEP2 && (
         <ScreenUser
-          user={mockUser}
+          user={userInfo}
           selectedBank={selectedBank}
+          captchaCode={captchaCode}
+          captchaValue={captchaValue}
+          onChangeField={handleChangeUserField}
+          onChangeCaptcha={setCaptchaValue}
+          onRefreshCaptcha={handleRefreshCaptcha}
           onNext={handleStepWait}
+          onPrev={() => setStep(CERT_STEPS.STEP1)}
         />
       )}
 
