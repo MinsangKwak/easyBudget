@@ -9,7 +9,17 @@ import FormCaptcha from "../../../../Form/FormCaptcha";
 import BaseButtonContainer from "../../../../Form/BaseButtonContainer";
 import BaseButton from "../../../../Form/BaseButton";
 
-const ScreenUser = ({ user, selectedBank, onNext }) => {
+const ScreenUser = ({
+  user,
+  selectedBank,
+  captchaCode,
+  captchaValue,
+  onChangeField,
+  onChangeCaptcha,
+  onRefreshCaptcha,
+  onNext,
+  onPrev,
+}) => {
   return (
     <Screen className="screen_certificate__user">
       <Title>인증서 본인확인</Title>
@@ -27,7 +37,7 @@ const ScreenUser = ({ user, selectedBank, onNext }) => {
                   id="user_name"
                   label="이름"
                   value={user.name}
-                  onChange={() => {}}
+                  onChange={(event) => onChangeField("name", event.target.value)}
                 />
               </FormFieldWrapper>
 
@@ -36,7 +46,7 @@ const ScreenUser = ({ user, selectedBank, onNext }) => {
                   id="user_birth"
                   label="생년월일"
                   value={user.birth}
-                  onChange={() => {}}
+                  onChange={(event) => onChangeField("birth", event.target.value)}
                 />
               </FormFieldWrapper>
 
@@ -45,15 +55,15 @@ const ScreenUser = ({ user, selectedBank, onNext }) => {
                   id="user_phone"
                   label="휴대폰 번호"
                   value={user.phone}
-                  onChange={() => {}}
+                  onChange={(event) => onChangeField("phone", event.target.value)}
                 />
               </FormFieldWrapper>
 
               <FormCaptcha
-                code="A1B2C3"
-                value=""
-                onChange={() => {}}
-                onRefresh={() => {}}
+                code={captchaCode}
+                value={captchaValue}
+                onChange={onChangeCaptcha}
+                onRefresh={onRefreshCaptcha}
                 onAudioClick={() => {}}
               />
             </div>
@@ -64,7 +74,10 @@ const ScreenUser = ({ user, selectedBank, onNext }) => {
                 휴대폰 번호로 인증하기
               </BaseButton>
 
-              <BaseButton className="btn_line__black btn_cert__back">
+              <BaseButton
+                className="btn_line__black btn_cert__back"
+                onClick={onPrev}
+              >
                 이전으로
               </BaseButton>
             </BaseButtonContainer>
