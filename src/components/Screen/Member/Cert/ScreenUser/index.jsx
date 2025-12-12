@@ -8,12 +8,15 @@ import FormFieldInput from "../../../../Form/FormFieldInput";
 import FormCaptcha from "../../../../Form/FormCaptcha";
 import BaseButtonContainer from "../../../../Form/BaseButtonContainer";
 import BaseButton from "../../../../Form/BaseButton";
+import ErrorMessage from "../../../../Form/ErrorMessage";
 
 const ScreenUser = ({
   user,
   selectedBank,
   captchaCode,
   captchaValue,
+  showCaptcha,
+  errorMessage,
   onChangeField,
   onChangeCaptcha,
   onRefreshCaptcha,
@@ -37,6 +40,7 @@ const ScreenUser = ({
                   id="user_name"
                   label="이름"
                   value={user.name}
+                  placeholder="이름을 입력하세요"
                   onChange={(event) => onChangeField("name", event.target.value)}
                 />
               </FormFieldWrapper>
@@ -46,6 +50,7 @@ const ScreenUser = ({
                   id="user_birth"
                   label="생년월일"
                   value={user.birth}
+                  placeholder="1990-01-01"
                   onChange={(event) => onChangeField("birth", event.target.value)}
                 />
               </FormFieldWrapper>
@@ -55,17 +60,24 @@ const ScreenUser = ({
                   id="user_phone"
                   label="휴대폰 번호"
                   value={user.phone}
+                  placeholder="010-1234-5678"
                   onChange={(event) => onChangeField("phone", event.target.value)}
                 />
               </FormFieldWrapper>
 
-              <FormCaptcha
-                code={captchaCode}
-                value={captchaValue}
-                onChange={onChangeCaptcha}
-                onRefresh={onRefreshCaptcha}
-                onAudioClick={() => {}}
-              />
+              {showCaptcha && (
+                <FormCaptcha
+                  code={captchaCode}
+                  value={captchaValue}
+                  onChange={onChangeCaptcha}
+                  onRefresh={onRefreshCaptcha}
+                  onAudioClick={() => {}}
+                />
+              )}
+
+              {errorMessage && (
+                <ErrorMessage className="form_error">{errorMessage}</ErrorMessage>
+              )}
             </div>
           }
           bottom={
