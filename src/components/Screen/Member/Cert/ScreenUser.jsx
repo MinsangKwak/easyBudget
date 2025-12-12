@@ -93,15 +93,7 @@ const ScreenUser = ({ user, onNext }) => {
   const [hasError, setHasError] = useState(false);
   const [attemptCount, setAttemptCount] = useState(0);
 
-  /* [4] 캡챠 상태 */
-  const [captchaCode, setCaptchaCode] = useState(() => generateCaptchaCode());
-  const [captchaInput, setCaptchaInput] = useState("");
-
-  // 시도 4번 이상이면 캡챠 필요
-  const isCaptchaRequired = attemptCount >= 4;
-
-  // 알파벳(대문자) 3글자 + 숫자 2글자 (총 5글자) 생성
-  function generateCaptchaCode() {
+  const generateCaptchaCode = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const digits = "0123456789";
 
@@ -117,7 +109,14 @@ const ScreenUser = ({ user, onNext }) => {
     }
 
     return result;
-  }
+  };
+
+  /* [4] 캡챠 상태 */
+  const [captchaCode, setCaptchaCode] = useState(() => generateCaptchaCode());
+  const [captchaInput, setCaptchaInput] = useState("");
+
+  // 시도 4번 이상이면 캡챠 필요
+  const isCaptchaRequired = attemptCount >= 4;
 
   const handleClickCaptchaRefresh = () => {
     setCaptchaCode(generateCaptchaCode());
