@@ -1,10 +1,35 @@
-// ScreenJoinGoogle.jsx
-const ScreenJoinGoogle = ({ onSignUpComplete }) => {
-  const handleClickGoogle = () => {
-    // TODO: 실제 구현 시 Google OAuth 연동
-    // window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?..."
+import { useEffect } from "react";
 
-    alert("데모 화면입니다. 실제 Google 연동은 나중에 OAuth로 붙여주세요 :)");
+const ScreenJoinGoogle = ({ onSignUpComplete }) => {
+  useEffect(() => {
+    if (!window.google) return;
+
+    window.google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: async ({ credential }) => {
+        // 1) 구글 id_token(credential) -> 백엔드로 전달
+        const res = await fetch("/api/auth/google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken: credential }),
+        });
+
+        if (!res.ok) {
+          alert("구글 로그인 실패");
+          return;
+        }
+
+        const data = await res.json(); // { accessToken, user }
+        // 2) 우리 서비스 토큰 저장(예: localStorage) — 또는 httpOnly 쿠키 권장
+        localStorage.setItem("accessToken", data.accessToken);
+
+        onSignUpComplete?.();
+      },
+    });
+  }, []);
+
+  const handleClickGoogle = () => {
+    window.google.accounts.id.prompt(); // 팝업
   };
 
   return (
