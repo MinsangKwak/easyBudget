@@ -25,15 +25,25 @@ const ScreenUser = ({
   onNext,
   onPrev,
 }) => {
+  const hasSelectedBankLogo = Boolean(selectedBank?.logoSrc);
+
+  const visualContent = hasSelectedBankLogo ? (
+    <img
+      src={selectedBank.logoSrc}
+      alt={`${selectedBank.label}은행 로고`}
+      className="screen_visual__logo"
+    />
+  ) : (
+    <LottieIcon
+      src={LOTTIE_SOURCES.certShield}
+      ariaLabel="본인 확인 애니메이션"
+      size={140}
+    />
+  );
+
   return (
     <Screen className="screen_certificate__user">
-      <div className="screen_visual">
-        <LottieIcon
-          src={LOTTIE_SOURCES.certShield}
-          ariaLabel="본인 확인 애니메이션"
-          size={140}
-        />
-      </div>
+      <div className="screen_visual">{visualContent}</div>
       <Title>인증서 본인확인</Title>
 
       <Inner>

@@ -12,16 +12,23 @@ import { LOTTIE_SOURCES } from "../../../../../constants/lottieSources";
 const ScreenWait = ({ selectedBank, onNext }) => {
   const bankName = selectedBank?.label || selectedBank?.name || "선택하신";
   const bankLogoSrc = selectedBank?.logoSrc;
+  const renderVisual = bankLogoSrc ? (
+    <img
+      src={bankLogoSrc}
+      alt={`${bankName}은행 로고`}
+      className="screen_visual__logo"
+    />
+  ) : (
+    <LottieIcon
+      src={LOTTIE_SOURCES.certShield}
+      ariaLabel="인증 대기 애니메이션"
+      size={140}
+    />
+  );
 
   return (
     <Screen className="screen_certificate__wait">
-      <div className="screen_visual">
-        <LottieIcon
-          src={LOTTIE_SOURCES.certShield}
-          ariaLabel="인증 대기 애니메이션"
-          size={140}
-        />
-      </div>
+      <div className="screen_visual">{renderVisual}</div>
       <Title>
         {bankName}은행 앱에서 인증 후 <br />
         <span className="text_primary">인증완료</span>를 눌러주세요
