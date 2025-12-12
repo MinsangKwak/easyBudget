@@ -1,20 +1,25 @@
 .screen_certificate__user .content_description {
-  color: #475569;
+  color: #cbd5e1;
   margin: 0;
 }
 
 .form_fields {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .selected_bank {
   display: inline-flex;
   gap: 0.5rem;
   align-items: center;
-  color: #1f2937;
-  font-weight: 600;
+  color: #e2e8f0;
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
 }
 
 .bank_badge {
@@ -23,8 +28,15 @@
   justify-content: center;
   min-width: 56px;
   padding: 0.35rem 0.65rem;
-  background-color: #e0f2fe;
-  color: #0ea5e9;
+  background: rgba(125, 211, 252, 0.16);
+  color: #7dd3fc;
   border-radius: 999px;
   font-weight: 700;
+}
+
+.form_error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
 }

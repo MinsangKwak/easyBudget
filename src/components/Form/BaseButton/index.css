@@ -6,17 +6,17 @@
   width: 100%;
   min-height: 48px;
   padding: 0.85rem 1rem;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  background-color: #f1f3f5;
-  color: #111;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease,
     transform 0.2s ease;
   text-decoration: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .btn_inline {
@@ -32,7 +32,7 @@
 }
 
 .btn:hover {
-  background-color: #e7eaee;
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .btn:active {
@@ -40,19 +40,19 @@
 }
 
 .btn_solid__primary {
-  background: linear-gradient(135deg, #2f7bff, #275bff);
-  color: #fff;
-  border-color: #2f7bff;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #0f172a;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .btn_solid__primary:hover {
-  background: linear-gradient(135deg, #387fff, #2e66ff);
+  background: linear-gradient(135deg, #7dd3fc, #818cf8);
 }
 
 .btn_line__black {
-  background-color: #fff;
-  border-color: #151515;
-  color: #151515;
+  background: rgba(15, 23, 42, 0.35);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #e2e8f0;
 }
 
 .btn_line__primary {
@@ -66,9 +66,9 @@
   width: auto;
   padding: 0.5rem 0.75rem;
   border-radius: 10px;
-  background-color: #f8fafc;
-  color: #111827;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 0.85rem;
 }
 
@@ -87,16 +87,16 @@
   min-height: auto;
   padding: 0.35rem 0.8rem;
   border-radius: 10px;
-  background-color: transparent;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn_bank {
   justify-content: space-between;
-  background-color: #fff;
-  color: #111;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 1rem 1.25rem;
   text-align: left;
 }
@@ -138,9 +138,9 @@
 }
 
 .btn_cert__back {
-  background-color: #fff;
-  color: #475569;
-  border-color: #e2e8f0;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn_email_join_submit,

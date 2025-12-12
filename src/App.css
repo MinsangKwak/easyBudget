@@ -1,12 +1,13 @@
 .app_root {
   min-height: 100vh;
-  padding: 2rem 1.5rem 3rem;
-  background: radial-gradient(circle at 20% 20%, #ebf2ff, transparent 25%),
-    radial-gradient(circle at 80% 0%, #e0f7ff, transparent 25%),
-    #f5f7fb;
+  padding: 3rem 1.5rem 3.5rem;
+  background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.25), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.3), transparent 28%),
+    linear-gradient(135deg, #0f172a 0%, #0b1224 50%, #0f172a 100%);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  align-items: center;
 }
 
 .app_nav {
@@ -16,8 +17,9 @@
 
 @media (max-width: 640px) {
   .app_root {
-    padding: 0;
-    background: #f5f7fb;
+    padding: 1rem;
+    background: linear-gradient(180deg, #0b1224 0%, #0f172a 100%);
+    align-items: stretch;
   }
 
   .app_nav {
