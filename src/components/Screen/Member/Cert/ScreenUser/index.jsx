@@ -9,6 +9,8 @@ import FormCaptcha from "../../../../Form/FormCaptcha";
 import BaseButtonContainer from "../../../../Form/BaseButtonContainer";
 import BaseButton from "../../../../Form/BaseButton";
 import ErrorMessage from "../../../../Form/ErrorMessage";
+import LottieIcon from "../../../../Common/LottieIcon";
+import { LOTTIE_SOURCES } from "../../../../../constants/lottieSources";
 
 const ScreenUser = ({
   user,
@@ -25,6 +27,13 @@ const ScreenUser = ({
 }) => {
   return (
     <Screen className="screen_certificate__user">
+      <div className="screen_visual">
+        <LottieIcon
+          src={LOTTIE_SOURCES.certShield}
+          ariaLabel="본인 확인 애니메이션"
+          size={140}
+        />
+      </div>
       <Title>인증서 본인확인</Title>
 
       <Inner>
