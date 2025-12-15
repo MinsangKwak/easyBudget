@@ -37,3 +37,14 @@ export const AppHeaderWithBackButton = {
   name: "AppHeader",
   render: () => <AppHeader showBackButton onBack={() => {}} />,
 };
+
+export const AppHeaderWithAuthAction = {
+  name: "AppHeader (Main)",
+  render: () => (
+    <AppHeader
+      showBackButton={false}
+      showAuthAction
+      onAuthClick={() => {}}
+    />
+  ),
+};

@@ -6,7 +6,7 @@ import Button from "../../../Form/Button";
 // import LottieIcon from "../../../Common/LottieIcon";
 // import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
 
-const ScreenJoin = ({ onClickCert, onClickEmail, onClickGoogle }) => {
+const ScreenJoin = ({ onClickCert, onClickEmail }) => {
   return (
     <Screen className="screen_join">
       {/* <div className="screen_visual">
@@ -25,17 +25,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail, onClickGoogle }) => {
               variant="solid__primary"
               onClick={onClickEmail}
             >
-              일반 회원가입
-            </Button>
-          </li>
-
-          <li>
-            <Button
-              type="button"
-              variant="line__black"
-              onClick={onClickGoogle}
-            >
-              Google 계정으로 가입하기
+              이메일로 가입하기
             </Button>
           </li>
 
