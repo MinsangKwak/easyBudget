@@ -1,5 +1,6 @@
 import "./index.css";
 import Button from "../Button";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const FormFieldInput = ({
   id,
@@ -29,10 +30,10 @@ const FormFieldInput = ({
 
   return (
     <div className={wrapperClassName}>
+      <label htmlFor={id} className="form_label">
+        {label}
+      </label>
       <div className="input_container">
-        <label htmlFor={id} className="form_label">
-          {label}
-        </label>
         <input
           id={id}
           type={type}
@@ -45,16 +46,16 @@ const FormFieldInput = ({
           onChange={onChange}
           onFocus={onFocus}
         />
+        <Button
+          type="button"
+          className="btn_inline btn_ghost form_field__clear"
+          aria-label="입력 지우기"
+          hidden={!showClear}
+          onClick={handleClickClear}
+        >
+          <IoIosCloseCircleOutline aria-hidden="true" />
+        </Button>
       </div>
-      <Button
-        type="button"
-        className="btn_inline btn_ghost form_field__clear"
-        aria-label="입력 지우기"
-        hidden={!showClear}
-        onClick={handleClickClear}
-      >
-        입력 값 지우기
-      </Button>
     </div>
   );
 };
