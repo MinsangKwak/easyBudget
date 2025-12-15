@@ -1,31 +1,29 @@
-html{
-  font-size:62.5%;
+html {
+  font-size: 62.5%;
 }
+
 .app_root {
   min-height: 100vh;
-  padding: 3rem 1.5rem 3.5rem;
-  background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.25), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.3), transparent 28%),
-    linear-gradient(135deg, #0f172a 0%, #0b1224 50%, #0f172a 100%);
+  padding: 2.4rem;
+  background: var(--color-background);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.6rem;
   align-items: center;
 }
 
 .app_nav {
-  width: min(720px, 100%);
+  width: min(760px, 100%);
   margin: 0 auto;
 }
 
 @media (max-width: 640px) {
   .app_root {
-    padding: 1rem;
-    background: linear-gradient(180deg, #0b1224 0%, #0f172a 100%);
+    padding: 2rem 1.6rem;
     align-items: stretch;
   }
 
   .app_nav {
-    padding: 1rem;
+    padding: 0.4rem 0;
   }
 }

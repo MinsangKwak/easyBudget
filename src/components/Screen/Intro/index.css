@@ -1,5 +1,6 @@
 .screen_main .intro_text {
   margin: 0;
-  color: #FFFFFF;
+  color: var(--color-secondary);
   line-height: 1.6;
+  font-weight: 400;
 }
