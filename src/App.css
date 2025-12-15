@@ -10,6 +10,7 @@ html {
   align-items: center;
 }
 
+.app_header,
 .app_nav {
   width: min(720px, 100%);
   margin: 0 auto;
