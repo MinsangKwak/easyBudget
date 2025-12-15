@@ -1,9 +1,8 @@
 import { Suspense, lazy, useState } from "react";
 import "./App.css";
 import Loading from "./components/Common/Loading";
-import Button from "./components/Form/Button";
 import { SCREEN_NAMES } from "./constants/screenNames";
-import { Header } from "./stories/Header";
+import AppHeader from "./components/Layout/AppHeader";
 
 const ScreenIntro = lazy(() => import("./components/Screen/Intro"));
 const ScreenMain = lazy(() => import("./components/Screen/Main"));
@@ -15,22 +14,6 @@ const ScreenWelcome = lazy(() => import("./components/Screen/Common/Welcome"));
 
 const App = () => {
   const [screen, setScreen] = useState(SCREEN_NAMES.INTRO);
-  const [user, setUser] = useState(null);
-
-  const handleLogin = () => {
-    setUser({ name: "유저" });
-    setScreen(SCREEN_NAMES.MAIN);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setScreen(SCREEN_NAMES.INTRO);
-  };
-
-  const handleCreateAccount = () => {
-    setUser(null);
-    setScreen(SCREEN_NAMES.JOIN);
-  };
 
   const handleGoJoin = () => setScreen(SCREEN_NAMES.JOIN);
   const handleGoCertFlow = () => setScreen(SCREEN_NAMES.CERT_FLOW);
@@ -39,10 +22,7 @@ const App = () => {
   const handleFlowComplete = () => setScreen(SCREEN_NAMES.WELCOME);
   const handleWelcomeTimeout = () => setScreen(SCREEN_NAMES.MAIN);
 
-  const showBackButton =
-    screen === SCREEN_NAMES.JOIN ||
-    screen === SCREEN_NAMES.EMAIL_FLOW ||
-    screen === SCREEN_NAMES.GOOGLE_FLOW;
+  const showBackButton = screen !== SCREEN_NAMES.INTRO;
 
   const handlePrev = () => {
     if (screen === SCREEN_NAMES.JOIN) {
@@ -52,28 +32,19 @@ const App = () => {
       screen === SCREEN_NAMES.GOOGLE_FLOW
     ) {
       setScreen(SCREEN_NAMES.JOIN);
+    } else if (screen === SCREEN_NAMES.CERT_FLOW) {
+      setScreen(SCREEN_NAMES.JOIN);
+    } else if (screen === SCREEN_NAMES.WELCOME) {
+      setScreen(SCREEN_NAMES.MAIN);
+    } else if (screen === SCREEN_NAMES.MAIN) {
+      setScreen(SCREEN_NAMES.INTRO);
     }
   };
 
   return (
     <div className="app_root">
-      <div className="app_header">
-        <Header
-          user={user}
-          onLogin={handleLogin}
-          onLogout={handleLogout}
-          onCreateAccount={handleCreateAccount}
-        />
-      </div>
+      <AppHeader showBackButton={showBackButton} onBack={handlePrev} />
       <Suspense fallback={<Loading />}>
-        {showBackButton && (
-          <div className="app_nav">
-            <Button type="button" className="btn_back" onClick={handlePrev}>
-              뒤로가기
-            </Button>
-          </div>
-        )}
-
         {screen === SCREEN_NAMES.INTRO && (
           <ScreenIntro onClickGoJoin={handleGoJoin} />
         )}
