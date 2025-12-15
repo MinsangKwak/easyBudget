@@ -36,6 +36,11 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
     onSignUpComplete?.();
   };
 
+  const handleGmailConnect = () => {
+    setError("");
+    onSignUpComplete?.();
+  };
+
   return (
     <Screen className="screen_email_join">
       {/* <div className="screen_visual">
@@ -100,12 +105,17 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
           {error && <ErrorMessage aria-live="polite">{error}</ErrorMessage>}
 
           <div className="btn_container">
-            <Button type="button" variant="solid__primary" className="btn_email_join_submit">
+            <Button type="submit" variant="solid__primary" className="btn_email_join_submit">
               이메일로 가입하기
             </Button>
           </div>
           <div className="btn_container">
-            <Button type="button" variant="line__black" className="btn_email_join_submit">
+            <Button
+              type="button"
+              variant="line__black"
+              className="btn_email_join_submit"
+              onClick={handleGmailConnect}
+            >
               빠르게 GMAIL로 가입하기
             </Button>
           </div>

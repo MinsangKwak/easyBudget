@@ -31,7 +31,17 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
               variant="solid__primary"
               onClick={onClickEmail}
             >
-              이메일로 가입하기 / GMAIL 연동하기
+              이메일로 가입하기
+            </Button>
+          </li>
+
+          <li>
+            <Button
+              type="button"
+              variant="line__black"
+              onClick={onClickEmail}
+            >
+              GMAIL 연동하기
             </Button>
           </li>
 

@@ -14,7 +14,6 @@ const ScreenWelcome = lazy(() => import("./components/Screen/Common/Welcome"));
 const App = () => {
   const [screen, setScreen] = useState(SCREEN_NAMES.MAIN);
 
-  const handleGoIntro = () => setScreen(SCREEN_NAMES.INTRO);
   const handleGoJoin = () => setScreen(SCREEN_NAMES.JOIN);
   const handleGoCertFlow = () => setScreen(SCREEN_NAMES.CERT_FLOW);
   const handleGoEmailFlow = () => setScreen(SCREEN_NAMES.EMAIL_FLOW);
@@ -26,7 +25,7 @@ const App = () => {
 
   const handlePrev = () => {
     if (screen === SCREEN_NAMES.JOIN) {
-      setScreen(SCREEN_NAMES.INTRO);
+      setScreen(SCREEN_NAMES.MAIN);
     } else if (screen === SCREEN_NAMES.EMAIL_FLOW) {
       setScreen(SCREEN_NAMES.JOIN);
     } else if (screen === SCREEN_NAMES.CERT_FLOW) {
@@ -43,7 +42,7 @@ const App = () => {
       <AppHeader
         showBackButton={showBackButton}
         showAuthAction={showAuthAction}
-        onAuthClick={handleGoIntro}
+        onAuthClick={handleGoJoin}
         onBack={handlePrev}
       />
       <Suspense fallback={<Loading />}>
