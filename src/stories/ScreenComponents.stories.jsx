@@ -3,7 +3,6 @@ import ScreenIntro from "../components/Screen/Intro";
 import ScreenMain from "../components/Screen/Main";
 import ScreenJoin from "../components/Screen/Member/Join";
 import ScreenJoinEmail from "../components/Screen/Member/JoinEmail";
-import ScreenJoinGoogle from "../components/Screen/Member/JoinGoogle";
 import CertFlow from "../components/Screen/Member/Cert/CertFlow";
 import ScreenCertSelect from "../components/Screen/Member/Cert/ScreenCertSelect";
 import ScreenUser from "../components/Screen/Member/Cert/ScreenUser";
@@ -28,18 +27,13 @@ export const Main = {
 export const Join = {
   name: "Join",
   render: () => (
-    <ScreenJoin onClickCert={() => {}} onClickEmail={() => {}} onClickGoogle={() => {}} />
+    <ScreenJoin onClickCert={() => {}} onClickEmail={() => {}} />
   ),
 };
 
 export const JoinEmail = {
   name: "JoinEmail",
   render: () => <ScreenJoinEmail onSignUpComplete={() => {}} />,
-};
-
-export const JoinGoogle = {
-  name: "JoinGoogle",
-  render: () => <ScreenJoinGoogle onSignUpComplete={() => {}} />,
 };
 
 export const CertificateFlow = {
