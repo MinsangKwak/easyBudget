@@ -24,6 +24,11 @@
 
 .btn_back {
   font-size: 1.4rem;
+  padding: 0.9rem;
+}
+
+.btn_back svg {
+  font-size: 1.8rem;
 }
 
 .btn_auth {
@@ -32,9 +37,9 @@
   border-radius: 0.8rem;
 }
 
-.btn_auth.btn_header{
-  width:120px;
-  font-size:1.2rem;
-  padding:0;
+.btn_auth.btn_header {
+  width: 120px;
+  font-size: 1.2rem;
+  padding: 0;
   height: 3.8rem;
 }
