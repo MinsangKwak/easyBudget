@@ -1,0 +1,21 @@
+.app_header {
+  width: min(720px, 100%);
+  margin: 0 auto;
+}
+
+.app_header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.8rem 0.4rem;
+}
+
+.app_header__logo {
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 0.08em;
+}
+
+.btn_back {
+  font-size: 1.4rem;
+}

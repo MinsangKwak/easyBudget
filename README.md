@@ -5,8 +5,8 @@
 ## 주요 기능
 
 - **화면 전환 상태 관리**: `src/App.jsx`에서 화면 상태를 관리하며, 가입 완료 시 환영 화면과 메인 화면으로 이동합니다.
-- **공통 헤더 Storybook 적용**: 앱 헤더를 Storybook의 `Header` 컴포넌트로 교체해 로그인/로그아웃/계정 생성 핸들러와 연결했습니다.
-- **컴포넌트 스토리 추가**: 버튼(프라이머리/세컨더리/테르셔리), 폼 입력 필드, 제목 컴포넌트를 Storybook에 등록했습니다.
+- **동적 헤더**: 인트로 화면을 제외한 모든 화면에서 상단 로고 대신 "뒤로가기" 버튼을 노출해 한 단계 전으로 이동할 수 있습니다.(`src/components/Layout/AppHeader`)
+- **Storybook 전체 커버리지**: `src/components` 아래 모든 UI 요소(공통, 레이아웃, 콘텐츠, 폼, 화면)를 Storybook 스토리로 등록해 독립적으로 확인할 수 있습니다.(`src/stories/*Components.stories.jsx`)
 - **금융인증서 가입 플로우 복원**:
   - 은행 선택 → 본인 정보 입력/수정 + 캡차 입력 → 은행 앱 인증 대기 → 완료 순서로 진행됩니다.
   - 은행을 다시 선택하면 사용자 입력과 캡차가 초기화되어 깨끗한 상태로 재시작합니다.
@@ -23,11 +23,12 @@
 ## Storybook 사용 안내
 
 - 개발 서버와 별도로 Storybook을 실행하려면 `npm run storybook`을 사용합니다.
-- 앱에서 사용하는 헤더(`src/App.jsx`)는 Storybook의 `Header` 컴포넌트와 동일한 UI/동작을 공유합니다.
 - 등록된 주요 스토리:
-  - `src/stories/AppButton.stories.jsx`: Primary/Secondary/Tertiary 변형 버튼
-  - `src/stories/FormFieldInput.stories.jsx`: 레이블과 설명을 갖춘 단일 라인 입력 필드
-  - `src/stories/Title.stories.jsx`: 제목/부제목 조합
+  - `src/stories/CommonComponents.stories.jsx`: 로딩 인디케이터, Lottie 아이콘
+  - `src/stories/LayoutComponents.stories.jsx`: 화면 레이아웃, 상단 헤더, 내부 그리드
+  - `src/stories/ContentComponents.stories.jsx`: 타이틀, 리스트, 진행 상태 표시 등 콘텐츠 구성 요소
+  - `src/stories/FormComponents.stories.jsx`: 버튼 레이아웃, 입력 필드, 캡차, 에러 메시지 등 폼 요소
+  - `src/stories/ScreenComponents.stories.jsx`: 인트로/메인/가입/금융인증/환영 화면 등 전체 플로우 스크린
 
 ## 실행 방법
 
@@ -60,4 +61,5 @@ GitHub Actions 워크플로를 추가해 `main` 브랜치 푸시 시 자동으�
 ## 현재 상태
 
 - 금융인증서 플로우의 단계 이동, 뒤로가기, 캡차 초기화 로직을 정상 동작하도록 복구했습니다.
-- README를 프로젝트 흐름 기준으로 갱신했습니다.
+- 인트로 이후 화면에서 자동으로 노출되는 상단 뒤로가기 버튼을 추가해 화면 전환 동선이 명확합니다.
+- Storybook에 모든 UI 컴포넌트를 등록하여 개발/디자인 확인이 용이합니다.
