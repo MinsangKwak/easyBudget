@@ -15,7 +15,13 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
           ariaLabel="가입 방식 선택 애니메이션"
         />
       </div> */}
-      <Title>로그인 방식을 <br/>선택해 주세요.</Title>
+      <Title>
+        안녕하세요 :) <br/>
+        로그인 방식을 선택해 주세요.
+      </Title>
+      <p className="intro_text">
+        원하시는 방식으로 로그인/회원가입을 진행해주세요.
+      </p>
 
       <Inner>
         <ul className="list">
@@ -25,7 +31,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
               variant="solid__primary"
               onClick={onClickEmail}
             >
-              이메일로 가입하기
+              이메일로 가입하기 / GMAIL 연동하기
             </Button>
           </li>
 

@@ -20,8 +20,8 @@ const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
         {showAuthAction && (
           <Button
             type="button"
-            variant="line__black"
-            className="btn_auth"
+            variant=""
+            className="btn_auth btn_header"
             onClick={onAuthClick}
           >
             로그인 / 회원가입
