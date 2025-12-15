@@ -1,7 +1,4 @@
-.join_method_list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;

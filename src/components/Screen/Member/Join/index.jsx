@@ -18,7 +18,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail, onClickGoogle }) => {
       <Title>어떤 방식으로 진행할까요?</Title>
 
       <Inner>
-        <ul className="join_method_list">
+        <ul className="list">
           <li>
             <Button
               type="button"
