@@ -5,6 +5,8 @@
 ## 주요 기능
 
 - **화면 전환 상태 관리**: `src/App.jsx`에서 화면 상태를 관리하며, 가입 완료 시 환영 화면과 메인 화면으로 이동합니다.
+- **공통 헤더 Storybook 적용**: 앱 헤더를 Storybook의 `Header` 컴포넌트로 교체해 로그인/로그아웃/계정 생성 핸들러와 연결했습니다.
+- **컴포넌트 스토리 추가**: 버튼(프라이머리/세컨더리/테르셔리), 폼 입력 필드, 제목 컴포넌트를 Storybook에 등록했습니다.
 - **금융인증서 가입 플로우 복원**:
   - 은행 선택 → 본인 정보 입력/수정 + 캡차 입력 → 은행 앱 인증 대기 → 완료 순서로 진행됩니다.
   - 은행을 다시 선택하면 사용자 입력과 캡차가 초기화되어 깨끗한 상태로 재시작합니다.
@@ -17,6 +19,15 @@
 - `src/components/Screen/Member/Join*`: 가입 방식 선택, 이메일/Google 가입 화면
 - `src/components/Screen/Common/Welcome`: 가입 완료 후 메인으로 이동을 안내하는 화면
 - `src/constants`: 화면 이름(`screenNames.js`), 은행 정보(`bankList.js`) 등 상수 정의
+
+## Storybook 사용 안내
+
+- 개발 서버와 별도로 Storybook을 실행하려면 `npm run storybook`을 사용합니다.
+- 앱에서 사용하는 헤더(`src/App.jsx`)는 Storybook의 `Header` 컴포넌트와 동일한 UI/동작을 공유합니다.
+- 등록된 주요 스토리:
+  - `src/stories/AppButton.stories.jsx`: Primary/Secondary/Tertiary 변형 버튼
+  - `src/stories/FormFieldInput.stories.jsx`: 레이블과 설명을 갖춘 단일 라인 입력 필드
+  - `src/stories/Title.stories.jsx`: 제목/부제목 조합
 
 ## 실행 방법
 
@@ -31,7 +42,7 @@ npm run build # 프로덕션 번들 빌드
 GitHub Actions 워크플로를 추가해 `main` 브랜치 푸시 시 자동으로 GitHub Pages에 배포하도록 설정했습니다. Pages 빌드 환경의 `GITHUB_REPOSITORY` 값을 이용해 Vite `base` 경로가 자동으로 `/저장소명/`으로 맞춰집니다.
 
 1. GitHub 저장소에서 **Settings → Pages**로 이동해 **Source**를 “GitHub Actions”로 설정합니다.
-2. `main` 브랜치로 코드를 푸시하면 자동으로 빌드 및 배포가 진행됩니다. 수동으로 실행하려면 Actions 탭에서 “Deploy to GitHub Pages” 워크플로를 선택해 **Run workflow**를 눌러 실행할 수 있습니다.
+2. `main` 또는 `deploy` 브랜치로 코드를 푸시하면 자동으로 빌드 및 배포가 진행됩니다. (수동 실행 트리거는 비활성화했습니다.)
 3. 배포가 완료되면 워크플로 출력의 `page_url` 또는 `https://<GitHubID>.github.io/<repo>/` 주소로 접속합니다.
 4. 로컬에서 배포 결과를 확인하려면 아래 명령으로 프로덕션 번들을 생성한 뒤 `dist/`를 `npm run preview`로 확인할 수 있습니다.
 

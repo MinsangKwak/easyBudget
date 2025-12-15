@@ -3,6 +3,7 @@ import "./App.css";
 import Loading from "./components/Common/Loading";
 import Button from "./components/Form/Button";
 import { SCREEN_NAMES } from "./constants/screenNames";
+import { Header } from "./stories/Header";
 
 const ScreenIntro = lazy(() => import("./components/Screen/Intro"));
 const ScreenMain = lazy(() => import("./components/Screen/Main"));
@@ -14,6 +15,22 @@ const ScreenWelcome = lazy(() => import("./components/Screen/Common/Welcome"));
 
 const App = () => {
   const [screen, setScreen] = useState(SCREEN_NAMES.INTRO);
+  const [user, setUser] = useState(null);
+
+  const handleLogin = () => {
+    setUser({ name: "유저" });
+    setScreen(SCREEN_NAMES.MAIN);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setScreen(SCREEN_NAMES.INTRO);
+  };
+
+  const handleCreateAccount = () => {
+    setUser(null);
+    setScreen(SCREEN_NAMES.JOIN);
+  };
 
   const handleGoJoin = () => setScreen(SCREEN_NAMES.JOIN);
   const handleGoCertFlow = () => setScreen(SCREEN_NAMES.CERT_FLOW);
@@ -40,6 +57,14 @@ const App = () => {
 
   return (
     <div className="app_root">
+      <div className="app_header">
+        <Header
+          user={user}
+          onLogin={handleLogin}
+          onLogout={handleLogout}
+          onCreateAccount={handleCreateAccount}
+        />
+      </div>
       <Suspense fallback={<Loading />}>
         {showBackButton && (
           <div className="app_nav">
