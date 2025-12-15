@@ -109,6 +109,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               이메일로 가입하기
             </Button>
           </div>
+          <span>또는</span>
           <div className="btn_container">
             <Button
               type="button"
@@ -116,7 +117,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               className="btn_email_join_submit"
               onClick={handleGmailConnect}
             >
-              빠르게 GMAIL로 가입하기
+              빠르게 GMAIL 연동하기
             </Button>
           </div>
         </form>
