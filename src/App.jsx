@@ -38,7 +38,7 @@ const App = () => {
   };
 
   return (
-    <div className="app_root">
+    <main className="app">
       <AppHeader
         showBackButton={showBackButton}
         showAuthAction={showAuthAction}
@@ -74,7 +74,7 @@ const App = () => {
 
         {screen === SCREEN_NAMES.MAIN && <ScreenMain />}
       </Suspense>
-    </div>
+    </main>
   );
 };
 

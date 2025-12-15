@@ -4,9 +4,9 @@ import { IoChevronBack } from "react-icons/io5";
 
 const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
   return (
-    <header className="app_header">
-      <div className="app_header__inner">
-        <div className="app_header__brand">
+    <header className="header">
+      <div className="header__inner">
+        <div className="header__brand">
           {showBackButton ? (
             <Button
               type="button"
@@ -17,8 +17,8 @@ const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
               <IoChevronBack aria-hidden="true" />
             </Button>
           ) : (
-            <div className="app_header__logo" aria-label="서비스 로고">
-              AUTH
+            <div className="header__logo" aria-label="서비스 로고">
+              신용점수 시뮬레이터
             </div>
           )}
         </div>
