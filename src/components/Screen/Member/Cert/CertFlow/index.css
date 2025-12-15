@@ -1,8 +1,8 @@
-.cert_flow_root {
+/* .cert_flow_root {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-}
+} */
 
 .cert_flow__header {
   display: flex;

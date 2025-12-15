@@ -5,8 +5,8 @@ import Title from "../../../Content/Title";
 import Inner from "../../../Content/Inner";
 import Button from "../../../Form/Button";
 import ErrorMessage from "../../../Form/ErrorMessage";
-import LottieIcon from "../../../Common/LottieIcon";
-import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
+// import LottieIcon from "../../../Common/LottieIcon";
+// import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
 
 const ScreenJoinEmail = ({ onSignUpComplete }) => {
   const [email, setEmail] = useState("");
@@ -38,13 +38,13 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
 
   return (
     <Screen className="screen_email_join">
-      <div className="screen_visual">
+      {/* <div className="screen_visual">
         <LottieIcon
           src={LOTTIE_SOURCES.emailWave}
           ariaLabel="이메일 가입 애니메이션"
           size={152}
         />
-      </div>
+      </div> */}
       <Title>이메일로 회원가입</Title>
 
       <Inner>

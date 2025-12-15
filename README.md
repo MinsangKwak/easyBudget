@@ -38,20 +38,6 @@ npm run dev   # 개발 서버 실행 (기본: http://localhost:5173)
 npm run build # 프로덕션 번들 빌드
 ```
 
-## GitHub Pages 배포 가이드
-
-GitHub Actions 워크플로를 추가해 `main` 브랜치 푸시 시 자동으로 GitHub Pages에 배포하도록 설정했습니다. Pages 빌드 환경의 `GITHUB_REPOSITORY` 값을 이용해 Vite `base` 경로가 자동으로 `/저장소명/`으로 맞춰집니다.
-
-1. GitHub 저장소에서 **Settings → Pages**로 이동해 **Source**를 “GitHub Actions”로 설정합니다.
-2. `main` 또는 `deploy` 브랜치로 코드를 푸시하면 자동으로 빌드 및 배포가 진행됩니다. (수동 실행 트리거는 비활성화했습니다.)
-3. 배포가 완료되면 워크플로 출력의 `page_url` 또는 `https://<GitHubID>.github.io/<repo>/` 주소로 접속합니다.
-4. 로컬에서 배포 결과를 확인하려면 아래 명령으로 프로덕션 번들을 생성한 뒤 `dist/`를 `npm run preview`로 확인할 수 있습니다.
-
-   ```bash
-   npm run build
-   npm run preview
-   ```
-
 ## 금융인증서 플로우 동작 요약
 
 1. **은행 선택**: `bankList`의 은행 중 하나를 선택하면 다음 단계로 이동하며 입력값과 캡차가 초기화됩니다.

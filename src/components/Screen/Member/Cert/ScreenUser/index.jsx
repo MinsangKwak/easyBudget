@@ -27,29 +27,34 @@ const ScreenUser = ({
 }) => {
   const hasSelectedBankLogo = Boolean(selectedBank?.logoSrc);
 
-  const visualContent = hasSelectedBankLogo ? (
-    <img
-      src={selectedBank.logoSrc}
-      alt={`${selectedBank.label}은행 로고`}
-      className="screen_visual__logo"
-    />
-  ) : (
-    <LottieIcon
-      src={LOTTIE_SOURCES.certShield}
-      ariaLabel="본인 확인 애니메이션"
-      size={140}
-    />
-  );
+  // const visualContent = hasSelectedBankLogo ? (
+  //   <img
+  //     src={selectedBank.logoSrc}
+  //     alt={`${selectedBank.label}은행 로고`}
+  //     className="screen_visual__logo"
+  //   />
+  // ) : (
+  //   <LottieIcon
+  //     src={LOTTIE_SOURCES.certShield}
+  //     ariaLabel="본인 확인 애니메이션"
+  //     size={140}
+  //   />
+  // );
 
   return (
     <Screen className="screen_certificate__user">
-      <div className="screen_visual">{visualContent}</div>
-      <Title>인증서 본인확인</Title>
+      {/* <div className="screen_visual">{visualContent}</div> */}
+
+
+      <Title>
+        <span className="bank_badge">{selectedBank?.label} 인증서</span>
+        본인확인
+      </Title>
+      <p className="content_description">
+        금융인증서 발급을 위해 본인 정보를 확인해주세요.
+      </p>
 
       <Inner>
-        <p className="content_description">
-          금융인증서 발급을 위해 본인 정보를 확인해주세요.
-        </p>
 
         <ScreenInnerGrid
           top={
@@ -115,10 +120,6 @@ const ScreenUser = ({
           }
         />
 
-        <div className="selected_bank">
-          <span className="bank_badge">{selectedBank?.label}</span>
-          <span className="bank_name">{selectedBank?.name} 인증서</span>
-        </div>
       </Inner>
     </Screen>
   );

@@ -126,12 +126,12 @@ const CertFlow = ({ onComplete, onExit }) => {
   };
 
   return (
-    <div className="cert_flow_root">
-      <div className="cert_flow__header">
+    <>
+      {/* <div className="cert_flow__header">
         <Button type="button" className="btn_back" onClick={handleBack}>
           뒤로가기
         </Button>
-      </div>
+      </div> */}
 
       {step === CERT_STEPS.STEP1 && (
         <ScreenCertSelect bankList={bankList} onSelectBank={handleSelectBank} />
@@ -156,7 +156,7 @@ const CertFlow = ({ onComplete, onExit }) => {
       {step === CERT_STEPS.STEP3 && (
         <ScreenWait selectedBank={selectedBank} onNext={handleFinishCert} />
       )}
-    </div>
+    </>
   );
 };
 
