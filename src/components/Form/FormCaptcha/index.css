@@ -9,19 +9,17 @@
   grid-template-columns: 1fr auto auto;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.85rem 1.1rem;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.08));
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 8px 20px rgba(66, 83, 99, 0.08);
 }
 
 .captcha_code {
   font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   letter-spacing: 0.08em;
-  color: #f8fafc;
+  color: var(--color-primary);
 }
