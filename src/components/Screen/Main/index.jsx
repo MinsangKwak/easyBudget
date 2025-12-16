@@ -202,7 +202,6 @@ const ScreenMain = () => {
   return (
     <Screen>
       <Inner>
-        <div className="page" style={{ backgroundImage: `url(${SampleBg})` }}>
           {/* ===== Intro Hero (질문 + 버튼 + 오른쪽 그래프) ===== */}
           <section className="hero">
             <div className="hero_left">
@@ -298,7 +297,9 @@ const ScreenMain = () => {
               </div>
             </div>
           </section>
+      </Inner>
 
+      <Inner>
           {/* ===== Section: 딱 2가지만 ===== */}
           <section className="section" ref={sectionRef}>
             <div className="section_head">
@@ -377,7 +378,8 @@ const ScreenMain = () => {
               </div>
             </div>
           </section>
-
+    </Inner>
+      <Inner>
           {/* ===== Section: 이율도 내려간다 ===== */}
           <section className="section">
             <div className="section_head">
@@ -412,7 +414,9 @@ const ScreenMain = () => {
               </div>
             </div>
           </section>
+    </Inner>
 
+      <Inner>
           {/* ===== Section: 메시지 ===== */}
           <section className="section">
             <div className="quote">
@@ -425,7 +429,6 @@ const ScreenMain = () => {
               </p>
             </div>
           </section>
-        </div>
       </Inner>
     </Screen>
   );
