@@ -10,7 +10,7 @@ import Button from "../../../Form/Button";
 import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 import ErrorMessage from "../../../Form/ErrorMessage";
 
-const ScreenJoinEmail = ({ onSignUpComplete }) => {
+const ScreenLogin = ({ onSignUpComplete }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -46,10 +46,10 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
   return (
     <Screen className="screen_join__email">
       <Title>
-        회원가입
+        로그인
       </Title>
       <Subtitle>
-        일반 회원가입 / G-Mail연동
+        정보를 입력해주세요.
       </Subtitle>
       <Inner>
         <form className="form_email_join" onSubmit={handleSubmit}>
@@ -85,36 +85,11 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
             </div>
           </div>
 
-          <div className="form_field input_wrapper">
-            <div className="input_container">
-              <label htmlFor="password_confirm" className="form_label">
-                비밀번호 확인
-              </label>
-              <input
-                id="password_confirm"
-                type="password"
-                className="form_field__input"
-                placeholder="비밀번호를 한 번 더 입력해주세요"
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-              />
-            </div>
-          </div>
-
           {error && <ErrorMessage aria-live="polite">{error}</ErrorMessage>}
 
           <BaseButtonContainer>
             <Button type="submit" variant="solid__primary" className="btn_email_join_submit">
-              이메일로 가입하기
-            </Button>
-            <span className="spacer">또는</span>
-            <Button
-              type="button"
-              variant="line__black"
-              className="btn_email_join_submit"
-              onClick={handleGmailConnect}
-            >
-              빠르게 GMAIL 연동하기
+              계정이 없으시다면 여기로 회원가입
             </Button>
           </BaseButtonContainer>
         </form>
@@ -123,4 +98,4 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
   );
 };
 
-export default ScreenJoinEmail;
+export default ScreenLogin;

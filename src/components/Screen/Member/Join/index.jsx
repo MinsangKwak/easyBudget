@@ -1,4 +1,5 @@
 import "./index.css";
+
 import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
 import Subtitle from "../../../Content/SubTitle";
@@ -18,7 +19,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
         신규 가입을 환영합니다.
       </Title>
       <Subtitle>
-        로그인 방식을 선택해 주세요.
+        회원가입 방식을 선택해 주세요.
       </Subtitle>
       <Inner>
         <IconLock />
@@ -31,6 +32,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
             <MdMailOutline aria-hidden="true" />
             일반 회원가입 / GMAIL 연동
           </Button>
+          <span className="spacer">또는</span>
           <Button
             type="button"
             variant="line__black"
