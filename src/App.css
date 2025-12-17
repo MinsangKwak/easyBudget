@@ -32,6 +32,7 @@ body{
   /* display:flex;
   align-items:center;
   justify-content:center; */
+  background-color:rgba(170, 170, 170, 0.85);
 }
 #root{flex:1 1 auto;}
 

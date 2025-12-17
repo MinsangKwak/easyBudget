@@ -2,7 +2,7 @@
  * Screen Join spacing
  * ========================= */
 .screen.screen_join {
-    margin-top: 4rem;
+    /* padding-top: 4rem; */
 }
 
 .screen_join .content_inner {
