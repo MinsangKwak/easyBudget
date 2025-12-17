@@ -47,7 +47,7 @@ export const bankList = {
   kakao: {
     name: "kakao",
     bankType: "kakao",
-    label: "카카오뱅크",
+    label: "카카오",
     logoSrc: logoKakao,
   },
 };

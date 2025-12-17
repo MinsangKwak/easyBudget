@@ -4,10 +4,15 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  width:14rem;
+  height:14rem;
 }
 
 .status_item {
-  position: relative;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+  position: absolute;
   z-index: 1;
   display: inline-flex;
   flex-direction: column;
@@ -31,8 +36,9 @@
 }
 
 .bg_spinner {
-  width: 128px;
-  height: 128px;
+    box-sizing:border-box;
+  width: 12.8rem;
+  height: 12.8rem;
   border-radius: 50%;
   border: 6px solid rgba(132, 56, 245, 0.12);
   border-top-color: var(--color-primary);

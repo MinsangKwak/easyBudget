@@ -1,0 +1,17 @@
+/* screen_cert */
+.screen_certificate__user .content_inner {
+    align-items: center;
+    margin-top: 2.4rem;
+}
+
+.screen_certificate__user .screen_inner_grid{
+    width:100%;
+}
+
+.screen_certificate__user .btn_container {
+    margin-top: 4rem;
+    flex-grow:1;
+    width:100%;
+}
+
+.form_captcha{margin-top:1rem;}

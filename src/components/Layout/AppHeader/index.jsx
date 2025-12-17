@@ -1,6 +1,8 @@
 import "./index.css";
 import Button from "../../Form/Button";
 import { IoChevronBack } from "react-icons/io5";
+import { AiOutlineMenu } from "react-icons/ai";
+
 
 const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
   return (
@@ -18,7 +20,7 @@ const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
             </Button>
           ) : (
             <div className="header__logo" aria-label="서비스 로고">
-              마이-저축
+              LOGO
             </div>
           )}
         </div>
@@ -27,10 +29,11 @@ const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
           <Button
             type="button"
             variant=""
-            className="btn_auth btn_header"
+            className="btn_menu"
+              aria-label="메뉴"
             onClick={onAuthClick}
           >
-            로그인
+            <AiOutlineMenu aria-hidden="true"/>
           </Button>
         )}
       </div>

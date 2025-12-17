@@ -46,6 +46,45 @@
   border-radius: 8px;
 }
 
+.btn_menu{
+  width:4.4rem;
+  height:4.4rem;
+  padding:0;
+  font-size:2rem;
+  border: 1px solid var(--color-grey-100);
+  background: var(--color-white);
+  color: var(--color-black);
+  border-radius: 8px;
+}
+
+.btn_captcha{
+  /* width:4.4rem; */
+  height:2.4rem;
+  padding:0 0.8rem;
+  font-size:1rem;
+  border: 1px solid var(--color-grey-100);
+  background: var(--color-white);
+  color: var(--color-black);
+  border-radius: 6px;
+}
+
+.btn_bank{
+  flex-direction:column;
+  padding-top:2rem;
+  padding-bottom:1.4rem;
+  font-size:1.6rem;
+  border: 1px solid #f7f7f7c1;
+  background: var(--color-white);
+  justify-content:flex-start;
+  color: var(--color-black);
+  gap:0.35rem;
+  border-radius: 8px;
+}
+
+.btn_bank img{width:4rem;}
+
+.btn_icon{}
+
 /* .btn_inline {
   width: auto;
   height: auto;

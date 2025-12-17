@@ -1,6 +1,7 @@
 import "./index.css";
 import Screen from "../../../../Layout/Screen";
 import Title from "../../../../Content/Title";
+import Subtitle from "../../../../Content/SubTitle";
 import Inner from "../../../../Content/Inner";
 import ScreenInnerGrid from "../../../../Layout/ScreenInnerGrid";
 import BaseButton from "../../../../Form/BaseButton";
@@ -35,8 +36,9 @@ const ScreenWait = ({ selectedBank, onNext }) => {
           <span className="text_primary">인증완료</span>를 눌러주세요
         </span>
       </Title>
-
-      <p className="content_description">인증요청 알림을 확인해주세요</p>
+      <Subtitle>
+        인증요청 알림을 확인해주세요
+      </Subtitle>
 
       <Inner>
         <ScreenInnerGrid

@@ -1,5 +1,9 @@
 import "./index.css";
 import Button from "../Button";
+import { IoRefreshCircleOutline } from "react-icons/io5";
+import { HiMiniSpeakerWave } from "react-icons/hi2";
+
+
 import FormFieldInput from "../FormFieldInput";
 
 const FormCaptcha = ({
@@ -30,19 +34,23 @@ const FormCaptcha = ({
 
         <Button
           type="button"
-          className="btn_inline btn_captcha btn_captcha__refresh"
+          className="btn_captcha"
           data-captcha-refresh
           onClick={handleRefresh}
         >
+        <IoRefreshCircleOutline />
+
           새로고침
         </Button>
 
         <Button
           type="button"
-          className="btn_inline btn_captcha btn_captcha__audio"
+          className="btn_captcha"
           data-captcha-audio
           onClick={handleAudio}
         >
+            <HiMiniSpeakerWave />
+
           음성듣기
         </Button>
       </div>
