@@ -1,437 +1,705 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./index.css";
-import Screen from "../../Layout/Screen";
-import Inner from "../../Content/Inner";
-import SampleBg from "../../../assets/background/sample_bg.png";
 
-/* utils */
-const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-const round = (v) => Math.round(v);
-const formatDelta = (n) => `${n > 0 ? "+" : ""}${n}`;
+/* =========================
+ * utils
+ * ========================= */
 
-/** UX 데모용: 점수 라벨 */
-function scoreLabel(score) {
-  if (score >= 870) return { text: "최우수", tone: "good" };
-  if (score >= 800) return { text: "우수", tone: "good" };
-  if (score >= 740) return { text: "양호", tone: "mid" };
-  if (score >= 650) return { text: "보통", tone: "mid" };
-  return { text: "주의", tone: "bad" };
-}
-
-/** UX 데모용: 간단 모델(카드 사용률 + 최근 신규) */
-function calcScoreLite({ cardUtil, recentNewCredit }) {
-  const base = 780;
-
-  const utilPenalty =
-    cardUtil <= 30 ? -4 : cardUtil <= 50 ? -14 : cardUtil <= 70 ? -28 : -42;
-
-  const newCreditPenalty = recentNewCredit ? -16 : 0;
-
-  const score = clamp(base + utilPenalty + newCreditPenalty, 350, 950);
-  return { score: round(score) };
-}
-
-/** “대출 이율” 데모용 맵핑: 점수↑ → 이율↓ (3%~15%) */
-function estimateRateByScore(score) {
-  const minS = 350;
-  const maxS = 950;
-  const minR = 3;
-  const maxR = 15;
-  const t = clamp((score - minS) / (maxS - minS), 0, 1);
-  const rate = maxR - t * (maxR - minR);
-  return Math.round(rate * 10) / 10; // 0.1% 단위
-}
-
-/** 그래프 */
-function buildSeriesLite({ months, currentScore, improvedScore }) {
-  const n = months;
-  const start = clamp(currentScore - 35, 350, 950);
-
-  const current = [];
-  const improved = [];
-
-  for (let i = 0; i <= n; i++) {
-    const t = i / n;
-
-    const cur = start + (currentScore - start) * (0.2 + 0.8 * t);
-
-    const ease = t < 0.4 ? t * 0.75 : 0.3 + (t - 0.4) * 1.166;
-    const imp = start + (improvedScore - start) * clamp(ease, 0, 1);
-
-    current.push({ x: i, y: round(cur) });
-    improved.push({ x: i, y: round(imp) });
-  }
-
-  return { current, improved };
-}
-
-function svgPathFromSeries(series, w, h, pad, yMin, yMax) {
-  const xMax = Math.max(1, series[series.length - 1]?.x || 1);
-  const sx = (x) => pad + (x / xMax) * (w - pad * 2);
-  const sy = (y) => {
-    const t = (y - yMin) / Math.max(1, yMax - yMin);
-    return pad + (1 - t) * (h - pad * 2);
-  };
-
-  let d = "";
-  for (let i = 0; i < series.length; i++) {
-    const p = series[i];
-    const x = sx(p.x);
-    const y = sy(p.y);
-    d += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
-  }
-  return d;
-}
-
-const ScreenMain = () => {
-  const sectionRef = useRef(null);
-
-  /** 핵심 입력 2개 */
-  const [inputs, setInputs] = useState({
-    cardUtil: 42,
-    recentNewCredit: true,
-  });
-
-  /** 핵심 “딱 2가지” 행동 */
-  const [actions, setActions] = useState({
-    keepUtilUnder30: true,
-    avoidNewCredit: true,
-  });
-
-  /** 시작 상태(인트로 버튼 누르기 전/후) */
-  const [started, setStarted] = useState(false);
-
-  /** 예시 프리셋 */
-  const PRESETS = useMemo(
-    () => ({
-      sample: {
-        inputs: { cardUtil: 78, recentNewCredit: true },
-        actions: { keepUtilUnder30: true, avoidNewCredit: true },
-      },
-      simple: {
-        inputs: { cardUtil: 42, recentNewCredit: true },
-        actions: { keepUtilUnder30: true, avoidNewCredit: true },
-      },
-    }),
-    []
-  );
-
-  const applyPresetAndGo = (key) => {
-    const p = PRESETS[key];
-    if (!p) return;
-    setInputs(p.inputs);
-    setActions(p.actions);
-    setStarted(true);
-
-    requestAnimationFrame(() => {
-      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  };
-
-  /** 점수 계산 */
-  const calc = useMemo(() => {
-    const base = calcScoreLite(inputs);
-
-    let next = { ...inputs };
-    if (actions.keepUtilUnder30) next.cardUtil = Math.min(next.cardUtil, 30);
-    if (actions.avoidNewCredit) next.recentNewCredit = false;
-    const improved = calcScoreLite(next);
-
-    const baseRate = estimateRateByScore(base.score);
-    const improvedRate = estimateRateByScore(improved.score);
-
-    return { base, improved, baseRate, improvedRate };
-  }, [inputs, actions]);
-
-  const deltaScore = calc.improved.score - calc.base.score;
-  const deltaRate = calc.improvedRate - calc.baseRate; // 내려가면 음수
-
-  /** hero count-up */
-  const [displayScore, setDisplayScore] = useState(calc.base.score);
-  const rafRef = useRef(0);
-
-  useEffect(() => {
-    cancelAnimationFrame(rafRef.current);
-    const from = displayScore;
-    const to = calc.base.score;
-    const start = performance.now();
-    const dur = 380;
-
-    const tick = (now) => {
-      const t = clamp((now - start) / dur, 0, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setDisplayScore(round(from + (to - from) * eased));
-      if (t < 1) rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [calc.base.score]);
-
-  const grade = scoreLabel(displayScore);
-
-  /** hero 그래프(오른쪽) */
-  const months = 6;
-  const series = useMemo(() => {
-    const { current, improved } = buildSeriesLite({
-      months,
-      currentScore: calc.base.score,
-      improvedScore: calc.improved.score,
-    });
-
-    const allY = [...current, ...improved].map((p) => p.y);
-    const yMin = clamp(Math.min(...allY) - 20, 350, 950);
-    const yMax = clamp(Math.max(...allY) + 20, 350, 950);
-
-    return { current, improved, yMin, yMax };
-  }, [calc.base.score, calc.improved.score]);
-
-  const chart = useMemo(() => {
-    const w = 820;
-    const h = 220;
-    const pad = 18;
-    const curPath = svgPathFromSeries(series.current, w, h, pad, series.yMin, series.yMax);
-    const impPath = svgPathFromSeries(series.improved, w, h, pad, series.yMin, series.yMax);
-
-    const grid = [];
-    for (let i = 0; i <= 4; i++) grid.push(pad + (i / 4) * (h - pad * 2));
-    return { w, h, pad, curPath, impPath, grid };
-  }, [series]);
-
-  return (
-    <Screen>
-      <Inner>
-          {/* ===== Intro Hero (질문 + 버튼 + 오른쪽 그래프) ===== */}
-          <section className="hero">
-            <div className="hero_left">
-              <p className="hero_kicker">신용점수 미리보기</p>
-
-              <h1 className="hero_title">
-                당신의 신용점수는 <br />
-                <span className="hero_em">몇 점</span>인가요?
-              </h1>
-
-              <p className="hero_desc">
-                신용점수는 어렵게 계산하기보다, <b>“바뀌는 이유”</b>를 먼저 이해하는 게 쉽습니다.
-                <br />
-                아래 버튼으로 예시부터 시작해보세요.
-              </p>
-
-              <div className="hero_cta">
-                <button type="button" className="btn_primary" onClick={() => applyPresetAndGo("sample")}>
-                  예시로 시작하기
-                </button>
-                <button type="button" className="btn_ghost" onClick={() => applyPresetAndGo("simple")}>
-                  간단하게 시작하기
-                </button>
-              </div>
-
-              <div className="hero_note">
-                * 실제 신용평가/금융자문이 아닌, UX 데모용 가정 모델입니다.
-              </div>
-            </div>
-
-            <div className="hero_right">
-              <div className={`score tone_${grade.tone}`}>
-                <div className="score_top">
-                  <span className="badge">{grade.text}</span>
-                  <span className="tag">{started ? "LIVE" : "PREVIEW"}</span>
-                </div>
-
-                <div className="score_value">
-                  <span className="score_num">{displayScore}</span>
-                  <span className="score_unit">점</span>
-                </div>
-
-                <div className="score_meta">
-                  <div className="meta_row">
-                    <span>두 가지 행동 반영 시</span>
-                    <b className={deltaScore >= 0 ? "plus" : "minus"}>{formatDelta(deltaScore)}점</b>
-                  </div>
-                  <div className="meta_row">
-                    <span>예상 대출 이율</span>
-                    <b className={deltaRate <= 0 ? "plus" : "minus"}>
-                      {calc.baseRate}% → {calc.improvedRate}%
-                    </b>
-                  </div>
-                </div>
-              </div>
-
-              <div className="chart_card">
-                <div className="chart_head">
-                  <b>6개월 변화(가정)</b>
-                  <span>유지 vs 행동 반영</span>
-                </div>
-
-                <svg
-                  className="chart"
-                  viewBox={`0 0 ${chart.w} ${chart.h}`}
-                  preserveAspectRatio="none"
-                  role="img"
-                  aria-label="점수 변화 그래프"
-                >
-                  {chart.grid.map((y, idx) => (
-                    <line
-                      key={idx}
-                      x1={chart.pad}
-                      x2={chart.w - chart.pad}
-                      y1={y}
-                      y2={y}
-                      className="grid"
-                    />
-                  ))}
-
-                  <path d={chart.curPath} className="line current" />
-                  <path d={chart.impPath} className="line improved" />
-                </svg>
-
-                <div className="legend">
-                  <span className="legend_item">
-                    <i className="dot current" /> 지금처럼 유지
-                  </span>
-                  <span className="legend_item">
-                    <i className="dot improved" /> 두 가지 행동 반영
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
-      </Inner>
-
-      <Inner>
-          {/* ===== Section: 딱 2가지만 ===== */}
-          <section className="section" ref={sectionRef}>
-            <div className="section_head">
-              <h2>딱 두 가지만 바꾸면, 신용도가 이렇게 바뀝니다</h2>
-              <p>아래 2가지만 조절하면 점수와 이율이 바로 업데이트됩니다.</p>
-            </div>
-
-            <div className="grid_2">
-              <div className="card">
-                <div className="card_title">1) 카드 사용률</div>
-                <div className="row_between">
-                  <span className="muted">현재</span>
-                  <b>{inputs.cardUtil}%</b>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={inputs.cardUtil}
-                  onChange={(e) => setInputs((p) => ({ ...p, cardUtil: Number(e.target.value) }))}
-                />
-                <div className="hint">가정: 30% 이하가 유리</div>
-
-                <label className={`check ${actions.keepUtilUnder30 ? "on" : ""}`}>
-                  <input
-                    type="checkbox"
-                    checked={actions.keepUtilUnder30}
-                    onChange={(e) => setActions((p) => ({ ...p, keepUtilUnder30: e.target.checked }))}
-                  />
-                  <span>30% 이하로 제한하기</span>
-                </label>
-              </div>
-
-              <div className="card">
-                <div className="card_title">2) 최근 신규(카드/대출)</div>
-                <div className="row_between">
-                  <span className="muted">현재</span>
-                  <b>{inputs.recentNewCredit ? "있음" : "없음"}</b>
-                </div>
-
-                <label className={`toggle ${inputs.recentNewCredit ? "on" : ""}`}>
-                  <input
-                    type="checkbox"
-                    checked={inputs.recentNewCredit}
-                    onChange={(e) => setInputs((p) => ({ ...p, recentNewCredit: e.target.checked }))}
-                  />
-                  <span className="toggle_ui" />
-                  <span className="toggle_txt">{inputs.recentNewCredit ? "있음" : "없음"}</span>
-                </label>
-
-                <div className="hint">가정: 단기 신규는 불리</div>
-
-                <label className={`check ${actions.avoidNewCredit ? "on" : ""}`}>
-                  <input
-                    type="checkbox"
-                    checked={actions.avoidNewCredit}
-                    onChange={(e) => setActions((p) => ({ ...p, avoidNewCredit: e.target.checked }))}
-                  />
-                  <span>신규 피하기(가정 제거)</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="result_bar">
-              <div className="result_item">
-                <span className="muted">현재 점수</span>
-                <b>{calc.base.score}점</b>
-              </div>
-              <div className="result_item">
-                <span className="muted">행동 반영</span>
-                <b>{calc.improved.score}점</b>
-              </div>
-              <div className="result_item">
-                <span className="muted">변화</span>
-                <b className={deltaScore >= 0 ? "plus" : "minus"}>{formatDelta(deltaScore)}점</b>
-              </div>
-            </div>
-          </section>
-    </Inner>
-      <Inner>
-          {/* ===== Section: 이율도 내려간다 ===== */}
-          <section className="section">
-            <div className="section_head">
-              <h2>이걸 하면, 대출상품 이율도 이렇게 내려갑니다</h2>
-              <p>실제 산정 방식이 아닌 “이해를 돕는” 데모용 추정치입니다.</p>
-            </div>
-
-            <div className="rate_card">
-              <div className="rate_left">
-                <div className="rate_label">예상 금리(가정)</div>
-                <div className="rate_value">
-                  <span className="rate_big">{calc.baseRate}%</span>
-                  <span className="rate_arrow">→</span>
-                  <span className="rate_big">{calc.improvedRate}%</span>
-                </div>
-                <div className="rate_delta">
-                  변화{" "}
-                  <b className={deltaRate <= 0 ? "plus" : "minus"}>
-                    {deltaRate <= 0 ? "" : "+"}
-                    {deltaRate.toFixed(1)}%p
-                  </b>
-                </div>
-              </div>
-
-              <div className="rate_right">
-                <div className="pill">
-                  점수 {calc.base.score} → {calc.improved.score}
-                </div>
-                <div className="muted">
-                  핵심은 “정확한 수치”가 아니라, <b>행동이 금리에도 영향을 줄 수 있다</b>는 구조를 이해하는 것입니다.
-                </div>
-              </div>
-            </div>
-          </section>
-    </Inner>
-
-      <Inner>
-          {/* ===== Section: 메시지 ===== */}
-          <section className="section">
-            <div className="quote">
-              <h3>점수는 숫자가 아니라, 행동의 결과</h3>
-              <p>
-                점수를 맞히는 것보다, <b>“어떤 행동이 왜 유리/불리한지”</b>를 이해하면 다음 선택이 쉬워집니다.
-              </p>
-              <p className="muted">
-                그래서 이 서비스는 “입력 항목을 늘리는 것” 대신, “바뀌는 이유를 빨리 보여주는 것”에 집중했습니다.
-              </p>
-            </div>
-          </section>
-      </Inner>
-    </Screen>
-  );
+const clampValue = (value, minimum, maximum) => {
+  return Math.min(maximum, Math.max(minimum, value));
 };
 
-export default ScreenMain;
+const roundValue = (value) => {
+  return Math.round(value);
+};
+
+const parseNumberSafely = (rawValue) => {
+  const parsedValue = Number(String(rawValue ?? "").replaceAll(",", "").trim());
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
+};
+
+const formatKoreanWon = (value) => {
+  const sign = value < 0 ? "-" : "";
+  const absoluteValue = Math.abs(roundValue(value));
+  return `${sign}${absoluteValue.toLocaleString("ko-KR")}원`;
+};
+
+const formatKoreanWonShort = (value) => {
+  const sign = value < 0 ? "-" : "";
+  const absoluteValue = Math.abs(roundValue(value));
+
+  if (absoluteValue >= 100000000) return `${sign}${Math.round(absoluteValue / 100000000)}억`;
+  if (absoluteValue >= 10000) return `${sign}${Math.round(absoluteValue / 10000)}만`;
+  return `${sign}${absoluteValue.toLocaleString("ko-KR")}`;
+};
+
+/* =========================
+ * RAF loop
+ * ========================= */
+
+function useRequestAnimationFrameLoop(isEnabled, onFrame) {
+  const animationFrameIdRef = useRef(0);
+  const lastTimestampRef = useRef(0);
+
+  useEffect(() => {
+    if (!isEnabled) return;
+
+    lastTimestampRef.current = performance.now();
+
+    const onAnimationFrame = (currentTimestamp) => {
+      const deltaTimeInSeconds = Math.min(
+        0.05,
+        (currentTimestamp - lastTimestampRef.current) / 1000
+      );
+
+      lastTimestampRef.current = currentTimestamp;
+      onFrame(deltaTimeInSeconds, currentTimestamp);
+
+      animationFrameIdRef.current = requestAnimationFrame(onAnimationFrame);
+    };
+
+    animationFrameIdRef.current = requestAnimationFrame(onAnimationFrame);
+
+    return () => {
+      cancelAnimationFrame(animationFrameIdRef.current);
+    };
+  }, [isEnabled, onFrame]);
+}
+
+/* =========================
+ * 모델: 남는 돈 목표 ↑ → 누수 먼저 자동 감소(가정)
+ * - 누수: 이자 + 수수료 + 구독
+ * - 고정비 상세내역: 생활비 + 이자 + 수수료 + 구독
+ * ========================= */
+
+function buildMonthlyCashflowModel({
+  monthlyIncome,
+  fixedCost,
+  baseLivingCost,
+  baseInterestCost,
+  baseFeeCost,
+  baseSubscriptionCost,
+  remainTarget,
+}) {
+  const safeIncome = Math.max(0, monthlyIncome);
+  const safeFixedCost = clampValue(fixedCost, 0, safeIncome);
+
+  const safeBaseLivingCost = clampValue(baseLivingCost, 0, safeIncome);
+  const safeBaseInterestCost = clampValue(baseInterestCost, 0, safeIncome);
+  const safeBaseFeeCost = clampValue(baseFeeCost, 0, safeIncome);
+  const safeBaseSubscriptionCost = clampValue(baseSubscriptionCost, 0, safeIncome);
+
+  const baseLeakCost = safeBaseInterestCost + safeBaseFeeCost + safeBaseSubscriptionCost;
+  const safeRemainTarget = clampValue(remainTarget, 0, safeIncome);
+
+  // 목표를 달성하려면 총 지출은 income - target 이하여야 함
+  const targetTotalOutflow = safeIncome - safeRemainTarget;
+
+  // 현재(기본) 총 지출: 고정비 + (생활비 + 누수)
+  const baseDetailTotal = safeBaseLivingCost + baseLeakCost;
+  const baseTotalOutflow = safeFixedCost + baseDetailTotal;
+
+  const excessOutflow = Math.max(0, baseTotalOutflow - targetTotalOutflow);
+
+  // 줄이는 순서: 누수(이자+수수료+구독) → 생활비
+  // 누수 바닥값: 25%는 남김(UX 가정)
+  const minimumLeakCost = baseLeakCost * 0.25;
+  const maximumLeakReduction = Math.max(0, baseLeakCost - minimumLeakCost);
+
+  const leakReduction = clampValue(excessOutflow, 0, maximumLeakReduction);
+  const remainingExcessAfterLeakReduction = Math.max(0, excessOutflow - leakReduction);
+
+  const livingReduction = clampValue(remainingExcessAfterLeakReduction, 0, safeBaseLivingCost);
+
+  const adjustedLeakCost = baseLeakCost - leakReduction;
+  const adjustedLivingCost = safeBaseLivingCost - livingReduction;
+
+  // 누수를 이자/수수료/구독에 비례 배분해서 줄여줌(가정)
+  const baseLeakDenominator = Math.max(1, baseLeakCost);
+
+  const adjustedInterestCost = Math.max(
+    0,
+    Math.round(adjustedLeakCost * (safeBaseInterestCost / baseLeakDenominator))
+  );
+  const adjustedFeeCost = Math.max(
+    0,
+    Math.round(adjustedLeakCost * (safeBaseFeeCost / baseLeakDenominator))
+  );
+
+  // 잔여가 조금 튈 수 있으니 구독에서 마지막으로 맞춤
+  const adjustedSubscriptionCost = Math.max(
+    0,
+    adjustedLeakCost - adjustedInterestCost - adjustedFeeCost
+  );
+
+  const detailTotalOutflow =
+    adjustedLivingCost + adjustedInterestCost + adjustedFeeCost + adjustedSubscriptionCost;
+
+  const totalOutflow = safeFixedCost + detailTotalOutflow;
+  const remainingMoney = safeIncome - totalOutflow;
+
+  return {
+    monthlyIncome: safeIncome,
+
+    fixedCost: safeFixedCost,
+
+    livingCost: adjustedLivingCost,
+    interestCost: adjustedInterestCost,
+    feeCost: adjustedFeeCost,
+    subscriptionCost: adjustedSubscriptionCost,
+
+    leakCost: adjustedInterestCost + adjustedFeeCost + adjustedSubscriptionCost,
+    baseLeakCost,
+
+    leakSaved: baseLeakCost - (adjustedInterestCost + adjustedFeeCost + adjustedSubscriptionCost),
+
+    remainTarget: safeRemainTarget,
+
+    totalOutflow,
+    remainingMoney,
+  };
+}
+
+/* =========================
+ * particles
+ * ========================= */
+
+function createFlowParticles({ totalValue, maximumParticles = 8, randomSeed = 0 }) {
+  const safeValue = Math.max(0, totalValue);
+  const particleCount = clampValue(Math.floor(safeValue / 120000) + 3, 3, maximumParticles);
+
+  const averageValuePerParticle = safeValue / Math.max(1, particleCount);
+
+  const particles = [];
+  for (let index = 0; index < particleCount; index += 1) {
+    const randomFactor = (Math.sin((index + 1) * 12.9898 + randomSeed) * 43758.5453) % 1;
+    const ratio = 0.7 + Math.abs(randomFactor) * 0.9;
+
+    const particleValue = Math.max(0, averageValuePerParticle * ratio);
+
+    particles.push({
+      id: `${randomSeed}-${index}`,
+      amount: particleValue,
+      laneIndex: index % 2,
+      startPhase: (index / particleCount) * 0.85,
+      speed: 0.18 + (index % 3) * 0.04,
+    });
+  }
+
+  return particles;
+}
+
+/* =========================
+ * ScreenMain
+ * ========================= */
+
+export default function ScreenMain() {
+  /* ---------- 사용자 기본값 ---------- */
+  const [cashflowBase, setCashflowBase] = useState({
+    monthlyIncome: 3800000,
+    fixedCost: 1350000,
+
+    baseLivingCost: 980000,
+    baseInterestCost: 210000,
+    baseFeeCost: 65000,
+    baseSubscriptionCost: 52000,
+  });
+
+  /* ---------- 목표(잔액) ---------- */
+  const [remainTargetValue, setRemainTargetValue] = useState(1208000);
+
+  /* ---------- 입력 중 애니메이션 정지 ---------- */
+  const [isUserEditing, setIsUserEditing] = useState(false);
+
+  /* ---------- 입력 폼(문자열) ---------- */
+  const [inputForm, setInputForm] = useState({
+    monthlyIncomeInput: String(cashflowBase.monthlyIncome),
+    fixedCostInput: String(cashflowBase.fixedCost),
+    remainTargetInput: String(remainTargetValue),
+
+    livingCostInput: String(cashflowBase.baseLivingCost),
+    interestCostInput: String(cashflowBase.baseInterestCost),
+    feeCostInput: String(cashflowBase.baseFeeCost),
+    subscriptionCostInput: String(cashflowBase.baseSubscriptionCost),
+  });
+
+  /* ---------- 애니메이션 시간 ---------- */
+  const [animationTime, setAnimationTime] = useState(0);
+
+  useRequestAnimationFrameLoop(!isUserEditing, (deltaTimeInSeconds) => {
+    setAnimationTime((previousAnimationTime) => previousAnimationTime + deltaTimeInSeconds);
+  });
+
+  /* ---------- 모델 계산 ---------- */
+  const cashflowModel = useMemo(() => {
+    return buildMonthlyCashflowModel({
+      monthlyIncome: cashflowBase.monthlyIncome,
+      fixedCost: cashflowBase.fixedCost,
+
+      baseLivingCost: cashflowBase.baseLivingCost,
+      baseInterestCost: cashflowBase.baseInterestCost,
+      baseFeeCost: cashflowBase.baseFeeCost,
+      baseSubscriptionCost: cashflowBase.baseSubscriptionCost,
+
+      remainTarget: remainTargetValue,
+    });
+  }, [cashflowBase, remainTargetValue]);
+
+  /* ---------- 누수 강조(맥박) ---------- */
+  const leakPulseValue = useMemo(() => {
+    return 0.5 + 0.5 * Math.sin(animationTime * 2.1);
+  }, [animationTime]);
+
+  /* ---------- 두께 계산 ---------- */
+  const pipeThickness = useMemo(() => {
+    const safeIncome = Math.max(1, cashflowModel.monthlyIncome);
+
+    const fixedRatio = cashflowModel.fixedCost / safeIncome;
+    const leakRatio = cashflowModel.leakCost / safeIncome;
+    const remainRatio = Math.max(0, cashflowModel.remainingMoney) / safeIncome;
+
+    return {
+      fixed: clampValue(fixedRatio, 0.06, 0.6),
+      leak: clampValue(leakRatio, 0.04, 0.6),
+      remain: clampValue(remainRatio, 0.04, 0.5),
+    };
+  }, [cashflowModel]);
+
+  /* ---------- 파티클 ---------- */
+  const particles = useMemo(() => {
+    return {
+      fixed: createFlowParticles({ totalValue: cashflowModel.fixedCost, randomSeed: 11 }),
+      leak: createFlowParticles({ totalValue: cashflowModel.leakCost, randomSeed: 71 }),
+      remain: createFlowParticles({
+        totalValue: Math.max(0, cashflowModel.remainingMoney),
+        randomSeed: 97,
+        maximumParticles: 6,
+      }),
+    };
+  }, [cashflowModel]);
+
+  /* ---------- 흐름 위치 ---------- */
+  const calculateFlowPosition = (startPhase, speed) => {
+    const position = (startPhase + animationTime * speed) % 1;
+    return position;
+  };
+
+  /* =========================
+   * 입력 확정(공통)
+   * ========================= */
+
+  const commitMonthlyIncomeInput = () => {
+    const parsedMonthlyIncome = clampValue(parseNumberSafely(inputForm.monthlyIncomeInput), 0, 20000000);
+
+    setCashflowBase((previousCashflowBase) => {
+      return {
+        ...previousCashflowBase,
+        monthlyIncome: parsedMonthlyIncome,
+      };
+    });
+
+    setInputForm((previousInputForm) => {
+      return {
+        ...previousInputForm,
+        monthlyIncomeInput: String(parsedMonthlyIncome),
+      };
+    });
+
+    setIsUserEditing(false);
+  };
+
+  const commitFixedCostInput = () => {
+    const parsedFixedCost = clampValue(parseNumberSafely(inputForm.fixedCostInput), 0, cashflowBase.monthlyIncome);
+
+    setCashflowBase((previousCashflowBase) => {
+      return {
+        ...previousCashflowBase,
+        fixedCost: parsedFixedCost,
+      };
+    });
+
+    setInputForm((previousInputForm) => {
+      return {
+        ...previousInputForm,
+        fixedCostInput: String(parsedFixedCost),
+      };
+    });
+
+    setIsUserEditing(false);
+  };
+
+  const commitRemainTargetInput = () => {
+    const parsedRemainTarget = clampValue(parseNumberSafely(inputForm.remainTargetInput), 0, cashflowBase.monthlyIncome);
+
+    setRemainTargetValue(parsedRemainTarget);
+
+    setInputForm((previousInputForm) => {
+      return {
+        ...previousInputForm,
+        remainTargetInput: String(parsedRemainTarget),
+      };
+    });
+
+    setIsUserEditing(false);
+  };
+
+  const commitDetailCostsInput = () => {
+    const parsedLivingCost = clampValue(parseNumberSafely(inputForm.livingCostInput), 0, cashflowBase.monthlyIncome);
+    const parsedInterestCost = clampValue(parseNumberSafely(inputForm.interestCostInput), 0, cashflowBase.monthlyIncome);
+    const parsedFeeCost = clampValue(parseNumberSafely(inputForm.feeCostInput), 0, cashflowBase.monthlyIncome);
+    const parsedSubscriptionCost = clampValue(
+      parseNumberSafely(inputForm.subscriptionCostInput),
+      0,
+      cashflowBase.monthlyIncome
+    );
+
+    setCashflowBase((previousCashflowBase) => {
+      return {
+        ...previousCashflowBase,
+        baseLivingCost: parsedLivingCost,
+        baseInterestCost: parsedInterestCost,
+        baseFeeCost: parsedFeeCost,
+        baseSubscriptionCost: parsedSubscriptionCost,
+      };
+    });
+
+    setInputForm((previousInputForm) => {
+      return {
+        ...previousInputForm,
+        livingCostInput: String(parsedLivingCost),
+        interestCostInput: String(parsedInterestCost),
+        feeCostInput: String(parsedFeeCost),
+        subscriptionCostInput: String(parsedSubscriptionCost),
+      };
+    });
+
+    setIsUserEditing(false);
+  };
+
+  const handleEnterToCommit = (keyboardEvent, commitFunction) => {
+    if (keyboardEvent.key !== "Enter") return;
+    keyboardEvent.currentTarget.blur();
+    commitFunction();
+  };
+
+  /* =========================
+   * 화면 구성(요청한 구조)
+   * ========================= */
+
+  return (
+    <div className="main_wrap">
+      {/* ======================
+       * 1) 상단 KPI 3개: 월 수입 | 고정비 | 잔액(목표)
+       * ====================== */}
+      <section className="top_kpi_grid" aria-label="상단 핵심 지표">
+        <div className="kpi_box kpi_a">
+          <div className="kpi_label">월 수입</div>
+          <div className="kpi_value">{formatKoreanWon(cashflowModel.monthlyIncome)}</div>
+
+          <input
+            className="kpi_input"
+            inputMode="numeric"
+            value={inputForm.monthlyIncomeInput}
+            onFocus={() => setIsUserEditing(true)}
+            onChange={(event) => {
+              setInputForm((previousInputForm) => {
+                return {
+                  ...previousInputForm,
+                  monthlyIncomeInput: event.target.value,
+                };
+              });
+            }}
+            onBlur={commitMonthlyIncomeInput}
+            onKeyDown={(keyboardEvent) => handleEnterToCommit(keyboardEvent, commitMonthlyIncomeInput)}
+            aria-label="월 수입 입력"
+          />
+        </div>
+
+        <div className="kpi_box kpi_b">
+          <div className="kpi_label">고정비</div>
+          <div className="kpi_value">{formatKoreanWon(cashflowModel.fixedCost)}</div>
+
+          <input
+            className="kpi_input"
+            inputMode="numeric"
+            value={inputForm.fixedCostInput}
+            onFocus={() => setIsUserEditing(true)}
+            onChange={(event) => {
+              setInputForm((previousInputForm) => {
+                return {
+                  ...previousInputForm,
+                  fixedCostInput: event.target.value,
+                };
+              });
+            }}
+            onBlur={commitFixedCostInput}
+            onKeyDown={(keyboardEvent) => handleEnterToCommit(keyboardEvent, commitFixedCostInput)}
+            aria-label="고정비 입력"
+          />
+        </div>
+
+        <div className="kpi_box kpi_c">
+          <div className="kpi_label">이번 달 남는 돈(잔액 목표)</div>
+          <div className={`kpi_value ${cashflowModel.remainingMoney >= 0 ? "good" : "bad"}`}>
+            {formatKoreanWon(cashflowModel.remainingMoney)}
+          </div>
+
+          <input
+            className="kpi_input"
+            inputMode="numeric"
+            value={inputForm.remainTargetInput}
+            onFocus={() => setIsUserEditing(true)}
+            onChange={(event) => {
+              setInputForm((previousInputForm) => {
+                return {
+                  ...previousInputForm,
+                  remainTargetInput: event.target.value,
+                };
+              });
+            }}
+            onBlur={commitRemainTargetInput}
+            onKeyDown={(keyboardEvent) => handleEnterToCommit(keyboardEvent, commitRemainTargetInput)}
+            aria-label="잔액 목표 입력"
+          />
+
+          <div className="kpi_sub muted">
+            목표를 올리면 <b className="leak">누수(이자·수수료·구독)</b>부터 자동으로 줄어듭니다(가정)
+          </div>
+        </div>
+      </section>
+
+      {/* ======================
+       * 2) 이번달 또 없어질 돈(누수)
+       * ====================== */}
+      <section className="panel" aria-label="이번 달 또 없어질 돈">
+        <div className="panel_head">
+          <div className="panel_title">이번 달 또 없어질 돈</div>
+          <div className="panel_value leak">{formatKoreanWon(cashflowModel.leakCost)}</div>
+        </div>
+
+        <div className="panel_sub muted">
+          목표 기준 절감 추정: <b className="plus">{formatKoreanWon(cashflowModel.leakSaved)}</b>
+        </div>
+
+        <div className="leak_pipe_preview">
+          <PipeLane
+            title="이자·수수료·구독"
+            value={cashflowModel.leakCost}
+            tone="leak"
+            thickness={pipeThickness.leak}
+            particles={particles.leak}
+            isUserEditing={isUserEditing}
+            calculateFlowPosition={calculateFlowPosition}
+            pulseValue={leakPulseValue}
+          />
+        </div>
+      </section>
+
+      {/* ======================
+       * 3) 고정비 상세내역
+       * - 생활비 / 이자 / 수수료 / 구독
+       * ====================== */}
+      <section className="panel" aria-label="고정비 상세내역">
+        <div className="panel_head">
+          <div className="panel_title">고정비 상세내역</div>
+          <div className="panel_value">{formatKoreanWon(cashflowModel.livingCost + cashflowModel.leakCost)}</div>
+        </div>
+
+        <div className="detail_grid">
+          <div className="detail_item">
+            <div className="detail_label">생활비</div>
+            <div className="detail_value">{formatKoreanWon(cashflowModel.livingCost)}</div>
+            <input
+              className="detail_input"
+              inputMode="numeric"
+              value={inputForm.livingCostInput}
+              onFocus={() => setIsUserEditing(true)}
+              onChange={(event) => {
+                setInputForm((previousInputForm) => {
+                  return {
+                    ...previousInputForm,
+                    livingCostInput: event.target.value,
+                  };
+                });
+              }}
+              onBlur={commitDetailCostsInput}
+              onKeyDown={(keyboardEvent) => handleEnterToCommit(keyboardEvent, commitDetailCostsInput)}
+              aria-label="생활비 입력"
+            />
+          </div>
+
+          <div className="detail_item">
+            <div className="detail_label">이자</div>
+            <div className="detail_value">{formatKoreanWon(cashflowModel.interestCost)}</div>
+            <input
+              className="detail_input"
+              inputMode="numeric"
+              value={inputForm.interestCostInput}
+              onFocus={() => setIsUserEditing(true)}
+              onChange={(event) => {
+                setInputForm((previousInputForm) => {
+                  return {
+                    ...previousInputForm,
+                    interestCostInput: event.target.value,
+                  };
+                });
+              }}
+              onBlur={commitDetailCostsInput}
+              onKeyDown={(keyboardEvent) => handleEnterToCommit(keyboardEvent, commitDetailCostsInput)}
+              aria-label="이자 입력"
+            />
+          </div>
+
+          <div className="detail_item">
+            <div className="detail_label">수수료</div>
+            <div className="detail_value">{formatKoreanWon(cashflowModel.feeCost)}</div>
+            <input
+              className="detail_input"
+              inputMode="numeric"
+              value={inputForm.feeCostInput}
+              onFocus={() => setIsUserEditing(true)}
+              onChange={(event) => {
+                setInputForm((previousInputForm) => {
+                  return {
+                    ...previousInputForm,
+                    feeCostInput: event.target.value,
+                  };
+                });
+              }}
+              onBlur={commitDetailCostsInput}
+              onKeyDown={(keyboardEvent) => handleEnterToCommit(keyboardEvent, commitDetailCostsInput)}
+              aria-label="수수료 입력"
+            />
+          </div>
+
+          <div className="detail_item">
+            <div className="detail_label">구독</div>
+            <div className="detail_value">{formatKoreanWon(cashflowModel.subscriptionCost)}</div>
+            <input
+              className="detail_input"
+              inputMode="numeric"
+              value={inputForm.subscriptionCostInput}
+              onFocus={() => setIsUserEditing(true)}
+              onChange={(event) => {
+                setInputForm((previousInputForm) => {
+                  return {
+                    ...previousInputForm,
+                    subscriptionCostInput: event.target.value,
+                  };
+                });
+              }}
+              onBlur={commitDetailCostsInput}
+              onKeyDown={(keyboardEvent) => handleEnterToCommit(keyboardEvent, commitDetailCostsInput)}
+              aria-label="구독 입력"
+            />
+          </div>
+        </div>
+
+        <div className="panel_sub muted">
+          입력 중에는 흐름이 멈추고, 확정하면 다시 흐릅니다.
+        </div>
+      </section>
+
+      {/* ======================
+       * 4) 이번달 남는 돈(잔액) — 드롭(떨어지는 느낌)
+       * ====================== */}
+      <section className="panel" aria-label="이번 달 남는 돈">
+        <div className="panel_head">
+          <div className="panel_title">이번 달 남는 돈</div>
+          <div className={`panel_value ${cashflowModel.remainingMoney >= 0 ? "good" : "bad"}`}>
+            {formatKoreanWon(cashflowModel.remainingMoney)}
+          </div>
+        </div>
+
+        <div className="drop_block">
+          <div className="drop_pipe" data-tone={cashflowModel.remainingMoney >= 0 ? "good" : "bad"}>
+            <div className={`drop_stream ${isUserEditing ? "is_paused" : ""}`} />
+
+            <div className="drop_chips" aria-hidden="true">
+              {particles.remain.map((particle) => {
+                const position = calculateFlowPosition(particle.startPhase, particle.speed);
+                const verticalPercent = (position * 100) % 100;
+
+                return (
+                  <span
+                    key={particle.id}
+                    className="chip chip_good"
+                    style={{
+                      top: `${verticalPercent}%`,
+                      left: `${particle.laneIndex ? 58 : 18}%`,
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    +{formatKoreanWonShort(particle.amount)}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="drop_note">
+            <b>핵심:</b> 남는 돈을 만들려면, <b className="leak">누수부터 줄어야</b> 합니다.
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* =========================
+ * PipeLane
+ * ========================= */
+
+function PipeLane({
+  title,
+  value,
+  tone = "base",
+  thickness = 0.25,
+  particles = [],
+  isUserEditing,
+  calculateFlowPosition,
+  pulseValue,
+}) {
+  const pipeHeightInPixels = clampValue(thickness * 44, 8, 28);
+
+  const leakStyle =
+    tone === "leak"
+      ? {
+          boxShadow: `0 0 ${Math.round(10 + (pulseValue || 0) * 14)}px rgba(220,38,38,0.25)`,
+          borderColor: `rgba(220,38,38,${0.22 + (pulseValue || 0) * 0.18})`,
+        }
+      : undefined;
+
+  return (
+    <div className={`lane lane_${tone}`}>
+      <div className="lane_head">
+        <div className="lane_title">{title}</div>
+        <div className={`lane_value ${tone === "leak" ? "leak" : ""}`}>{formatKoreanWon(value)}</div>
+      </div>
+
+      <div className="lane_pipe" style={{ height: `${pipeHeightInPixels}px`, ...leakStyle }}>
+        <div className={`lane_stream ${tone === "leak" ? "is_leak" : ""} ${isUserEditing ? "is_paused" : ""}`} />
+
+        <div className="lane_chips" aria-hidden="true">
+          {particles.map((particle) => {
+            const position = calculateFlowPosition(particle.startPhase, particle.speed);
+            const leftPercent = 6 + position * 88;
+
+            return (
+              <span
+                key={particle.id}
+                className={`chip ${tone === "leak" ? "chip_leak" : "chip_base"}`}
+                style={{
+                  left: `${leftPercent}%`,
+                  top: particle.laneIndex ? "70%" : "30%",
+                }}
+              >
+                -{formatKoreanWonShort(particle.amount)}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}

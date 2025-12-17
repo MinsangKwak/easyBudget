@@ -36,6 +36,8 @@ body{
 #root{flex:1 1 auto;}
 
 .app {
+  display:flex;
+  flex-direction:column;
   width: min(720px, 100%);
   padding:60px 20px 0;
   margin:0 auto;

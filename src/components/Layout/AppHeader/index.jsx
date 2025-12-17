@@ -18,7 +18,7 @@ const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
             </Button>
           ) : (
             <div className="header__logo" aria-label="서비스 로고">
-              신용점수 시뮬레이터
+              마이-저축
             </div>
           )}
         </div>

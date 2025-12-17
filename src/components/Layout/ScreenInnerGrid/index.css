@@ -1,9 +1,0 @@
-.screen_inner_grid {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.grid_top,
-.grid_bottom {
-  width: 100%;
-}
