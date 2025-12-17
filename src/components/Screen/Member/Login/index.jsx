@@ -89,6 +89,9 @@ const ScreenLogin = ({ onSignUpComplete }) => {
 
           <BaseButtonContainer>
             <Button type="submit" variant="solid__primary" className="btn_email_join_submit">
+              로그인
+            </Button>
+            <Button type="submit" variant="solid__primary" className="btn_email_join_submit">
               계정이 없으시다면 여기로 회원가입
             </Button>
           </BaseButtonContainer>
