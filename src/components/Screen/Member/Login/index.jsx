@@ -82,9 +82,6 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
               />
-            </FormFieldWrapper>
-
-            <FormFieldWrapper>
               <FormFieldInput
                 id="password"
                 type="password"
@@ -107,6 +104,7 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
               >
                 로그인
               </Button>
+              <span className="spacer">또는</span>
               <Button
                 type="button"
                 variant="line__black"

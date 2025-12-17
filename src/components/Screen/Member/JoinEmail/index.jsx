@@ -64,9 +64,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-          </FormFieldWrapper>
 
-          <FormFieldWrapper>
             <FormFieldInput
               id="password"
               type="password"
@@ -75,9 +73,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-          </FormFieldWrapper>
 
-          <FormFieldWrapper>
             <FormFieldInput
               id="password_confirm"
               type="password"
