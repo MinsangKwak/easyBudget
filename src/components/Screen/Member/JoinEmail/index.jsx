@@ -2,11 +2,12 @@ import "./index.css";
 import { useState } from "react";
 import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
+import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
 import Button from "../../../Form/Button";
+import BaseButtonContainer from "../../../Form/BaseButtonContainer";
+
 import ErrorMessage from "../../../Form/ErrorMessage";
-// import LottieIcon from "../../../Common/LottieIcon";
-// import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
 
 const ScreenJoinEmail = ({ onSignUpComplete }) => {
   const [email, setEmail] = useState("");
@@ -42,7 +43,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
   };
 
   return (
-    <Screen className="screen_email_join">
+    <Screen className="screen_join__email">
       {/* <div className="screen_visual">
         <LottieIcon
           src={LOTTIE_SOURCES.emailWave}
@@ -50,8 +51,12 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
           size={152}
         />
       </div> */}
-      <Title>이메일로 회원가입</Title>
-
+      <Title>
+        회원가입
+      </Title>
+      <Subtitle>
+        일반 회원가입 / G-Mail연동
+      </Subtitle>
       <Inner>
         <form className="form_email_join" onSubmit={handleSubmit}>
           <div className="form_field input_wrapper">
@@ -104,13 +109,11 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
 
           {error && <ErrorMessage aria-live="polite">{error}</ErrorMessage>}
 
-          <div className="btn_container">
+          <BaseButtonContainer>
             <Button type="submit" variant="solid__primary" className="btn_email_join_submit">
               이메일로 가입하기
             </Button>
-          </div>
-          <span>또는</span>
-          <div className="btn_container">
+            <span className="spacer">또는</span>
             <Button
               type="button"
               variant="line__black"
@@ -119,7 +122,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
             >
               빠르게 GMAIL 연동하기
             </Button>
-          </div>
+          </BaseButtonContainer>
         </form>
       </Inner>
     </Screen>

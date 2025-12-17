@@ -4,10 +4,11 @@ import Title from "../../../Content/Title";
 import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
 import Button from "../../../Form/Button";
+import BaseButtonContainer from "../../../Form/BaseButtonContainer";
+
+import IconLock from "../../../Common/IconLock";
 import { MdMailOutline } from "react-icons/md";
 import { FaIdBadge } from "react-icons/fa";
-import BaseButtonContainer from "../../../Form/BaseButtonContainer";
-import { FaLock, FaEnvelope, FaIdCard } from "react-icons/fa";
 
 const ScreenJoin = ({ onClickCert, onClickEmail }) => {
   return (
@@ -20,11 +21,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
         로그인 방식을 선택해 주세요.
       </Subtitle>
       <Inner>
-        <div className="login_hero login_hero--triple" aria-hidden="true">
-          <FaEnvelope className="login_hero__side left" />
-          <FaLock className="login_hero__icon" />
-          <FaIdCard className="login_hero__side right" />
-        </div>
+        <IconLock />
         <BaseButtonContainer>
           <Button
             type="button"

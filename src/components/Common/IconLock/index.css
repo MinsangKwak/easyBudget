@@ -1,0 +1,174 @@
+
+/* =========================
+ * Login Hero Row (가로 3개)
+ * ========================= */
+.icon_lock_row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 0 auto 16px;
+}
+
+/* =========================
+ * Login Hero Card (1개)
+ * ========================= */
+.icon_lock {
+    position: relative;
+    width: 14rem;
+    height: 14rem;
+
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+
+    border-radius: 24px;
+    background: var(--color-white);
+    border: 1px solid var(--color-primary);
+    box-shadow: 0 18px 40px rgba(16, 24, 40, .10);
+    overflow: hidden;
+}
+
+/* shine */
+/* .icon_lock::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, .45) 40%,
+            rgba(255, 255, 255, 0) 80%);
+    transform: rotate(18deg);
+    animation: loginShine 2.8s ease-in-out infinite;
+    opacity: .55;
+    pointer-events: none;
+} */
+
+/* pulse ring */
+.icon_lock::after {
+    content: "";
+    position: absolute;
+    left:44px;
+    width: 52px;
+    height: 52px;
+    border-radius: 999px;
+    border: 1px solid rgba(96, 37, 235, 0.25);
+    box-shadow: 0 0 0 0 rgba(180, 43, 180, 0.12);
+    animation: pulseRing 1.6s ease-out infinite;
+    pointer-events: none;
+}
+
+/* =========================
+ * Icons
+ * ========================= */
+
+/* 중앙 자물쇠 */
+.icon_lock__icon {
+    justify-self: center;
+    font-size: 40px;
+    color: var(--color-primary);
+    animation: lockFloat 2.2s ease-in-out infinite;
+}
+
+/* 좌/우 보조 아이콘 */
+.icon_lock__side {
+    font-size: 20px;
+    color: rgba(124, 58, 237, .45);
+    opacity: .7;
+    animation: sideFloat 3.2s ease-in-out infinite;
+}
+
+.icon_lock__side.left {
+    margin-left: 12px;
+    animation-delay: .2s;
+}
+
+.icon_lock__side.right {
+    margin-right: 12px;
+    animation-delay: .6s;
+}
+
+/* =========================
+ * Animations
+ * ========================= */
+@keyframes loginShine {
+    0% {
+        transform: translateX(-35%) rotate(18deg);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: .55;
+    }
+
+    50% {
+        transform: translateX(35%) rotate(18deg);
+        opacity: .35;
+    }
+
+    100% {
+        transform: translateX(60%) rotate(18deg);
+        opacity: 0;
+    }
+}
+
+@keyframes lockFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes pulseRing {
+    0% {
+        transform: scale(.92);
+        opacity: 0;
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, .14);
+    }
+
+    15% {
+        opacity: .9;
+    }
+
+    60% {
+        opacity: .25;
+        box-shadow: 0 0 0 14px rgba(37, 99, 235, .06);
+    }
+
+    100% {
+        transform: scale(1.18);
+        opacity: 0;
+        box-shadow: 0 0 0 20px rgba(37, 99, 235, 0);
+    }
+}
+
+@keyframes sideFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: .45;
+    }
+
+    50% {
+        transform: translateY(-3px);
+        opacity: .75;
+    }
+}
+
+/* =========================
+ * Reduced motion
+ * ========================= */
+@media (prefers-reduced-motion: reduce) {
+
+    .icon_lock::before,
+    .icon_lock::after,
+    .icon_lock__icon,
+    .icon_lock__side {
+        animation: none !important;
+    }
+}
