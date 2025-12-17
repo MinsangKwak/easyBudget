@@ -336,3 +336,310 @@ button, input{ font: inherit; }
   line-height: 1.55;
   color: var(--muted);
 }
+
+/* =========================
+ * HERO: 누수 레이더
+ * ========================= */
+
+.hero_radar{
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.hero_radar__left,
+.radar_card{
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl); /* ✅ 수정: var(--r-xl) -> var(--radius-xl) */
+  background: rgba(255,255,255,.92);
+  box-shadow: var(--shadow);
+}
+
+.hero_radar__kicker{
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.hero_radar__title{
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.hero_radar__em{
+  color: var(--danger);
+  font-weight: 900;
+}
+
+.hero_radar__big{
+  padding: 14px;
+  border-radius: var(--radius-lg); /* ✅ 수정: var(--r-lg) -> var(--radius-lg) */
+  border: 1px solid var(--border);
+  background: var(--soft);
+}
+
+.hero_radar__big_label{
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.hero_radar__big_value{
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.hero_radar__big_value.leak{
+  color: var(--danger);
+}
+
+.hero_radar__big_sub{
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.hero_radar__cta{
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hero_radar__mini{
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+/* right */
+.hero_radar__right{
+  display: grid;
+}
+
+.radar_card__head{
+  margin-bottom: 10px;
+}
+.radar_card__title{
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--text);
+}
+.radar_card__sub{
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.radar_chart{
+  display: grid;
+  place-items: center;
+  padding: 10px 0 6px 0;
+}
+
+/* donut */
+.radar_donut{
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.radar_ring_bg{
+  fill: none;
+  stroke: rgba(16,24,40,.06);
+}
+
+.radar_segment{
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dasharray .35s ease, stroke-dashoffset .35s ease;
+}
+
+.radar_segment.is_living{
+  stroke: rgba(37,99,235,.65);
+}
+
+.radar_segment.is_leak{
+  stroke: rgba(220,38,38,.75);
+}
+
+.radar_center{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.radar_center__top{
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+.radar_center__value{
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.radar_center__bottom{
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+/* legend */
+.radar_legend{
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.radar_legend__row{
+  display: grid;
+  grid-template-columns: 14px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255,255,255,.65);
+}
+
+.legend_dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.legend_dot.living{ background: rgba(37,99,235,.75); }
+.legend_dot.leak{ background: rgba(220,38,38,.75); }
+
+.legend_label{
+  color: var(--text);
+  font-weight: 700;
+}
+
+.legend_value{
+  color: var(--text);
+  font-weight: 900;
+}
+
+/* =========================
+ * FlipCard (추가)
+ * ========================= */
+
+.flip_card{
+  position: relative;
+}
+
+.flip_card__inner{
+  position: relative;
+  width: 100%;
+  min-height: 350px;
+  perspective: 1200px;
+}
+
+.flip_card__face{
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  border-radius: var(--radius-xl);
+  transition: transform .55s cubic-bezier(.2,.75,.2,1);
+}
+
+.flip_card__front{
+  transform: rotateY(0deg);
+}
+
+.flip_card__back{
+  transform: rotateY(180deg);
+}
+
+.flip_card.is_flipped .flip_card__front{
+  transform: rotateY(-180deg);
+}
+
+.flip_card.is_flipped .flip_card__back{
+  transform: rotateY(0deg);
+}
+
+.flip_card__actions{
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+/* buttons */
+.btn_primary,
+.btn_ghost{
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-weight: 900;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.btn_primary{
+  background: rgba(37,99,235,.92);
+  border-color: rgba(37,99,235,.35);
+  color: #fff;
+  box-shadow: 0 10px 18px rgba(37,99,235,.18);
+}
+
+.btn_primary:hover{
+  filter: brightness(0.98);
+}
+
+.btn_ghost{
+  background: rgba(255,255,255,.92);
+  color: var(--text);
+}
+
+.btn_ghost:hover{
+  background: rgba(246,247,251,.95);
+}
+
+.btn_primary,
+.btn_ghost{
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-weight: 900;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn_primary{
+  background: rgba(37,99,235,.92);
+  color: #fff;
+  border-color: rgba(37,99,235,.35);
+}
+
+.btn_ghost{
+  background: rgba(255,255,255,.75);
+  color: var(--text);
+}
+
+.btn_primary:hover{ filter: brightness(.98); }
+.btn_ghost:hover{ background: rgba(255,255,255,.92); }
