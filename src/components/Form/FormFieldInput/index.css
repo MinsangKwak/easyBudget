@@ -12,7 +12,7 @@
 
 .form_label {
   font-weight: 700;
-  color: var(--color-secondary);
+  color: var(--color-black-100);
   font-size: 1.5rem;
 }
 
@@ -23,7 +23,7 @@
   padding: 0 1.4rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-primary);
-  background: var(--color-surface);
+  background: var(--color-white);
   font-size: 1.6rem;
   color: var(--color-primary);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -33,7 +33,7 @@
   border-color: #6f27de;
   outline: none;
   box-shadow: 0 0 0 3px rgba(132, 56, 245, 0.15);
-  background: var(--color-surface);
+  background: var(--color-white);
 }
 
 .form_field__input::placeholder {

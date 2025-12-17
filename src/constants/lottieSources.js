@@ -1,17 +1,7 @@
-import introPulse from "../assets/lottie/introPulse.json?url";
-import joinGlow from "../assets/lottie/joinGlow.json?url";
-import certShield from "../assets/lottie/certShield.json?url";
-import emailWave from "../assets/lottie/emailWave.json?url";
-import socialOrbit from "../assets/lottie/socialOrbit.json?url";
-import welcomeSpark from "../assets/lottie/welcomeSpark.json?url";
-import loaderOrbit from "../assets/lottie/loaderOrbit.json?url";
+import intro from "../assets/lottie/intro.json";
+import introPulse from "../assets/lottie/introPulse.json";
 
 export const LOTTIE_SOURCES = {
+  intro,
   introPulse,
-  joinGlow,
-  certShield,
-  emailWave,
-  socialOrbit,
-  welcomeSpark,
-  loaderOrbit,
 };

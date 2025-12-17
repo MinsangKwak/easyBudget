@@ -559,33 +559,33 @@ export default function ScreenMain() {
         {/* LEFT */}
         <div className="hero_radar__left">
 
-<div className="hero_radar__topbar">
-  <div className="hero_radar__kicker">나가는 돈 줄여보자</div>
+          <div className="hero_radar__topbar">
+            <div className="hero_radar__kicker">나가는 돈 줄여보자</div>
 
-  <div className="hero_radar__top_actions">
-    <button
-      type="button"
-      className="btn_primary"
-      onClick={() => setIsHeroCardFlipped(true)}
-      aria-label="내 값 입력으로 전환"
-      title="내 값 입력"
-    >
-      <FiEdit3 style={{ marginRight: 6, verticalAlign: "-2px" }} />
-      내 값 입력
-    </button>
+            <div className="hero_radar__top_actions">
+              <button
+                type="button"
+                className="btn_primary"
+                onClick={() => setIsHeroCardFlipped(true)}
+                aria-label="내 값 입력으로 전환"
+                title="내 값 입력"
+              >
+                <FiEdit3 style={{ marginRight: 6, verticalAlign: "-2px" }} />
+                내 값 입력
+              </button>
 
-    <button
-      type="button"
-      className="btn_ghost"
-      onClick={() => setIsHeroCardFlipped(false)}
-      aria-label="평균 보기로 전환"
-      title="평균 보기"
-    >
-      <FiRefreshCcw style={{ marginRight: 6, verticalAlign: "-2px" }} />
-      평균 보기
-    </button>
-  </div>
-</div>
+              <button
+                type="button"
+                className="btn_ghost"
+                onClick={() => setIsHeroCardFlipped(false)}
+                aria-label="평균 보기로 전환"
+                title="평균 보기"
+              >
+                <FiRefreshCcw style={{ marginRight: 6, verticalAlign: "-2px" }} />
+                평균 보기
+              </button>
+            </div>
+          </div>
 
 
           <div className="hero_radar__kicker">나가는 돈 줄여보자</div>
@@ -1016,9 +1016,9 @@ function PipeLane({
   const leakStyle =
     tone === "leak"
       ? {
-          boxShadow: `0 0 ${Math.round(10 + (pulseValue || 0) * 14)}px rgba(220,38,38,0.25)`,
-          borderColor: `rgba(220,38,38,${0.22 + (pulseValue || 0) * 0.18})`,
-        }
+        boxShadow: `0 0 ${Math.round(10 + (pulseValue || 0) * 14)}px rgba(220,38,38,0.25)`,
+        borderColor: `rgba(220,38,38,${0.22 + (pulseValue || 0) * 0.18})`,
+      }
       : undefined;
 
   return (
