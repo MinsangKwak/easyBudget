@@ -14,8 +14,9 @@ const FormFieldInput = ({
   inputMode,
   placeholder,
   wrapperClassName = "form_field input_wrapper",
+  disabled = false,
 }) => {
-  const showClear = !!value && value.length > 0;
+  const showClear = !!value && value.length > 0 && !disabled;
 
   const handleClickClear = () => {
     if (onChange) {
@@ -45,6 +46,7 @@ const FormFieldInput = ({
           value={value}
           onChange={onChange}
           onFocus={onFocus}
+          disabled={disabled}
         />
         <Button
           type="button"
@@ -52,6 +54,7 @@ const FormFieldInput = ({
           aria-label="입력 지우기"
           hidden={!showClear}
           onClick={handleClickClear}
+          disabled={disabled}
         >
           <IoIosCloseCircleOutline aria-hidden="true" />
         </Button>

@@ -9,6 +9,8 @@ import Inner from "../../../Content/Inner";
 import Button from "../../../Form/Button";
 import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 import ErrorMessage from "../../../Form/ErrorMessage";
+import FormFieldInput from "../../../Form/FormFieldInput";
+import FormFieldWrapper from "../../../Form/FormFieldWrapper";
 
 const ScreenJoinEmail = ({ onSignUpComplete }) => {
   const [email, setEmail] = useState("");
@@ -53,53 +55,38 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
       </Subtitle>
       <Inner>
         <form className="form_email_join" onSubmit={handleSubmit}>
-          <div className="form_field input_wrapper">
-            <div className="input_container">
-              <label htmlFor="email" className="form_label">
-                이메일
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="form_field__input"
-                placeholder="example@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-          </div>
+          <FormFieldWrapper>
+            <FormFieldInput
+              id="email"
+              type="email"
+              label="이메일"
+              placeholder="example@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </FormFieldWrapper>
 
-          <div className="form_field input_wrapper">
-            <div className="input_container">
-              <label htmlFor="password" className="form_label">
-                비밀번호
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="form_field__input"
-                placeholder="비밀번호 (8자 이상)"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
+          <FormFieldWrapper>
+            <FormFieldInput
+              id="password"
+              type="password"
+              label="비밀번호"
+              placeholder="비밀번호 (8자 이상)"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormFieldWrapper>
 
-          <div className="form_field input_wrapper">
-            <div className="input_container">
-              <label htmlFor="password_confirm" className="form_label">
-                비밀번호 확인
-              </label>
-              <input
-                id="password_confirm"
-                type="password"
-                className="form_field__input"
-                placeholder="비밀번호를 한 번 더 입력해주세요"
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-              />
-            </div>
-          </div>
+          <FormFieldWrapper>
+            <FormFieldInput
+              id="password_confirm"
+              type="password"
+              label="비밀번호 확인"
+              placeholder="비밀번호를 한 번 더 입력해주세요"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+            />
+          </FormFieldWrapper>
 
           {error && <ErrorMessage aria-live="polite">{error}</ErrorMessage>}
 
