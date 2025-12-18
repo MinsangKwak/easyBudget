@@ -26,7 +26,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
         <BaseButtonContainer>
           <Button
             type="button"
-            variant="solid__primary"
+            className="btn_md btn_solid__primary"
             onClick={onClickEmail}
           >
             <MdMailOutline aria-hidden="true" />
@@ -35,7 +35,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
           <span className="spacer">또는</span>
           <Button
             type="button"
-            variant="line__black"
+            className="btn_md btn_outline__black"
             onClick={onClickCert}
           >
             <FaIdBadge aria-hidden="true" />

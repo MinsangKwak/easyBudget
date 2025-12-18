@@ -39,7 +39,6 @@ const ScreenWait = ({ selectedBank, onNext }) => {
       <Subtitle>
         인증요청 알림을 확인해주세요
       </Subtitle>
-
       <Inner>
         <ScreenInnerGrid
           top={
@@ -51,14 +50,14 @@ const ScreenWait = ({ selectedBank, onNext }) => {
           bottom={
             <BaseButtonContainer>
               <BaseButton
-                className="btn_solid__primary btn_wait__complete"
+                className="btn_md btn_solid__primary"
                 onClick={onNext}
               >
                 인증 완료
               </BaseButton>
-
+              <span className="spacer">또는</span>
               <BaseButton
-                className="btn_line__black btn_cert__ask_auth"
+                className="btn_md btn_outline__grey"
                 data-modal-target="auth_help"
               >
                 <span className="btn_text">인증이 잘 안되시나요?</span>

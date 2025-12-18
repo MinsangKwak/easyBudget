@@ -94,12 +94,15 @@ const ScreenUser = ({
           }
           bottom={
             <BaseButtonContainer>
-              <BaseButton className="btn_solid__primary" onClick={onNext}>
+              <BaseButton
+                className="btn_md btn_solid__primary"
+                onClick={onNext}
+              >
                 휴대폰 번호로 인증하기
               </BaseButton>
                 <span className="spacer">또는</span>
               <BaseButton
-                className="btn_line__black btn_cert__back"
+                className="btn_md btn_outline__black"
                 onClick={onPrev}
               >
                 이전으로

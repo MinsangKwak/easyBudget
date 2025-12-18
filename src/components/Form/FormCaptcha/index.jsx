@@ -34,18 +34,17 @@ const FormCaptcha = ({
 
         <Button
           type="button"
-          className="btn_captcha"
+          className="btn_sm btn_outline__grey"
           data-captcha-refresh
           onClick={handleRefresh}
         >
         <IoRefreshCircleOutline />
-
           새로고침
         </Button>
 
         <Button
           type="button"
-          className="btn_captcha"
+          className="btn_sm btn_outline__grey"
           data-captcha-audio
           onClick={handleAudio}
         >

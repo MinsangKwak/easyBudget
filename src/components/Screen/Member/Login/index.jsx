@@ -98,8 +98,7 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
             <BaseButtonContainer>
               <Button
                 type="submit"
-                variant="solid__primary"
-                className="btn_email_join_submit"
+                className="btn_md btn_solid__primary"
                 disabled={isLoading}
               >
                 로그인
@@ -107,8 +106,7 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
               <span className="spacer">또는</span>
               <Button
                 type="button"
-                variant="line__black"
-                className="btn_email_join_submit"
+                className="btn_md btn_outline__black"
                 onClick={handleClickSignUp}
                 disabled={isLoading}
               >
