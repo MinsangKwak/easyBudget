@@ -8,9 +8,9 @@
 - **동적 헤더**: 메인 화면에서는 로고와 "로그인 / 회원가입" 버튼을 좌우에 배치하고, 로그인 진입 시(인트로 화면)에는 로고 대신 뒤로가기 버튼 한 개만 노출되어 홈으로 돌아갈 수 있습니다.(`src/components/Layout/AppHeader`)
 - **Storybook 전체 커버리지**: `src/components` 아래 모든 UI 요소(공통, 레이아웃, 콘텐츠, 폼, 화면)를 Storybook 스토리로 등록해 독립적으로 확인할 수 있습니다.(`src/stories/*Components.stories.jsx`)
 - **금융인증서 가입 플로우 복원**:
-  - 은행 선택 → 본인 정보 입력/수정 + 캡차 입력 → 은행 앱 인증 대기 → 완료 순서로 진행됩니다.
-  - 은행을 다시 선택하면 사용자 입력과 캡차가 초기화되어 깨끗한 상태로 재시작합니다.
-  - 본인 정보 입력 화면의 “이전으로” 버튼과 상단 뒤로가기 버튼으로 이전 단계로 안전하게 이동할 수 있습니다.
+    - 은행 선택 → 본인 정보 입력/수정 + 캡차 입력 → 은행 앱 인증 대기 → 완료 순서로 진행됩니다.
+    - 은행을 다시 선택하면 사용자 입력과 캡차가 초기화되어 깨끗한 상태로 재시작합니다.
+    - 본인 정보 입력 화면의 “이전으로” 버튼과 상단 뒤로가기 버튼으로 이전 단계로 안전하게 이동할 수 있습니다.
 - **지연 로딩(Suspense)**: 주요 화면 컴포넌트를 지연 로딩하여 초기 번들 크기를 줄입니다.
 - **로그인 경험**: 이메일/비밀번호 형식을 검증하고, 요청 처리 중에는 `ScreenLoading`으로 상태를 명확히 보여준 뒤 정상적으로 메인으로 복귀합니다.(`src/components/Screen/Member/Login`)
 
@@ -33,11 +33,11 @@
 
 - 개발 서버와 별도로 Storybook을 실행하려면 `npm run storybook`을 사용합니다.
 - 등록된 주요 스토리:
-  - `src/stories/CommonComponents.stories.jsx`: 로딩 인디케이터, Lottie 아이콘
-  - `src/stories/LayoutComponents.stories.jsx`: 화면 레이아웃, 상단 헤더, 내부 그리드
-  - `src/stories/ContentComponents.stories.jsx`: 타이틀, 리스트, 진행 상태 표시 등 콘텐츠 구성 요소
-  - `src/stories/FormComponents.stories.jsx`: 버튼 레이아웃, 입력 필드, 캡차, 에러 메시지 등 폼 요소
-  - `src/stories/ScreenComponents.stories.jsx`: 인트로/메인/가입/금융인증/환영 화면 등 전체 플로우 스크린
+    - `src/stories/CommonComponents.stories.jsx`: 로딩 인디케이터, Lottie 아이콘
+    - `src/stories/LayoutComponents.stories.jsx`: 화면 레이아웃, 상단 헤더, 내부 그리드
+    - `src/stories/ContentComponents.stories.jsx`: 타이틀, 리스트, 진행 상태 표시 등 콘텐츠 구성 요소
+    - `src/stories/FormComponents.stories.jsx`: 버튼 레이아웃, 입력 필드, 캡차, 에러 메시지 등 폼 요소
+    - `src/stories/ScreenComponents.stories.jsx`: 인트로/메인/가입/금융인증/환영 화면 등 전체 플로우 스크린
 
 ## 실행 방법
 

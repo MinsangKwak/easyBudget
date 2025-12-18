@@ -10,7 +10,7 @@ import Subtitle from "../../Content/SubTitle";
 import IconLock from "../../../components/Common/IconLock";
 const ScreenIntro = ({ onClickLoginEmail, onClickLoginCertificate, onClickGoJoin }) => {
     return (
-        <Screen className="screen_main">
+        <Screen className="screen_intro">
             <Title>시작하기</Title>
             <Subtitle>로그인 방식을 먼저 선택해주세요.</Subtitle>
             <Inner>

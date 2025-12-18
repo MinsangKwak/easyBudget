@@ -1,14 +1,15 @@
-.screen_main {
+/* screen_intro */
+.screen_intro {
     /* width: auto; */
 }
 
-.screen_main .content_inner {
+.screen_intro .content_inner {
     margin-top: 1.6rem;
 }
-.screen_main .icon_lock {
+.screen_intro .icon_lock {
     margin: 0 auto;
 }
-.screen_main .btn_container {
+.screen_intro .btn_container {
     margin-top: 4rem;
     flex-grow: 1;
     width: 100%;
