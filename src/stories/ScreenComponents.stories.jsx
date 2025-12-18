@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ScreenIntro from "../components/Screen/Intro";
 import ScreenMain from "../components/Screen/Main";
+import ScreenLogin from "../components/Screen/Member/Login";
 import ScreenJoin from "../components/Screen/Member/Join";
 import ScreenJoinEmail from "../components/Screen/Member/JoinEmail";
 import CertFlow from "../components/Screen/Member/Cert/CertFlow";
@@ -17,6 +18,13 @@ export default {
 export const Intro = {
   name: "Intro",
   render: () => <ScreenIntro onClickGoJoin={() => {}} />,
+};
+
+export const Login = {
+  name: "Login",
+  render: () => (
+    <ScreenLogin onLoginSuccess={() => {}} onClickSignUp={() => {}} />
+  ),
 };
 
 export const Main = {

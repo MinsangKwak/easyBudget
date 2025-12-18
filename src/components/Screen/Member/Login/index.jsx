@@ -9,7 +9,7 @@ import Inner from "../../../Content/Inner";
 import Button from "../../../Form/Button";
 import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 import ErrorMessage from "../../../Form/ErrorMessage";
-import Loading from "../../../Common/Loading";
+import ScreenLoading from "../../Common/Loading";
 import FormFieldInput from "../../../Form/FormFieldInput";
 import FormFieldWrapper from "../../../Form/FormFieldWrapper";
 
@@ -69,7 +69,7 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
       </Subtitle>
       <Inner>
         {isLoading ? (
-          <Loading message="로그인 중입니다." />
+          <ScreenLoading message="로그인 중입니다." />
         ) : (
           <form className="form_email_join" onSubmit={handleSubmit}>
             <FormFieldWrapper>
