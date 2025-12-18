@@ -167,9 +167,10 @@ const ScreenLogin = ({
                             <ScreenLoading
                                 message={
                                     isCertificateMode
-                                        ? "금융인증서 로그인 중입니다."
-                                        : "로그인 중입니다."
+                                        ? "금융인증서 로그인 중입니다. 잠시만 기다려 주세요."
+                                        : "로그인 중입니다. 잠시만 기다려 주세요."
                                 }
+                                showSubtitle={false}
                             />
                         ) : isCertificateMode ? (
                             <form className="form_email_join" onSubmit={handleCertificateSubmit}>

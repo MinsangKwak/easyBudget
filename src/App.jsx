@@ -45,6 +45,8 @@ const App = () => {
     handleFlowComplete();
   };
 
+  const showBackButton = screen === SCREEN_NAMES.INTRO;
+
   return (
     <main className="app">
       <AppHeader
@@ -53,6 +55,8 @@ const App = () => {
         onLoginClick={handleGoLogin}
         onProfileClick={handleGoProfile}
         onLogoutClick={handleLogout}
+        showBackButton={showBackButton}
+        onBackClick={handleGoHome}
       />
       <Suspense fallback={<ScreenLoading />}>
         {screen === SCREEN_NAMES.INTRO && (
