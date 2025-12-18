@@ -9,7 +9,7 @@ import BaseButton from "../../Form/BaseButton";
 import BaseButtonContainer from "../../Form/BaseButtonContainer";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FiRefreshCcw, FiEdit3 } from "react-icons/fi";
+import { FiEdit3, FiX, FiChevronDown } from "react-icons/fi";
 
 /* =========================
  * utils
@@ -19,9 +19,7 @@ const clampValue = (value, minimum, maximum) => {
     return Math.min(maximum, Math.max(minimum, value));
 };
 
-const roundValue = (value) => {
-    return Math.round(value);
-};
+const roundValue = (value) => Math.round(value);
 
 const parseNumberSafely = (rawValue) => {
     const parsedValue = Number(
@@ -35,7 +33,7 @@ const parseNumberSafely = (rawValue) => {
 const formatKoreanWon = (value) => {
     const sign = value < 0 ? "-" : "";
     const absoluteValue = Math.abs(roundValue(value));
-    return `${sign}${absoluteValue.toLocaleString("ko-KR")}`;
+    return `${sign}${absoluteValue.toLocaleString("ko-KR")}원`;
 };
 
 const formatKoreanWonShort = (value) => {
@@ -48,7 +46,7 @@ const formatKoreanWonShort = (value) => {
 };
 
 /* =========================
- * RAF loop
+ * RAF loop (donut 살짝 숨쉬기)
  * ========================= */
 
 function useRequestAnimationFrameLoop(isEnabled, onFrame) {
@@ -74,1040 +72,519 @@ function useRequestAnimationFrameLoop(isEnabled, onFrame) {
 
         animationFrameIdRef.current = requestAnimationFrame(onAnimationFrame);
 
-        return () => {
-            cancelAnimationFrame(animationFrameIdRef.current);
-        };
+        return () => cancelAnimationFrame(animationFrameIdRef.current);
     }, [isEnabled, onFrame]);
 }
 
 /* =========================
- * 모델: 남는 돈 목표 ↑ → 소비금액 먼저 자동 감소(가정)
- * - 소비금액: 이자 + 수수료 + 구독
- * - 고정비 상세내역: 생활비 + 이자 + 수수료 + 구독
+ * demo transactions
  * ========================= */
 
-function buildMonthlyCashflowModel({
-    monthlyIncome,
-    fixedCost,
-    baseLivingCost,
-    baseInterestCost,
-    baseFeeCost,
-    baseSubscriptionCost,
-    remainTarget,
-}) {
-    const safeIncome = Math.max(0, monthlyIncome);
-    const safeFixedCost = clampValue(fixedCost, 0, safeIncome);
+const makeTx = (id, title, amount, date, sub) => ({ id, title, amount, date, sub });
 
-    const safeBaseLivingCost = clampValue(baseLivingCost, 0, safeIncome);
-    const safeBaseInterestCost = clampValue(baseInterestCost, 0, safeIncome);
-    const safeBaseFeeCost = clampValue(baseFeeCost, 0, safeIncome);
-    const safeBaseSubscriptionCost = clampValue(baseSubscriptionCost, 0, safeIncome);
+const DEMO_TRANSACTIONS = {
+    card_shinhan: [
+        makeTx("c1", "스타벅스", 6500, "10/18", "카드"),
+        makeTx("c2", "GS25", 4200, "10/18", "카드"),
+        makeTx("c3", "쿠팡", 38900, "10/17", "카드"),
+    ],
+    card_hyundai: [
+        makeTx("c4", "버거킹", 12400, "10/16", "카드"),
+        makeTx("c5", "교보문고", 18500, "10/15", "카드"),
+    ],
+    card_kb: [
+        makeTx("c6", "넷플릭스", 17000, "10/12", "구독"),
+        makeTx("c7", "유튜브 프리미엄", 14900, "10/12", "구독"),
+    ],
+    cash: [makeTx("m1", "현금 인출", 50000, "10/10", "현금")],
 
-    const baseLeakCost = safeBaseInterestCost + safeBaseFeeCost + safeBaseSubscriptionCost;
-    const safeRemainTarget = clampValue(remainTarget, 0, safeIncome);
-
-    // 목표를 달성하려면 총 지출은 income - target 이하여야 함
-    const targetTotalOutflow = safeIncome - safeRemainTarget;
-
-    // 현재(기본) 총 지출: 고정비 + (생활비 + 소비금액)
-    const baseDetailTotal = safeBaseLivingCost + baseLeakCost;
-    const baseTotalOutflow = safeFixedCost + baseDetailTotal;
-
-    const excessOutflow = Math.max(0, baseTotalOutflow - targetTotalOutflow);
-
-    // 줄이는 순서: 소비금액(이자+수수료+구독) → 생활비
-    // 소비금액 바닥값: 25%는 남김(UX 가정)
-    const minimumLeakCost = baseLeakCost * 0.25;
-    const maximumLeakReduction = Math.max(0, baseLeakCost - minimumLeakCost);
-
-    const leakReduction = clampValue(excessOutflow, 0, maximumLeakReduction);
-    const remainingExcessAfterLeakReduction = Math.max(0, excessOutflow - leakReduction);
-
-    const livingReduction = clampValue(remainingExcessAfterLeakReduction, 0, safeBaseLivingCost);
-
-    const adjustedLeakCost = baseLeakCost - leakReduction;
-    const adjustedLivingCost = safeBaseLivingCost - livingReduction;
-
-    // 소비금액를 이자/수수료/구독에 비례 배분해서 줄여줌(가정)
-    const baseLeakDenominator = Math.max(1, baseLeakCost);
-
-    const adjustedInterestCost = Math.max(
-        0,
-        Math.round(adjustedLeakCost * (safeBaseInterestCost / baseLeakDenominator)),
-    );
-
-    const adjustedFeeCost = Math.max(
-        0,
-        Math.round(adjustedLeakCost * (safeBaseFeeCost / baseLeakDenominator)),
-    );
-
-    // 잔여가 조금 튈 수 있으니 구독에서 마지막으로 맞춤
-    const adjustedSubscriptionCost = Math.max(
-        0,
-        adjustedLeakCost - adjustedInterestCost - adjustedFeeCost,
-    );
-
-    const detailTotalOutflow =
-        adjustedLivingCost + adjustedInterestCost + adjustedFeeCost + adjustedSubscriptionCost;
-
-    const totalOutflow = safeFixedCost + detailTotalOutflow;
-    const remainingMoney = safeIncome - totalOutflow;
-
-    return {
-        monthlyIncome: safeIncome,
-
-        fixedCost: safeFixedCost,
-
-        livingCost: adjustedLivingCost,
-        interestCost: adjustedInterestCost,
-        feeCost: adjustedFeeCost,
-        subscriptionCost: adjustedSubscriptionCost,
-
-        leakCost: adjustedInterestCost + adjustedFeeCost + adjustedSubscriptionCost,
-        baseLeakCost,
-
-        leakSaved:
-            baseLeakCost - (adjustedInterestCost + adjustedFeeCost + adjustedSubscriptionCost),
-
-        remainTarget: safeRemainTarget,
-
-        totalOutflow,
-        remainingMoney,
-    };
-}
+    cat_food: [
+        makeTx("t1", "김밥천국", 12000, "10/18", "식비"),
+        makeTx("t2", "스타벅스", 6500, "10/18", "외식비"),
+        makeTx("t3", "마켓컬리", 54000, "10/16", "식비"),
+    ],
+    cat_loan: [makeTx("t4", "대출 이자", 210000, "10/15", "대출")],
+    cat_ins: [makeTx("t5", "실손보험", 200000, "10/08", "보험")],
+    cat_house: [makeTx("t6", "관리비", 140000, "10/03", "주거")],
+    cat_misc: [
+        makeTx("t7", "통신요금", 45000, "10/02", "통신"),
+        makeTx("t8", "수수료", 12000, "10/01", "수수료"),
+    ],
+};
 
 /* =========================
- * particles
- * ========================= */
-
-function createFlowParticles({ totalValue, maximumParticles = 8, randomSeed = 0 }) {
-    const safeValue = Math.max(0, totalValue);
-    const particleCount = clampValue(Math.floor(safeValue / 120000) + 3, 3, maximumParticles);
-
-    const averageValuePerParticle = safeValue / Math.max(1, particleCount);
-
-    const particles = [];
-    for (let index = 0; index < particleCount; index += 1) {
-        const randomFactor = (Math.sin((index + 1) * 12.9898 + randomSeed) * 43758.5453) % 1;
-        const ratio = 0.7 + Math.abs(randomFactor) * 0.9;
-
-        const particleValue = Math.max(0, averageValuePerParticle * ratio);
-
-        particles.push({
-            id: `${randomSeed}-${index}`,
-            amount: particleValue,
-            laneIndex: index % 2,
-            startPhase: (index / particleCount) * 0.85,
-            speed: 0.18 + (index % 3) * 0.04,
-        });
-    }
-
-    return particles;
-}
-
-/* =========================
- * 평균(데모) 데이터
- * ========================= */
-
-function buildDemographicAverageForThirty({
-    monthlyIncomeCandidate,
-    fixedCostCandidate,
-    livingCostCandidate,
-    interestCostCandidate,
-    feeCostCandidate,
-    subscriptionCostCandidate,
-}) {
-    const safeMonthlyIncomeCandidate = Math.max(0, monthlyIncomeCandidate);
-    const safeFixedCostCandidate = Math.max(0, fixedCostCandidate);
-    const safeLivingCostCandidate = Math.max(0, livingCostCandidate);
-    const safeInterestCostCandidate = Math.max(0, interestCostCandidate);
-    const safeFeeCostCandidate = Math.max(0, feeCostCandidate);
-    const safeSubscriptionCostCandidate = Math.max(0, subscriptionCostCandidate);
-
-    const averageMonthlyIncome =
-        safeMonthlyIncomeCandidate > 0 ? safeMonthlyIncomeCandidate : 3800000;
-
-    const averageFixedCost = safeFixedCostCandidate > 0 ? safeFixedCostCandidate : 1200000;
-
-    const averageLivingCost = safeLivingCostCandidate > 0 ? safeLivingCostCandidate : 950000;
-
-    const averageInterestCost = safeInterestCostCandidate > 0 ? safeInterestCostCandidate : 230000;
-
-    const averageFeeCost = safeFeeCostCandidate > 0 ? safeFeeCostCandidate : 65000;
-
-    const averageSubscriptionCost =
-        safeSubscriptionCostCandidate > 0 ? safeSubscriptionCostCandidate : 59000;
-
-    const averageLeakCost = averageInterestCost + averageFeeCost + averageSubscriptionCost;
-    const averageTotalOutflow = averageFixedCost + averageLivingCost + averageLeakCost;
-    const averageRemaining = averageMonthlyIncome - averageTotalOutflow;
-
-    return {
-        demographicLabel: "30대 평균(데모)",
-        averageMonthlyIncome,
-        averageFixedCost,
-        averageLivingCost,
-        averageInterestCost,
-        averageFeeCost,
-        averageSubscriptionCost,
-        averageLeakCost,
-        averageTotalOutflow,
-        averageRemaining,
-    };
-}
-
-/* =========================
- * ScreenMain
+ * ScreenMain (Mobile)
  * ========================= */
 
 export default function ScreenMain() {
-    /* ---------- 나의 기본값 ---------- */
-    const [cashflowBase, setCashflowBase] = useState({
-        monthlyIncome: 3800000,
-        fixedCost: 1350000,
+    /* ---------- month ---------- */
+    const [monthLabel] = useState("10월");
 
-        baseLivingCost: 980000,
-        baseInterestCost: 210000,
-        baseFeeCost: 65000,
-        baseSubscriptionCost: 52000,
+    /* ---------- 리포트 요약 (데모) ---------- */
+    const report = useMemo(() => {
+        return {
+            incomeTotal: 0,
+            incomeHint: 3780000,
+
+            spendTotal: 1570000,
+            spendHint: 3500000,
+
+            regularPlanned: 400000,
+            regularPaid: 925000,
+            regularCountPlanned: 3,
+            regularCountPaid: 4,
+
+            variablePlanned: 1865000,
+            variablePaid: 595000,
+            variableHint: 1270000,
+        };
+    }, []);
+
+    /* ---------- 지출 수단 (데모) ---------- */
+    const [paymentGroups] = useState([
+        {
+            key: "card",
+            label: "카드지출",
+            total: 649000,
+            items: [
+                { key: "card_shinhan", label: "신한카드", amount: 240000, logoText: "S" },
+                { key: "card_hyundai", label: "현대카드", amount: 185000, logoText: "H" },
+                { key: "card_kb", label: "KB국민카드", amount: 175000, logoText: "K" },
+                { key: "card_other", label: "우리카드", amount: 49000, logoText: "W" },
+            ],
+        },
+        {
+            key: "cash",
+            label: "현금지출",
+            total: 50000,
+            items: [{ key: "cash", label: "현금", amount: 50000, logoText: "₩" }],
+        },
+    ]);
+
+    /* ---------- 카테고리별 지출 ---------- */
+    const [isCategoryEditMode, setIsCategoryEditMode] = useState(false);
+
+    const [categorySpend, setCategorySpend] = useState([
+        { key: "cat_food", label: "식비·외식비", amount: 660000, percent: 38 },
+        { key: "cat_loan", label: "대출", amount: 550000, percent: 35 },
+        { key: "cat_ins", label: "보험", amount: 200000, percent: 13 },
+        { key: "cat_house", label: "주거·관리", amount: 140000, percent: 8 },
+        { key: "cat_misc", label: "결제·소통", amount: 45000, percent: 3 },
+    ]);
+
+    /* ---------- 편집 입력 (문자열) ---------- */
+    const [categoryAmountInput, setCategoryAmountInput] = useState(() => {
+        const next = {};
+        categorySpend.forEach((c) => (next[c.key] = String(c.amount)));
+        return next;
     });
-
-    /* ---------- 나의 목표(잔액) ---------- */
-    const [remainTargetValue, setRemainTargetValue] = useState(1208000);
-
-    /* ---------- 입력 중 애니메이션 정지 ---------- */
-    const [isUserEditing, setIsUserEditing] = useState(false);
-
-    /* ---------- 입력 폼(문자열) ---------- */
-    const [inputForm, setInputForm] = useState({
-        monthlyIncomeInput: String(cashflowBase.monthlyIncome),
-        fixedCostInput: String(cashflowBase.fixedCost),
-        remainTargetInput: String(remainTargetValue),
-
-        livingCostInput: String(cashflowBase.baseLivingCost),
-        interestCostInput: String(cashflowBase.baseInterestCost),
-        feeCostInput: String(cashflowBase.baseFeeCost),
-        subscriptionCostInput: String(cashflowBase.baseSubscriptionCost),
-    });
-
-    /* ---------- 히어로 카드: 뒤집기 ---------- */
-    const [isHeroCardFlipped, setIsHeroCardFlipped] = useState(false);
-
-    /* ---------- 애니메이션 시간 ---------- */
-    const [animationTime, setAnimationTime] = useState(0);
-
-    useRequestAnimationFrameLoop(!isUserEditing, (deltaTimeInSeconds) => {
-        setAnimationTime((previousAnimationTime) => previousAnimationTime + deltaTimeInSeconds);
-    });
-
-    /* ---------- 나의 모델 계산 ---------- */
-    const cashflowModel = useMemo(() => {
-        return buildMonthlyCashflowModel({
-            monthlyIncome: cashflowBase.monthlyIncome,
-            fixedCost: cashflowBase.fixedCost,
-
-            baseLivingCost: cashflowBase.baseLivingCost,
-            baseInterestCost: cashflowBase.baseInterestCost,
-            baseFeeCost: cashflowBase.baseFeeCost,
-            baseSubscriptionCost: cashflowBase.baseSubscriptionCost,
-
-            remainTarget: remainTargetValue,
-        });
-    }, [cashflowBase, remainTargetValue]);
-
-    /* ---------- “30대 평균(데모)” 계산 ---------- */
-    const demographicAverage = useMemo(() => {
-        return buildDemographicAverageForThirty({
-            monthlyIncomeCandidate: cashflowBase.monthlyIncome,
-            fixedCostCandidate: cashflowBase.fixedCost,
-            livingCostCandidate: cashflowBase.baseLivingCost,
-            interestCostCandidate: cashflowBase.baseInterestCost,
-            feeCostCandidate: cashflowBase.baseFeeCost,
-            subscriptionCostCandidate: cashflowBase.baseSubscriptionCost,
-        });
-    }, [cashflowBase]);
-
-    /* ---------- 소비금액 강조(맥박) ---------- */
-    const leakPulseValue = useMemo(() => {
-        return 0.5 + 0.5 * Math.sin(animationTime * 2.1);
-    }, [animationTime]);
-
-    /* ---------- HERO 큰 숫자: 소비금액 카운트업(입력 중 정지) ---------- */
-    const [animatedLeakValue, setAnimatedLeakValue] = useState(cashflowModel.leakCost);
 
     useEffect(() => {
-        if (isUserEditing) return;
+        // 카테고리 목록 변경 시 입력도 보정
+        setCategoryAmountInput((prev) => {
+            const next = { ...prev };
+            categorySpend.forEach((c) => {
+                if (next[c.key] == null) next[c.key] = String(c.amount);
+            });
+            return next;
+        });
+    }, [categorySpend]);
 
-        const fromValue = animatedLeakValue;
-        const toValue = cashflowModel.leakCost;
+    const categoryTotal = useMemo(() => {
+        return categorySpend.reduce((acc, c) => acc + Math.max(0, c.amount), 0);
+    }, [categorySpend]);
 
-        const startTimestamp = performance.now();
-        const durationMilliseconds = 420;
+    const categorySegments = useMemo(() => {
+        // 도넛 색을 "CSS class 톤"으로 구분 (living/leak 느낌보다 category tone)
+        // 여기선 2종만 쓰고, 나머지는 동일 톤으로 처리
+        return categorySpend.map((c, index) => {
+            const tone = index === 0 ? "primary" : index === 1 ? "dark" : "soft";
+            return { key: c.key, label: c.label, value: c.amount, tone };
+        });
+    }, [categorySpend]);
 
-        let animationFrameId = 0;
+    /* ---------- 바텀시트(내역 드릴다운) ---------- */
+    const [sheetState, setSheetState] = useState({
+        isOpen: false,
+        title: "",
+        items: [],
+    });
 
-        const onAnimationFrame = (currentTimestamp) => {
-            const progress = clampValue(
-                (currentTimestamp - startTimestamp) / durationMilliseconds,
-                0,
-                1,
-            );
-            const easedProgress = 1 - Math.pow(1 - progress, 3);
-
-            setAnimatedLeakValue(roundValue(fromValue + (toValue - fromValue) * easedProgress));
-
-            if (progress < 1) {
-                animationFrameId = requestAnimationFrame(onAnimationFrame);
-            }
-        };
-
-        animationFrameId = requestAnimationFrame(onAnimationFrame);
-
-        return () => cancelAnimationFrame(animationFrameId);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cashflowModel.leakCost, isUserEditing]);
-
-    /* ---------- 두께 계산 ---------- */
-    const pipeThickness = useMemo(() => {
-        const safeIncome = Math.max(1, cashflowModel.monthlyIncome);
-
-        const fixedRatio = cashflowModel.fixedCost / safeIncome;
-        const leakRatio = cashflowModel.leakCost / safeIncome;
-        const remainRatio = Math.max(0, cashflowModel.remainingMoney) / safeIncome;
-
-        return {
-            fixed: clampValue(fixedRatio, 0.06, 0.6),
-            leak: clampValue(leakRatio, 0.04, 0.6),
-            remain: clampValue(remainRatio, 0.04, 0.5),
-        };
-    }, [cashflowModel]);
-
-    /* ---------- 파티클 ---------- */
-    const particles = useMemo(() => {
-        return {
-            fixed: createFlowParticles({ totalValue: cashflowModel.fixedCost, randomSeed: 11 }),
-            leak: createFlowParticles({ totalValue: cashflowModel.leakCost, randomSeed: 71 }),
-            remain: createFlowParticles({
-                totalValue: Math.max(0, cashflowModel.remainingMoney),
-                randomSeed: 97,
-                maximumParticles: 6,
-            }),
-        };
-    }, [cashflowModel]);
-
-    /* ---------- 흐름 위치 ---------- */
-    const calculateFlowPosition = (startPhase, speed) => {
-        const position = (startPhase + animationTime * speed) % 1;
-        return position;
+    const openSheet = ({ title, items }) => {
+        setSheetState({ isOpen: true, title, items });
+        document.documentElement.classList.add("is_sheet_open");
     };
+
+    const closeSheet = () => {
+        setSheetState((prev) => ({ ...prev, isOpen: false }));
+        document.documentElement.classList.remove("is_sheet_open");
+    };
+
+    /* ---------- animation time (도넛 숨쉬기) ---------- */
+    const [animationTime, setAnimationTime] = useState(0);
+    useRequestAnimationFrameLoop(!isCategoryEditMode, (dt) => {
+        setAnimationTime((t) => t + dt);
+    });
 
     /* =========================
-     * 입력 확정(공통)
+     * handlers
      * ========================= */
 
-    const commitMonthlyIncomeInput = () => {
-        const parsedMonthlyIncome = clampValue(
-            parseNumberSafely(inputForm.monthlyIncomeInput),
-            0,
-            20000000,
-        );
-
-        setCashflowBase((previousCashflowBase) => {
-            return {
-                ...previousCashflowBase,
-                monthlyIncome: parsedMonthlyIncome,
-            };
-        });
-
-        setInputForm((previousInputForm) => {
-            return {
-                ...previousInputForm,
-                monthlyIncomeInput: String(parsedMonthlyIncome),
-            };
-        });
-
-        setIsUserEditing(false);
+    const handleClickPaymentItem = (itemKey, label) => {
+        const items = DEMO_TRANSACTIONS[itemKey] || [];
+        openSheet({ title: `${label} 내역`, items });
     };
 
-    const commitFixedCostInput = () => {
-        const parsedFixedCost = clampValue(
-            parseNumberSafely(inputForm.fixedCostInput),
-            0,
-            cashflowBase.monthlyIncome,
-        );
-
-        setCashflowBase((previousCashflowBase) => {
-            return {
-                ...previousCashflowBase,
-                fixedCost: parsedFixedCost,
-            };
-        });
-
-        setInputForm((previousInputForm) => {
-            return {
-                ...previousInputForm,
-                fixedCostInput: String(parsedFixedCost),
-            };
-        });
-
-        setIsUserEditing(false);
+    const handleClickCategoryRow = (categoryKey, label) => {
+        const items = DEMO_TRANSACTIONS[categoryKey] || [];
+        openSheet({ title: `${label} 내역`, items });
     };
 
-    const commitRemainTargetInput = () => {
-        const parsedRemainTarget = clampValue(
-            parseNumberSafely(inputForm.remainTargetInput),
-            0,
-            cashflowBase.monthlyIncome,
+    const commitCategoryAmount = (categoryKey) => {
+        const raw = categoryAmountInput[categoryKey];
+        const parsed = clampValue(parseNumberSafely(raw), 0, 20000000);
+
+        setCategorySpend((prev) =>
+            prev.map((c) => (c.key === categoryKey ? { ...c, amount: parsed } : c)),
         );
 
-        setRemainTargetValue(parsedRemainTarget);
-
-        setInputForm((previousInputForm) => {
-            return {
-                ...previousInputForm,
-                remainTargetInput: String(parsedRemainTarget),
-            };
-        });
-
-        setIsUserEditing(false);
+        setCategoryAmountInput((prev) => ({ ...prev, [categoryKey]: String(parsed) }));
     };
 
-    const commitDetailCostsInput = () => {
-        const parsedLivingCost = clampValue(
-            parseNumberSafely(inputForm.livingCostInput),
-            0,
-            cashflowBase.monthlyIncome,
-        );
-
-        const parsedInterestCost = clampValue(
-            parseNumberSafely(inputForm.interestCostInput),
-            0,
-            cashflowBase.monthlyIncome,
-        );
-
-        const parsedFeeCost = clampValue(
-            parseNumberSafely(inputForm.feeCostInput),
-            0,
-            cashflowBase.monthlyIncome,
-        );
-
-        const parsedSubscriptionCost = clampValue(
-            parseNumberSafely(inputForm.subscriptionCostInput),
-            0,
-            cashflowBase.monthlyIncome,
-        );
-
-        setCashflowBase((previousCashflowBase) => {
-            return {
-                ...previousCashflowBase,
-                baseLivingCost: parsedLivingCost,
-                baseInterestCost: parsedInterestCost,
-                baseFeeCost: parsedFeeCost,
-                baseSubscriptionCost: parsedSubscriptionCost,
-            };
-        });
-
-        setInputForm((previousInputForm) => {
-            return {
-                ...previousInputForm,
-                livingCostInput: String(parsedLivingCost),
-                interestCostInput: String(parsedInterestCost),
-                feeCostInput: String(parsedFeeCost),
-                subscriptionCostInput: String(parsedSubscriptionCost),
-            };
-        });
-
-        setIsUserEditing(false);
+    const handleEnterCommit = (event, categoryKey) => {
+        if (event.key !== "Enter") return;
+        event.currentTarget.blur();
+        commitCategoryAmount(categoryKey);
     };
-
-    const handleEnterToCommit = (keyboardEvent, commitFunction) => {
-        if (keyboardEvent.key !== "Enter") return;
-        keyboardEvent.currentTarget.blur();
-        commitFunction();
-    };
-
-    /* =========================
-     * 링크 이동(데모)
-     * ========================= */
-    const handleClickGoToDetails = () => {
-        const detailSection = document.querySelector('[aria-label="고정비 상세내역"]');
-        detailSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
-    /* =========================
-     * 1단계 항목 고정 (가독성)
-     * - 월 수입 / 고정비 /  잔액 / 소비금액
-     * ========================= */
-    const stage1Items = useMemo(() => {
-        return [
-            {
-                key: "income",
-                label: "월 수입",
-                value: cashflowModel.monthlyIncome,
-                tone: "base",
-            },
-            {
-                key: "fixed",
-                label: "고정비",
-                value: cashflowModel.fixedCost,
-                tone: "base",
-            },
-            {
-                key: "leak",
-                label: " 소비금액",
-                value: cashflowModel.leakCost,
-                tone: "leak",
-            },
-            {
-                key: "balance",
-                label: " 잔액",
-                value: cashflowModel.remainingMoney,
-                tone: cashflowModel.remainingMoney >= 0 ? "good" : "bad",
-            },
-        ];
-    }, [cashflowModel]);
 
     return (
-        <Screen className="screen_main">
-            <Title>안녕하세요 :)</Title>
-            <Subtitle>당신의 자산은 잘 관리되고 있나요?</Subtitle>
-            <p className="description">
-                수입관리도 중요하지만 <br />
-                지출관리도 중요하니까! <br />
-                당신의 가계부 작성을 도와드립니다.
-            </p>
+        <Screen className="screen_main mobile_budget">
+            <Title>쉬운 가계부,</Title>
+            <Subtitle>마이데이터를 연결하면 자동으로 지출/수입을 분류해요.</Subtitle>
+            <p className="description">내 입맛에 맞게 카테고리를 재분류할 수 있어요.</p>
+
             <Inner>
-                {/* ======================
-                 * HERO: 좌(평균/입력카드) + 우(1단계 항목 고정 + 레이더)
-                 * ====================== */}
-                <section className="section_hero" aria-label="히어로 비교 영역">
-                    {/* LEFT */}
-                    <article className="hero">
-                        <FlipCard
-                            isFlipped={isHeroCardFlipped}
-                            front={
-                                <div className="detail_box">
-                                    <div className="detail_text">
-                                        <h3 className="front__head">
-                                            {formatKoreanWon(
-                                                demographicAverage.averageMonthlyIncome,
-                                            )}
-                                        </h3>
-                                        <span className="detail_description">
-                                            (30대 평균 총액(데모))
-                                        </span>
-                                    </div>
-                                    <div className="detail_text">
-                                        <p className="detail_subtitle leak">
-                                            -
-                                            {formatKoreanWon(
-                                                demographicAverage.averageTotalOutflow,
-                                            )}
-                                        </p>
-                                        <span className="detail_description">
-                                            월 별 평균 소비금액
-                                        </span>
-                                    </div>
-                                    <div className="detail_text">
-                                        <p className="detail_subtitle leak">
-                                            -{formatKoreanWon(animatedLeakValue)}
-                                        </p>
-                                        <span className="detail_description">
-                                            평균 소비금액(은행이자·카드 수수료·구독 등)
-                                        </span>
-                                    </div>
-                                    <div className="detail_text">
-                                        <p
-                                            className={
-                                                "detail_subtitle " +
-                                                `${
-                                                    demographicAverage.averageRemaining >= 0
-                                                        ? "good"
-                                                        : "bad"
-                                                }`
-                                            }
-                                        >
-                                            {formatKoreanWon(demographicAverage.averageRemaining)}
-                                        </p>
-                                        <span className="detail_description">
-                                            월 평균 잔액(단순 계산)
-                                        </span>
-                                    </div>
+                <div className="stack">
+                    {/* ======================
+                     * 1) REPORT (첫 화면)
+                     * ====================== */}
+                    <section className="card report" aria-label="리포트">
+                        <div className="report_head">
+                            <div className="report_title">리포트</div>
+
+                            <button type="button" className="month_btn" aria-label="월 선택">
+                                <span className="month_btn__label">{monthLabel}</span>
+                                <FiChevronDown />
+                            </button>
+                        </div>
+
+                        <div className="report_kpi">
+                            <div className="kpi_box kpi_income">
+                                <div className="kpi_label">총 수입</div>
+                                <div className="kpi_value">
+                                    {formatKoreanWon(report.incomeTotal)}
                                 </div>
-                            }
-                            back={
-                                <div>
-                                    <section
-                                        className="top_kpi_grid"
-                                        aria-label="내 정보 입력(히어로)"
-                                    >
-                                        <div className="detail_text">
-                                            <input
-                                                className="kpi_input"
-                                                inputMode="numeric"
-                                                value={inputForm.monthlyIncomeInput}
-                                                onFocus={() => setIsUserEditing(true)}
-                                                onChange={(event) => {
-                                                    setInputForm((previousInputForm) => {
-                                                        return {
-                                                            ...previousInputForm,
-                                                            monthlyIncomeInput: event.target.value,
-                                                        };
-                                                    });
-                                                }}
-                                                onBlur={commitMonthlyIncomeInput}
-                                                onKeyDown={(keyboardEvent) => {
-                                                    handleEnterToCommit(
-                                                        keyboardEvent,
-                                                        commitMonthlyIncomeInput,
-                                                    );
-                                                }}
-                                                aria-label="월 수입 입력"
-                                            />
-                                            <div className="detail_description">월 수입</div>
-                                        </div>
-
-                                        <div className="detail_text">
-                                            <input
-                                                className="kpi_input"
-                                                inputMode="numeric"
-                                                value={inputForm.fixedCostInput}
-                                                onFocus={() => setIsUserEditing(true)}
-                                                onChange={(event) => {
-                                                    setInputForm((previousInputForm) => {
-                                                        return {
-                                                            ...previousInputForm,
-                                                            fixedCostInput: event.target.value,
-                                                        };
-                                                    });
-                                                }}
-                                                onBlur={commitFixedCostInput}
-                                                onKeyDown={(keyboardEvent) => {
-                                                    handleEnterToCommit(
-                                                        keyboardEvent,
-                                                        commitFixedCostInput,
-                                                    );
-                                                }}
-                                                aria-label="고정비 입력"
-                                            />
-                                            <div className="detail_description">고정비</div>
-                                        </div>
-
-                                        <div className="detail_text">
-                                            <input
-                                                className="kpi_input"
-                                                inputMode="numeric"
-                                                value={inputForm.remainTargetInput}
-                                                onFocus={() => setIsUserEditing(true)}
-                                                onChange={(event) => {
-                                                    setInputForm((previousInputForm) => {
-                                                        return {
-                                                            ...previousInputForm,
-                                                            remainTargetInput: event.target.value,
-                                                        };
-                                                    });
-                                                }}
-                                                onBlur={commitRemainTargetInput}
-                                                onKeyDown={(keyboardEvent) => {
-                                                    handleEnterToCommit(
-                                                        keyboardEvent,
-                                                        commitRemainTargetInput,
-                                                    );
-                                                }}
-                                                aria-label="잔액 목표 입력"
-                                            />
-                                            <div className="detail_description">
-                                                 잔액 목표
-                                            </div>
-                                        </div>
-                                    </section>
-                                </div>
-                            }
-                        />
-                        <BaseButtonContainer className="btn_container__bookmark">
-                            <BaseButton
-                                type="button"
-                                size="sm"
-                                style="btn_outline__grey"
-                                onClick={() => setIsHeroCardFlipped(false)}
-                                aria-label="평균 보기로 전환"
-                                title="평균 보기"
-                            >
-                                <FiRefreshCcw />
-                            </BaseButton>
-                            <BaseButton
-                                type="button"
-                                size="sm"
-                                style="btn_solid__primary"
-                                onClick={() => setIsHeroCardFlipped(true)}
-                                aria-label="내 값 입력으로 전환"
-                                title="내 값 입력"
-                            >
-                                <FiEdit3 />
-                            </BaseButton>
-                        </BaseButtonContainer>
-                    </article>
-
-                    <p className="description">
-                        시각화된 자산과 잔액 <br />
-                        한번 점검해보세요.
-                    </p>
-                    {/* RIGHT */}
-                    <div className="radar">
-                        <div className="radar_card">
-                            <div className="radar_card__head">
-                                <div className="radar_card__title">가계부 점검 1단계</div>
-                                <div className="radar_card__sub muted">
-                                    수입, 지출을 꼼꼼히 기록해보세요.
+                                <div className="kpi_hint muted">
+                                    예산 {formatKoreanWon(report.incomeHint)}
                                 </div>
                             </div>
 
-                            {/* ✅ 1단계 항목 고정: 월수입/고정비/소비금액/이번달 잔액 */}
-                            <div className="radar_legend" aria-label="1단계 항목">
-                                {stage1Items.map((item) => {
-                                    const valueClass =
-                                        item.tone === "leak"
-                                            ? "leak"
-                                            : item.tone === "good"
-                                              ? "good"
-                                              : item.tone === "bad"
-                                                ? "bad"
-                                                : "";
+                            <div className="kpi_box kpi_spend">
+                                <div className="kpi_label">총 지출</div>
+                                <div className="kpi_value">
+                                    {formatKoreanWon(report.spendTotal)}
+                                </div>
+                                <div className="kpi_hint muted">
+                                    예산 {formatKoreanWon(report.spendHint)}
+                                </div>
+                            </div>
+                        </div>
 
-                                    const dotClass =
-                                        item.key === "leak"
-                                            ? "leak"
-                                            : item.key === "balance"
-                                              ? cashflowModel.remainingMoney >= 0
-                                                  ? "living"
-                                                  : "leak"
-                                              : "living";
+                        <div className="report_blocks">
+                            <div className="report_block">
+                                <div className="block_head">
+                                    <div className="block_title">정기지출</div>
+                                    <div className="block_badges">
+                                        <span className="badge">
+                                            지출 예정 {report.regularCountPlanned}건
+                                        </span>
+                                        <span className="badge">
+                                            지출 완료 {report.regularCountPaid}건
+                                        </span>
+                                    </div>
+                                </div>
 
-                                    return (
-                                        <div key={item.key} className="radar_legend__row">
-                                            <span className={`legend_dot ${dotClass}`} />
-                                            <span className="legend_label">{item.label}</span>
-                                            <b className={`legend_value ${valueClass}`}>
-                                                {formatKoreanWon(item.value)}
-                                            </b>
+                                <div className="block_rows">
+                                    <div className="row">
+                                        <span className="row_label muted">지출 예정</span>
+                                        <b className="row_value">
+                                            {formatKoreanWon(report.regularPlanned)}
+                                        </b>
+                                    </div>
+                                    <div className="row">
+                                        <span className="row_label muted">지출 완료</span>
+                                        <b className="row_value">
+                                            {formatKoreanWon(report.regularPaid)}
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="report_block">
+                                <div className="block_head">
+                                    <div className="block_title">변동지출</div>
+                                </div>
+
+                                <div className="block_rows">
+                                    <div className="row">
+                                        <span className="row_label muted">지출 예산</span>
+                                        <b className="row_value">
+                                            {formatKoreanWon(report.variablePlanned)}
+                                        </b>
+                                    </div>
+                                    <div className="row">
+                                        <span className="row_label muted">지출</span>
+                                        <b className="row_value">
+                                            {formatKoreanWon(report.variablePaid)}
+                                        </b>
+                                    </div>
+                                    <div className="row row_hint">
+                                        <span className="row_label muted">예상</span>
+                                        <b className="row_value muted">
+                                            {formatKoreanWon(report.variableHint)}
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ======================
+                     * 2) PAYMENT METHODS
+                     * ====================== */}
+                    <section className="card pay" aria-label="지출 수단">
+                        <div className="panel_head">
+                            <div className="panel_title">지출수단</div>
+                            <div className="panel_value">{formatKoreanWon(report.regularPaid)}</div>
+                        </div>
+
+                        <div className="pay_groups">
+                            {paymentGroups.map((group) => (
+                                <div key={group.key} className="pay_group">
+                                    <div className="pay_group__head">
+                                        <div className="pay_group__title">{group.label}</div>
+                                        <div className="pay_group__total">
+                                            {formatKoreanWon(group.total)}
                                         </div>
-                                    );
-                                })}
+                                    </div>
+
+                                    <ul className="list">
+                                        {group.items.map((item) => (
+                                            <li key={item.key} className="list_row">
+                                                <div className="list_left">
+                                                    <span className="avatar" aria-hidden="true">
+                                                        {item.logoText}
+                                                    </span>
+                                                    <span className="list_label">{item.label}</span>
+                                                </div>
+
+                                                <div className="list_right">
+                                                    <b className="list_value">
+                                                        {formatKoreanWon(item.amount)}
+                                                    </b>
+                                                    <button
+                                                        type="button"
+                                                        className="arrow_btn"
+                                                        aria-label={`${item.label} 내역 보기`}
+                                                        onClick={() =>
+                                                            handleClickPaymentItem(
+                                                                item.key,
+                                                                item.label,
+                                                            )
+                                                        }
+                                                    >
+                                                        ›
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="pay_add">
+                            <button type="button" className="add_btn">
+                                마이데이터 추가 <span className="add_plus">+</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* ======================
+                     * 3) CATEGORY SPEND (도넛+리스트)
+                     * ====================== */}
+                    <section className="card cat" aria-label="카테고리별 지출">
+                        <div className="panel_head">
+                            <div className="panel_title">
+                                카테고리별 지출{" "}
+                                <span className="muted">({categorySpend.length}개)</span>
                             </div>
 
-                            {/* ✅ 도넛도 “1단계 흐름”이 읽히게: 고정비 vs 소비금액 vs 잔액 */}
-                            <div className="radar_chart" style={{ marginTop: 8 }}>
-                                <RadarDonut
-                                    animationTime={animationTime}
-                                    isUserEditing={isUserEditing}
-                                    segments={[
-                                        {
-                                            key: "fixed",
-                                            label: "고정비",
-                                            value: cashflowModel.fixedCost,
-                                            tone: "living",
-                                        },
-                                        {
-                                            key: "leak",
-                                            label: "소비금액",
-                                            value: cashflowModel.leakCost,
-                                            tone: "leak",
-                                        },
-                                        {
-                                            key: "balance",
-                                            label: " 잔액",
-                                            value: Math.max(0, cashflowModel.remainingMoney),
-                                            tone:
-                                                cashflowModel.remainingMoney >= 0
-                                                    ? "living"
-                                                    : "leak",
-                                        },
-                                    ]}
-                                    centerTopLabel="나의 흐름"
-                                    centerValue={cashflowModel.leakCost}
-                                    centerBottomLabel=" 소비금액"
-                                />
-                            </div>
-
-                            <BaseButtonContainer className="hero_radar__cta">
+                            <BaseButtonContainer className="cat_actions">
                                 <BaseButton
                                     type="button"
                                     size="sm"
-                                    style="solid__primary"
-                                    onClick={handleClickGoToDetails}
+                                    style={
+                                        isCategoryEditMode
+                                            ? "btn_solid__primary"
+                                            : "btn_outline__grey"
+                                    }
+                                    onClick={() => setIsCategoryEditMode((v) => !v)}
+                                    aria-label="편집 모드 토글"
+                                    title="편집"
                                 >
-                                    더 자세히 보기
-                                </BaseButton>
-                                <BaseButton
-                                    type="button"
-                                    size="sm"
-                                    style="outline__grey"
-                                    onClick={() => {
-                                        const leakSection = document.querySelector(
-                                            '[aria-label=" 또 없어질 돈"]',
-                                        );
-                                        leakSection?.scrollIntoView({
-                                            behavior: "smooth",
-                                            block: "start",
-                                        });
-                                    }}
-                                >
-                                    소비금액부터 보기
+                                    <FiEdit3 />
                                 </BaseButton>
                             </BaseButtonContainer>
                         </div>
-                    </div>
-                </section>
 
-                {/* ======================
-                 * 2) 이번달 또 없어질 돈(소비금액)
-                 * ====================== */}
-                <section className="card" aria-label=" 또 없어질 돈">
-                    <div className="panel_head">
-                        <div className="panel_title"> 소비금액</div>
-                        <div className="panel_value leak">
-                            {formatKoreanWon(cashflowModel.leakCost)}
-                        </div>
-                    </div>
-
-                    <div className="panel_sub muted">
-                        목표 기준 절감 추정:{" "}
-                        <b className="plus">{formatKoreanWon(cashflowModel.leakSaved)}</b>
-                    </div>
-
-                    <PipeLane
-                        title="이자·수수료·구독"
-                        value={cashflowModel.leakCost}
-                        tone="leak"
-                        thickness={pipeThickness.leak}
-                        particles={particles.leak}
-                        isUserEditing={isUserEditing}
-                        calculateFlowPosition={calculateFlowPosition}
-                        pulseValue={leakPulseValue}
-                    />
-                </section>
-
-                {/* ======================
-                 * 3) 고정비 상세내역
-                 * ====================== */}
-                <section className="card" aria-label="고정비 상세내역">
-                    <div className="panel_head">
-                        <div className="panel_title">지출 상세</div>
-                        <div className="panel_value">
-                            {formatKoreanWon(cashflowModel.livingCost + cashflowModel.leakCost)}
-                        </div>
-                    </div>
-
-                    <div className="detail_grid">
-                        <div className="detail_item">
-                            <div className="detail_label">생활비</div>
-                            <div className="detail_value">
-                                {formatKoreanWon(cashflowModel.livingCost)}
-                            </div>
+                        <div className="cat_donut">
+                            <DonutChart
+                                segments={categorySegments}
+                                centerTopLabel="지출 합계"
+                                centerValue={categoryTotal}
+                                centerBottomLabel="이번 달"
+                                animationTime={animationTime}
+                                isPaused={isCategoryEditMode}
+                            />
                         </div>
 
-                        <div className="detail_item">
-                            <div className="detail_label">이자</div>
-                            <div className="detail_value">
-                                {formatKoreanWon(cashflowModel.interestCost)}
-                            </div>
-                        </div>
+                        <ul className="cat_list" aria-label="카테고리 리스트">
+                            {categorySpend.map((c, index) => {
+                                const dotTone =
+                                    index === 0 ? "primary" : index === 1 ? "dark" : "soft";
 
-                        <div className="detail_item">
-                            <div className="detail_label">수수료</div>
-                            <div className="detail_value">
-                                {formatKoreanWon(cashflowModel.feeCost)}
-                            </div>
-                        </div>
+                                return (
+                                    <li key={c.key} className="cat_row">
+                                        <div className="cat_left">
+                                            <span
+                                                className={`dot dot_${dotTone}`}
+                                                aria-hidden="true"
+                                            />
+                                            <div className="cat_text">
+                                                <div className="cat_label">{c.label}</div>
+                                                <div className="cat_meta muted">{c.percent}%</div>
+                                            </div>
+                                        </div>
 
-                        <div className="detail_item">
-                            <div className="detail_label">구독</div>
-                            <div className="detail_value">
-                                {formatKoreanWon(cashflowModel.subscriptionCost)}
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                                        <div className="cat_right">
+                                            {!isCategoryEditMode ? (
+                                                <b className="cat_value">
+                                                    {formatKoreanWon(c.amount)}
+                                                </b>
+                                            ) : (
+                                                <input
+                                                    className="cat_input"
+                                                    inputMode="numeric"
+                                                    value={categoryAmountInput[c.key] ?? ""}
+                                                    onChange={(e) => {
+                                                        const nextValue = e.target.value;
+                                                        setCategoryAmountInput((prev) => ({
+                                                            ...prev,
+                                                            [c.key]: nextValue,
+                                                        }));
+                                                    }}
+                                                    onBlur={() => commitCategoryAmount(c.key)}
+                                                    onKeyDown={(e) => handleEnterCommit(e, c.key)}
+                                                    aria-label={`${c.label} 금액 수정`}
+                                                />
+                                            )}
 
-                {/* ======================
-                 * 4) 이번달 잔액 (기존 남는 돈 → 잔액)
-                 * ====================== */}
-                <section className="card" aria-label=" 잔액">
-                    <div className="panel_head">
-                        <div className="panel_title"> 잔액</div>
-                        <div
-                            className={`panel_value ${cashflowModel.remainingMoney >= 0 ? "good" : "bad"}`}
-                        >
-                            {formatKoreanWon(cashflowModel.remainingMoney)}
-                        </div>
-                    </div>
-
-                    <div className="drop_block">
-                        <div
-                            className="drop_pipe"
-                            data-tone={cashflowModel.remainingMoney >= 0 ? "good" : "bad"}
-                        >
-                            <div className={`drop_stream ${isUserEditing ? "is_paused" : ""}`} />
-
-                            <div className="drop_chips" aria-hidden="true">
-                                {particles.remain.map((particle) => {
-                                    const position = calculateFlowPosition(
-                                        particle.startPhase,
-                                        particle.speed,
-                                    );
-                                    const verticalPercent = (position * 100) % 100;
-
-                                    return (
-                                        <span
-                                            key={particle.id}
-                                            className="chip chip_good"
-                                            style={{
-                                                top: `${verticalPercent}%`,
-                                                left: `${particle.laneIndex ? 58 : 18}%`,
-                                                transform: "translateY(-50%)",
-                                            }}
-                                        >
-                                            +{formatKoreanWonShort(particle.amount)}
-                                        </span>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                                            <button
+                                                type="button"
+                                                className="arrow_btn"
+                                                aria-label={`${c.label} 내역 보기`}
+                                                onClick={() =>
+                                                    handleClickCategoryRow(c.key, c.label)
+                                                }
+                                            >
+                                                ›
+                                            </button>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </section>
+                </div>
             </Inner>
+
+            {/* ======================
+             * BottomSheet
+             * ====================== */}
+            <BottomSheet
+                isOpen={sheetState.isOpen}
+                title={sheetState.title}
+                items={sheetState.items}
+                onClose={closeSheet}
+            />
         </Screen>
     );
 }
 
 /* =========================
- * FlipCard (버튼 제거 버전)
+ * DonutChart (모바일 카드용)
  * ========================= */
 
-function FlipCard({ isFlipped, front, back }) {
-    return (
-        <div className={`flip_card ${isFlipped ? "is_flipped" : ""}`}>
-            <div className="flip_card__inner">
-                <div className="flip_card__face flip_card__front">{front}</div>
-                <div className="flip_card__face flip_card__back">{back}</div>
-            </div>
-        </div>
-    );
-}
-
-/* =========================
- * PipeLane
- * ========================= */
-
-function PipeLane({
-    title,
-    value,
-    tone = "base",
-    thickness = 0.25,
-    particles = [],
-    isUserEditing,
-    calculateFlowPosition,
-    pulseValue,
-}) {
-    const pipeHeightInPixels = clampValue(thickness * 44, 8, 28);
-
-    const leakStyle =
-        tone === "leak"
-            ? {
-                  boxShadow: `0 0 ${Math.round(10 + (pulseValue || 0) * 14)}px rgba(220,38,38,0.25)`,
-                  borderColor: `rgba(220,38,38,${0.22 + (pulseValue || 0) * 0.18})`,
-              }
-            : undefined;
-
-    return (
-        <div className={`lane lane_${tone}`}>
-            <div className="lane_head">
-                <div className="lane_title">{title}</div>
-                <div className={`lane_value ${tone === "leak" ? "leak" : ""}`}>
-                    {formatKoreanWon(value)}
-                </div>
-            </div>
-
-            <div className="lane_pipe" style={{ height: `${pipeHeightInPixels}px`, ...leakStyle }}>
-                <div
-                    className={`lane_stream ${tone === "leak" ? "is_leak" : ""} ${isUserEditing ? "is_paused" : ""}`}
-                />
-
-                <div className="lane_chips" aria-hidden="true">
-                    {particles.map((particle) => {
-                        const position = calculateFlowPosition(particle.startPhase, particle.speed);
-                        const leftPercent = 6 + position * 88;
-
-                        return (
-                            <span
-                                key={particle.id}
-                                className={`chip ${tone === "leak" ? "chip_leak" : "chip_base"}`}
-                                style={{
-                                    left: `${leftPercent}%`,
-                                    top: particle.laneIndex ? "70%" : "30%",
-                                }}
-                            >
-                                -{formatKoreanWonShort(particle.amount)}
-                            </span>
-                        );
-                    })}
-                </div>
-            </div>
-        </div>
-    );
-}
-
-/* =========================
- * RadarDonut
- * ========================= */
-
-function RadarDonut({
+function DonutChart({
     segments = [],
     centerTopLabel,
     centerValue,
     centerBottomLabel,
     animationTime,
-    isUserEditing,
+    isPaused,
 }) {
-    const size = 220;
+    const size = 210;
     const strokeWidth = 18;
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
 
     const totalValue = Math.max(
         1,
-        segments.reduce((accumulator, segment) => accumulator + Math.max(0, segment.value), 0),
+        segments.reduce((acc, s) => acc + Math.max(0, s.value), 0),
     );
 
     const startAt = -90;
 
-    const pulseValue = isUserEditing ? 0 : 0.5 + 0.5 * Math.sin(animationTime * 2.0);
-    const leakGlowOpacity = 0.18 + pulseValue * 0.22;
+    // 살짝 숨쉬기(멈추면 0)
+    const pulse = isPaused ? 0 : 0.5 + 0.5 * Math.sin(animationTime * 2.0);
+    const ringOpacity = 0.18 + pulse * 0.12;
 
     let cumulative = 0;
 
     return (
-        <div className="radar_donut" style={{ width: `${size}px`, height: `${size}px` }}>
+        <div className="donut" style={{ width: `${size}px`, height: `${size}px` }}>
             <svg
                 width={size}
                 height={size}
                 viewBox={`0 0 ${size} ${size}`}
                 role="img"
-                aria-label="레이더 도넛"
+                aria-label="도넛 그래프"
             >
                 <circle
                     cx={size / 2}
                     cy={size / 2}
                     r={radius}
-                    className="radar_ring_bg"
+                    className="donut_bg"
                     strokeWidth={strokeWidth}
+                    style={{ opacity: ringOpacity }}
                 />
 
                 {segments.map((segment) => {
                     const safeValue = Math.max(0, segment.value);
                     const ratio = safeValue / totalValue;
-                    const segmentLength = ratio * circumference;
 
+                    const segmentLength = ratio * circumference;
                     const dashArray = `${segmentLength} ${circumference - segmentLength}`;
                     const dashOffset = circumference * (1 - cumulative);
 
@@ -1119,29 +596,68 @@ function RadarDonut({
                             cx={size / 2}
                             cy={size / 2}
                             r={radius}
-                            className={`radar_segment ${segment.tone === "leak" ? "is_leak" : "is_living"}`}
+                            className={`donut_seg tone_${segment.tone || "soft"}`}
                             strokeWidth={strokeWidth}
                             strokeDasharray={dashArray}
                             strokeDashoffset={dashOffset}
                             transform={`rotate(${startAt} ${size / 2} ${size / 2})`}
-                            style={
-                                segment.tone === "leak"
-                                    ? {
-                                          filter: `drop-shadow(0 0 10px rgba(220, 38, 38, ${leakGlowOpacity}))`,
-                                      }
-                                    : undefined
-                            }
                         />
                     );
                 })}
             </svg>
 
-            <div className="radar_center">
-                <div className="radar_center__top">{centerTopLabel}</div>
-                <div className={`radar_center__value ${centerValue >= 0 ? "leak" : ""}`}>
-                    {formatKoreanWonShort(centerValue)}
+            <div className="donut_center">
+                <div className="donut_top muted">{centerTopLabel}</div>
+                <div className="donut_value">{formatKoreanWonShort(centerValue)}</div>
+                <div className="donut_bottom muted">{centerBottomLabel}</div>
+            </div>
+        </div>
+    );
+}
+
+/* =========================
+ * BottomSheet
+ * ========================= */
+
+function BottomSheet({ isOpen, title, items, onClose }) {
+    return (
+        <div className={`sheet ${isOpen ? "is_open" : ""}`} aria-hidden={!isOpen}>
+            <div className="sheet_dim" onClick={onClose} />
+
+            <div className="sheet_panel" role="dialog" aria-label={title || "내역"}>
+                <div className="sheet_head">
+                    <div className="sheet_title">{title || "내역"}</div>
+                    <button
+                        type="button"
+                        className="sheet_close"
+                        onClick={onClose}
+                        aria-label="닫기"
+                    >
+                        <FiX />
+                    </button>
                 </div>
-                <div className="radar_center__bottom muted">{centerBottomLabel}</div>
+
+                {(!items || items.length === 0) && (
+                    <div className="sheet_empty muted">표시할 내역이 없어요.</div>
+                )}
+
+                {items && items.length > 0 && (
+                    <ul className="tx_list" aria-label="거래 내역">
+                        {items.map((tx) => (
+                            <li key={tx.id} className="tx_row">
+                                <div className="tx_left">
+                                    <div className="tx_title">{tx.title}</div>
+                                    <div className="tx_meta muted">
+                                        {tx.date} · {tx.sub}
+                                    </div>
+                                </div>
+                                <div className="tx_right">
+                                    <b className="tx_amount">{formatKoreanWon(tx.amount)}</b>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );
