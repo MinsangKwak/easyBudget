@@ -89,7 +89,7 @@ const DEFAULT_USERS = [
             providers: {
                 local: {
                     email: "test@test.com",
-                    passwordHash: "$2b$10$dummy_local_hash",
+                    passwordHash: "1234qwer",
                     emailVerified: false,
                     connectedAt: "2025-12-18T00:00:00Z",
                 },
