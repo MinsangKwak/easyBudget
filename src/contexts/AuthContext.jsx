@@ -309,8 +309,7 @@ const collectUserEmails = (user = {}) => {
 };
 
 const buildPhoneBirthKey = (user = {}) => {
-    const phone =
-        user.profile?.phone ?? user.auth?.providers?.bankCert?.phone ?? user.phone ?? "";
+    const phone = user.profile?.phone ?? user.auth?.providers?.bankCert?.phone ?? user.phone ?? "";
     const birth = user.profile?.birth ?? user.auth?.providers?.bankCert?.birth ?? user.birth ?? "";
     const normalizedPhone = normalizePhoneDigits(phone);
     const normalizedBirth = String(birth).replace(/\D/g, "");
@@ -342,11 +341,7 @@ const normalizeUserShape = (user) => {
         profile.name ?? primaryProviderData.displayName ?? user.displayName ?? primaryProvider;
 
     const normalizedPhone =
-        profile.phone ??
-        bankProvider.phone ??
-        primaryProviderData.phone ??
-        user.phone ??
-        null;
+        profile.phone ?? bankProvider.phone ?? primaryProviderData.phone ?? user.phone ?? null;
 
     const normalizedBirth =
         profile.birth ?? bankProvider.birth ?? primaryProviderData.birth ?? user.birth ?? null;
@@ -397,7 +392,9 @@ export const AuthProvider = ({ children }) => {
                 if (payloadEmails.some((email) => userEmails.includes(email))) return true;
 
                 const userPhoneBirth = buildPhoneBirthKey(user);
-                return Boolean(payloadPhoneBirth && userPhoneBirth && payloadPhoneBirth === userPhoneBirth);
+                return Boolean(
+                    payloadPhoneBirth && userPhoneBirth && payloadPhoneBirth === userPhoneBirth,
+                );
             });
 
             const mergeUser = (baseUser = {}, incomingUser = {}) => ({
@@ -422,7 +419,10 @@ export const AuthProvider = ({ children }) => {
                 resolvedUser = mergeUser(nextUsers[existingIndex], userPayload);
                 nextUsers[existingIndex] = resolvedUser;
             } else {
-                resolvedUser = mergeUser(userPayload.id ? {} : { id: generateUserId() }, userPayload);
+                resolvedUser = mergeUser(
+                    userPayload.id ? {} : { id: generateUserId() },
+                    userPayload,
+                );
                 nextUsers.push(resolvedUser);
             }
 
@@ -478,8 +478,8 @@ export const AuthProvider = ({ children }) => {
         const isPasswordValid = !hasStoredPassword
             ? true
             : providerData.password
-                ? providerData.password === password
-                : password === "password1234";
+              ? providerData.password === password
+              : password === "password1234";
 
         if (!isPasswordValid) {
             throw new Error("INVALID_PASSWORD");
