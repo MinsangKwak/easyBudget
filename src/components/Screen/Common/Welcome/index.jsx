@@ -2,9 +2,10 @@ import "./index.css";
 import { useState, useEffect } from "react";
 import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
+import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
-import LottieIcon from "../../../Common/LottieIcon";
-import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
+
+import IconLock from "../../../Common/IconLock";
 
 const ScreenWelcome = ({ onTimeout }) => {
   const [seconds, setSeconds] = useState(2);
@@ -24,15 +25,12 @@ const ScreenWelcome = ({ onTimeout }) => {
 
   return (
     <Screen className="screen_welcome">
-      <div className="screen_visual">
-        <LottieIcon
-          src={LOTTIE_SOURCES.welcomeSpark}
-          ariaLabel="가입 완료 애니메이션"
-          size={150}
-        />
-      </div>
       <Title>가입을 환영합니다.</Title>
+      <Subtitle>
+        잠시만 기다려 주세요.
+      </Subtitle>
       <Inner>
+        <IconLock />
         <p className="welcome_message">
           {seconds}초 후 메인 페이지로 이동합니다.
         </p>

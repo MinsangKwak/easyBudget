@@ -1,9 +1,9 @@
 import { Suspense, lazy, useState } from "react";
 import "./App.css";
-import Loading from "./components/Common/Loading";
 import { SCREEN_NAMES } from "./constants/screenNames";
 import AppHeader from "./components/Layout/AppHeader";
 
+import ScreenLoading from "./components/Screen/Common/Loading";
 const ScreenIntro = lazy(() => import("./components/Screen/Intro"));
 const ScreenMain = lazy(() => import("./components/Screen/Main"));
 const ScreenLogin = lazy(() => import("./components/Screen/Member/Login"));
@@ -50,7 +50,7 @@ const App = () => {
         onAuthClick={handleGoLogin}
         onBack={handlePrev}
       />
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<ScreenLoading />}>
         {screen === SCREEN_NAMES.INTRO && (
           <ScreenIntro onClickGoJoin={handleGoJoin} />
         )}
