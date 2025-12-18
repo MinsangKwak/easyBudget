@@ -26,20 +26,6 @@ const ScreenUser = ({
 }) => {
   const hasSelectedBankLogo = Boolean(selectedBank?.logoSrc);
 
-  // const visualContent = hasSelectedBankLogo ? (
-  //   <img
-  //     src={selectedBank.logoSrc}
-  //     alt={`${selectedBank.label}은행 로고`}
-  //     className="screen_visual__logo"
-  //   />
-  // ) : (
-  //   <LottieIcon
-  //     src={LOTTIE_SOURCES.certShield}
-  //     ariaLabel="본인 확인 애니메이션"
-  //     size={140}
-  //   />
-  // );
-
   return (
     <Screen className="screen_certificate__user">
         <Title>
@@ -94,17 +80,12 @@ const ScreenUser = ({
           }
           bottom={
             <BaseButtonContainer>
-              <BaseButton
-                size="md"
-                style="solid__primary"
-                onClick={onNext}
-              >
+              <BaseButton className="btn_solid__primary" onClick={onNext}>
                 휴대폰 번호로 인증하기
               </BaseButton>
                 <span className="spacer">또는</span>
               <BaseButton
-                size="md"
-                style="outline__black"
+                className="btn_line__black btn_cert__back"
                 onClick={onPrev}
               >
                 이전으로

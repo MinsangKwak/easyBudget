@@ -8,6 +8,7 @@
 
     --color-black: #000000;
     --color-black-100: #425363;
+    --color-black-200: #969696;
 
     --color-primary: #8438f5;
 
@@ -16,6 +17,7 @@
     --radius-lg: 18px;
     --radius-md: 14px;
     --radius-sm: 10px;
+    --radius-xs: 5px;
 
     font-family:
         "Pretendard",

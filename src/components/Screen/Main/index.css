@@ -11,49 +11,6 @@
     font-size: 1.4rem;
 }
 
-:root {
-    --bg: #ffffff;
-    --surface: #ffffff;
-    --soft: #f6f7fb;
-    --border: #e6e8f0;
-
-    --text: #101828;
-    --muted: #667085;
-
-    --primary: #2563eb;
-    --success: #16a34a;
-    --danger: #dc2626;
-
-    --shadow: 0 18px 40px rgba(16, 24, 40, 0.08);
-    --radius-xl: 10px;
-    --radius-lg: 8px;
-}
-
-* {
-    box-sizing: border-box;
-}
-button,
-input {
-    font: inherit;
-}
-
-.muted {
-    color: var(--muted);
-}
-/* .leak {
-    color: var(--danger);
-} */
-.plus {
-    color: var(--success);
-}
-
-/* .good {
-    color: var(--success);
-}
-.bad {
-    color: var(--danger);
-} */
-
 .main_wrap {
     flex: 1 1 auto;
     width: 100%;
@@ -64,14 +21,6 @@ input {
 
 /* ===== top KPI grid ===== */
 .top_kpi_grid {
-    /* display: grid; */
-    /* grid-template-columns: 1fr; */
-    /* gap: 12px; */
-    /* border: 1px solid var(--border); */
-    /* border-radius: var(--radius-xl); */
-    /* background: rgba(255, 255, 255, 0.92); */
-    /* box-shadow: var(--shadow); */
-    /* padding: 14px; */
 }
 
 .kpi_value {
@@ -116,10 +65,6 @@ input {
     color: var(--text);
 }
 
-.panel_sub {
-    font-size: 12px;
-    line-height: 1.5;
-}
 
 /* ===== leak preview ===== */
 .leak_pipe_preview {
@@ -135,7 +80,7 @@ input {
 }
 
 .detail_item {
-    border: 1px solid var(--border);
+    border: 2px dashed var(--color-black-100);
     border-radius: var(--radius-lg);
     background: var(--soft);
     padding: 12px;
@@ -173,7 +118,7 @@ input {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     background: var(--surface);
-    padding: 12px;
+    padding: 1rem 0;
 }
 
 .lane_head {
@@ -366,18 +311,6 @@ input {
     margin-bottom: 6px;
 }
 
-/* .hero_radar__big_value {
-    font-size: 34px;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    color: var(--text);
-}
-
-.hero_radar__big_value.leak {
-    color: var(--danger);
-} */
-
 .hero_radar__big_sub {
     margin-top: 10px;
     font-size: 13px;
@@ -386,10 +319,7 @@ input {
 }
 
 .hero_radar__cta {
-    margin-top: 12px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    margin-top: 1.2rem;
 }
 
 .hero_radar__mini {
@@ -398,7 +328,7 @@ input {
 }
 
 /* right */
-.hero_radar__right {
+.radar {
     display: grid;
 }
 
@@ -522,63 +452,11 @@ input {
     gap: 10px;
 }
 
-.btn_primary,
-.btn_ghost {
-    height: 38px;
-    padding: 0 12px;
-    border-radius: 12px;
-    border: 2px solid color-mix(in srgb, var(--color-primary) 32%, transparent);
-    font-weight: 900;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--color-primary) 24%, transparent);
-}
-
-.btn_primary {
-    background: linear-gradient(
-        120deg,
-        color-mix(in srgb, var(--color-primary) 90%, transparent) 0%,
-        color-mix(in srgb, var(--color-white) 15%, transparent) 100%
-    );
-    color: var(--color-white);
-}
-
-.btn_ghost {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--color-white) 88%, var(--color-white-100) 12%) 0%,
-        color-mix(in srgb, var(--color-white) 70%, var(--color-white-100) 30%) 100%
-    );
-    color: var(--color-black-100);
-    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-grey-100) 64%, transparent);
-}
-
-.btn_primary:hover {
-    transform: translateY(-1px);
-}
-.btn_ghost:hover {
-    filter: brightness(0.98);
-}
 /* S:: section_hero */
 .section_hero {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding: 2.2rem;
-    border-radius: calc(var(--radius-lg) * 1.1);
-    border: 2px solid var(--color-black-100);
-    background:
-        linear-gradient(135deg, var(--color-white-100) 0%, var(--color-white) 42%, var(--color-primary) 44%, var(--color-white) 46%, var(--color-white-100) 100%),
-        radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-primary) 22%, transparent) 0%, transparent 42%),
-        radial-gradient(circle at 80% 80%, color-mix(in srgb, var(--color-black-100) 18%, transparent) 0%, transparent 46%),
-        var(--color-white);
-    box-shadow: 0 18px 48px color-mix(in srgb, var(--color-black-100) 20%, transparent);
-    overflow: hidden;
-    isolation: isolate;
+    gap: 1rem;
 }
 
 .section_hero::before,
@@ -631,8 +509,8 @@ input {
 
 .hero {
     position: relative;
-    padding: 2.4rem 2rem 1.4rem;
-    border-radius: calc(var(--radius-lg) * 1.2);
+    padding: 6rem 1.6rem 1.6rem;
+    border-radius: var(--radius-md);
     background: linear-gradient(
         160deg,
         color-mix(in srgb, var(--color-white) 94%, var(--color-primary) 6%) 0%,
@@ -650,15 +528,15 @@ input {
     position: absolute;
     left: 18px;
     top: 14px;
-    padding: 6px 10px;
-    border-radius: 10px;
+    padding: 0 6px;
+    border-radius: var(--radius-xs);
     background: color-mix(in srgb, var(--color-primary) 16%, var(--color-white) 84%);
     color: var(--color-black-100);
     font-weight: 900;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 11px;
-    box-shadow: 4px 4px 0 color-mix(in srgb, var(--color-black-100) 20%, transparent);
+    font-size: 1.2rem;
+    line-height:2.4rem;
 }
 
 .hero .btn_container__bookmark {
@@ -666,33 +544,18 @@ input {
     right: 14px;
     top: 14px;
     flex-direction: row;
-    gap: 10px;
+    gap: 0.5rem;
     z-index: 2;
 }
 
 .hero .btn_container__bookmark .btn {
-    width: 8rem;
+    width: 2.4rem;
+    padding-left:0;
+    padding-right:0;
 }
 
 .hero .detail_box {
     position: relative;
-    background: repeating-linear-gradient(
-            90deg,
-            color-mix(in srgb, var(--color-white) 92%, var(--color-white-100) 8%) 0,
-            color-mix(in srgb, var(--color-white) 92%, var(--color-white-100) 8%) 22px,
-            color-mix(in srgb, var(--color-white) 80%, var(--color-primary) 20%) 22px,
-            color-mix(in srgb, var(--color-white) 80%, var(--color-primary) 20%) 24px
-        ),
-        var(--color-white);
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.6rem;
-    border-radius: calc(var(--radius-lg) * 1.2);
-    padding: 1.6rem;
-    border: 2px solid var(--color-black-100);
-    box-shadow: 10px 10px 0 color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
 
 .hero .front__head {
@@ -700,20 +563,19 @@ input {
     font-weight: 900;
     line-height: 1;
     color: var(--color-primary);
-    text-shadow:
-        4px 4px 0 var(--color-white-100),
-        8px 8px 0 color-mix(in srgb, var(--color-black-100) 18%, transparent);
+    text-shadow:4px 4px 0 color-mix(in srgb, var(--color-black-100) 18%, transparent);
+    border-bottom:3px solid var(--color-black-100);
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
 
 .hero .detail_description {
     display: inline-flex;
-    margin-top: 0.2rem;
     font-size: 1.2rem;
     line-height: 1.37;
     font-weight: 700;
     color: var(--color-black-100);
     padding: 6px 10px;
-    border-radius: var(--radius-sm);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
     background: color-mix(in srgb, var(--color-white-100) 90%, var(--color-primary) 10%);
     box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--color-primary) 20%, transparent);
 }
@@ -725,9 +587,8 @@ input {
     line-height: 1.37;
     font-weight: 900;
     color: var(--color-black-100);
-    text-shadow:
-        3px 3px 0 var(--color-white-100),
-        6px 6px 0 color-mix(in srgb, var(--color-black-100) 20%, transparent);
+    border-bottom:3px solid var(--color-black-100);
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--color-primary) 18%, transparent);
     letter-spacing: -0.01em;
 }
 
@@ -742,9 +603,9 @@ input {
     border: 0;
     border-bottom: 3px solid var(--color-black-100);
     outline: 0;
-    background: color-mix(in srgb, var(--color-white) 88%, var(--color-white-100) 12%);
+    background-color:transparent;
     padding: 8px 0 4px;
-    box-shadow: 0 8px 0 color-mix(in srgb, var(--color-primary) 18%, transparent);
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
 .kpi_input:focus {
     border-color: var(--color-primary);
@@ -764,15 +625,14 @@ input {
     width: 100%;
 }
 
-.hero_radar__right {
+.radar {
     position: relative;
     padding: 1.6rem;
-    border-radius: calc(var(--radius-lg) * 1.2);
+    border-radius: var(--radius-md);
     background: linear-gradient(
-        145deg,
-        color-mix(in srgb, var(--color-white) 92%, var(--color-white-100) 8%) 0%,
-        color-mix(in srgb, var(--color-primary) 14%, var(--color-white) 86%) 60%,
-        var(--color-white) 100%
+        160deg,
+        color-mix(in srgb, var(--color-white) 94%, var(--color-primary) 6%) 0%,
+        color-mix(in srgb, var(--color-white) 100%, transparent) 70%
     );
     border: 2px solid var(--color-black-100);
     box-shadow:
@@ -781,19 +641,20 @@ input {
     z-index: 1;
 }
 
-.hero_radar__right::before {
+.radar::before {
     content: "you vs flow";
     position: absolute;
     left: 18px;
     top: 12px;
-    padding: 6px 12px;
-    border-radius: 12px;
+    padding: 0 6px;
+    border-radius: var(--radius-xs);
     background: color-mix(in srgb, var(--color-primary) 12%, var(--color-white) 88%);
     color: var(--color-black-100);
     font-weight: 800;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    box-shadow: 4px 4px 0 color-mix(in srgb, var(--color-primary) 20%, transparent);
+    font-size: 1.2rem;
+    line-height:2.4rem;
 }
 
 .radar_card {
@@ -867,3 +728,18 @@ input {
     font-weight: 900;
 }
 /* E:: section_hero */
+
+.card{
+    padding: 1.6rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--color-white) 94%, var(--color-primary) 6%) 0%,
+        color-mix(in srgb, var(--color-white) 100%, transparent) 70%
+    );
+    border: 2px solid var(--color-black-100);
+    box-shadow:
+        inset 0 0 0 6px color-mix(in srgb, var(--color-white-100) 90%, transparent),
+        0 14px 30px color-mix(in srgb, var(--color-black-100) 16%, transparent);
+    z-index: 1;
+}

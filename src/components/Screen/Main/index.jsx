@@ -81,8 +81,8 @@ function useRequestAnimationFrameLoop(isEnabled, onFrame) {
 }
 
 /* =========================
- * 모델: 남는 돈 목표 ↑ → 누수 먼저 자동 감소(가정)
- * - 누수: 이자 + 수수료 + 구독
+ * 모델: 남는 돈 목표 ↑ → 소비금액 먼저 자동 감소(가정)
+ * - 소비금액: 이자 + 수수료 + 구독
  * - 고정비 상세내역: 생활비 + 이자 + 수수료 + 구독
  * ========================= */
 
@@ -109,14 +109,14 @@ function buildMonthlyCashflowModel({
     // 목표를 달성하려면 총 지출은 income - target 이하여야 함
     const targetTotalOutflow = safeIncome - safeRemainTarget;
 
-    // 현재(기본) 총 지출: 고정비 + (생활비 + 누수)
+    // 현재(기본) 총 지출: 고정비 + (생활비 + 소비금액)
     const baseDetailTotal = safeBaseLivingCost + baseLeakCost;
     const baseTotalOutflow = safeFixedCost + baseDetailTotal;
 
     const excessOutflow = Math.max(0, baseTotalOutflow - targetTotalOutflow);
 
-    // 줄이는 순서: 누수(이자+수수료+구독) → 생활비
-    // 누수 바닥값: 25%는 남김(UX 가정)
+    // 줄이는 순서: 소비금액(이자+수수료+구독) → 생활비
+    // 소비금액 바닥값: 25%는 남김(UX 가정)
     const minimumLeakCost = baseLeakCost * 0.25;
     const maximumLeakReduction = Math.max(0, baseLeakCost - minimumLeakCost);
 
@@ -128,7 +128,7 @@ function buildMonthlyCashflowModel({
     const adjustedLeakCost = baseLeakCost - leakReduction;
     const adjustedLivingCost = safeBaseLivingCost - livingReduction;
 
-    // 누수를 이자/수수료/구독에 비례 배분해서 줄여줌(가정)
+    // 소비금액를 이자/수수료/구독에 비례 배분해서 줄여줌(가정)
     const baseLeakDenominator = Math.max(1, baseLeakCost);
 
     const adjustedInterestCost = Math.max(
@@ -327,12 +327,12 @@ export default function ScreenMain() {
         });
     }, [cashflowBase]);
 
-    /* ---------- 누수 강조(맥박) ---------- */
+    /* ---------- 소비금액 강조(맥박) ---------- */
     const leakPulseValue = useMemo(() => {
         return 0.5 + 0.5 * Math.sin(animationTime * 2.1);
     }, [animationTime]);
 
-    /* ---------- HERO 큰 숫자: 누수 카운트업(입력 중 정지) ---------- */
+    /* ---------- HERO 큰 숫자: 소비금액 카운트업(입력 중 정지) ---------- */
     const [animatedLeakValue, setAnimatedLeakValue] = useState(cashflowModel.leakCost);
 
     useEffect(() => {
@@ -536,7 +536,7 @@ export default function ScreenMain() {
 
     /* =========================
      * 1단계 항목 고정 (가독성)
-     * - 월 수입 / 고정비 / 이번 달 잔액 / 누수
+     * - 월 수입 / 고정비 /  잔액 / 소비금액
      * ========================= */
     const stage1Items = useMemo(() => {
         return [
@@ -554,13 +554,13 @@ export default function ScreenMain() {
             },
             {
                 key: "leak",
-                label: "이번 달 누수(이자·수수료·구독)",
+                label: " 소비금액",
                 value: cashflowModel.leakCost,
                 tone: "leak",
             },
             {
                 key: "balance",
-                label: "이번 달 잔액",
+                label: " 잔액",
                 value: cashflowModel.remainingMoney,
                 tone: cashflowModel.remainingMoney >= 0 ? "good" : "bad",
             },
@@ -717,17 +717,10 @@ export default function ScreenMain() {
                                                 aria-label="잔액 목표 입력"
                                             />
                                             <div className="detail_description">
-                                                이번 달 잔액 목표
+                                                 잔액 목표
                                             </div>
                                         </div>
                                     </section>
-
-                                    <div
-                                        className="hero_radar__mini muted"
-                                        style={{ marginTop: 10 }}
-                                    >
-                                        입력 중에는 흐름이 멈추고, 확정하면 다시 흐릅니다.
-                                    </div>
                                 </div>
                             }
                         />
@@ -741,7 +734,6 @@ export default function ScreenMain() {
                                 title="평균 보기"
                             >
                                 <FiRefreshCcw />
-                                평균 보기
                             </BaseButton>
                             <BaseButton
                                 type="button"
@@ -751,7 +743,7 @@ export default function ScreenMain() {
                                 aria-label="내 값 입력으로 전환"
                                 title="내 값 입력"
                             >
-                                <FiEdit3 />내 값 입력
+                                <FiEdit3 />
                             </BaseButton>
                         </BaseButtonContainer>
                     </article>
@@ -761,16 +753,16 @@ export default function ScreenMain() {
                         한번 점검해보세요.
                     </p>
                     {/* RIGHT */}
-                    <div className="hero_radar__right">
+                    <div className="radar">
                         <div className="radar_card">
                             <div className="radar_card__head">
-                                <div className="radar_card__title">나의 예상 소비(1단계)</div>
+                                <div className="radar_card__title">가계부 점검 1단계</div>
                                 <div className="radar_card__sub muted">
-                                    먼저 4개 항목으로 고정해서 “흐름”부터 잡습니다.
+                                    수입, 지출을 꼼꼼히 기록해보세요.
                                 </div>
                             </div>
 
-                            {/* ✅ 1단계 항목 고정: 월수입/고정비/누수/이번달 잔액 */}
+                            {/* ✅ 1단계 항목 고정: 월수입/고정비/소비금액/이번달 잔액 */}
                             <div className="radar_legend" aria-label="1단계 항목">
                                 {stage1Items.map((item) => {
                                     const valueClass =
@@ -803,7 +795,7 @@ export default function ScreenMain() {
                                 })}
                             </div>
 
-                            {/* ✅ 도넛도 “1단계 흐름”이 읽히게: 고정비 vs 누수 vs 잔액 */}
+                            {/* ✅ 도넛도 “1단계 흐름”이 읽히게: 고정비 vs 소비금액 vs 잔액 */}
                             <div className="radar_chart" style={{ marginTop: 8 }}>
                                 <RadarDonut
                                     animationTime={animationTime}
@@ -817,13 +809,13 @@ export default function ScreenMain() {
                                         },
                                         {
                                             key: "leak",
-                                            label: "누수",
+                                            label: "소비금액",
                                             value: cashflowModel.leakCost,
                                             tone: "leak",
                                         },
                                         {
                                             key: "balance",
-                                            label: "이번 달 잔액",
+                                            label: " 잔액",
                                             value: Math.max(0, cashflowModel.remainingMoney),
                                             tone:
                                                 cashflowModel.remainingMoney >= 0
@@ -833,29 +825,26 @@ export default function ScreenMain() {
                                     ]}
                                     centerTopLabel="나의 흐름"
                                     centerValue={cashflowModel.leakCost}
-                                    centerBottomLabel="이번 달 누수"
+                                    centerBottomLabel=" 소비금액"
                                 />
                             </div>
 
-                            <div className="panel_sub muted" style={{ marginTop: 10 }}>
-                                결론은 간단합니다. <b className="leak">누수</b>를 줄이면{" "}
-                                <b>이번 달 잔액</b>이 커집니다.
-                            </div>
-
-                            <div className="hero_radar__cta" style={{ marginTop: 10 }}>
-                                <button
+                            <BaseButtonContainer className="hero_radar__cta">
+                                <BaseButton
                                     type="button"
-                                    className="btn_primary"
+                                    size="sm"
+                                    style="solid__primary"
                                     onClick={handleClickGoToDetails}
                                 >
                                     더 자세히 보기
-                                </button>
-                                <button
+                                </BaseButton>
+                                <BaseButton
                                     type="button"
-                                    className="btn_ghost"
+                                    size="sm"
+                                    style="outline__grey"
                                     onClick={() => {
                                         const leakSection = document.querySelector(
-                                            '[aria-label="이번 달 또 없어질 돈"]',
+                                            '[aria-label=" 또 없어질 돈"]',
                                         );
                                         leakSection?.scrollIntoView({
                                             behavior: "smooth",
@@ -863,24 +852,19 @@ export default function ScreenMain() {
                                         });
                                     }}
                                 >
-                                    누수부터 보기
-                                </button>
-                            </div>
-
-                            <div className="hero_radar__mini muted">
-                                * 다음 단계에서 생활비/구독 등을 더 잘게 쪼개는 흐름(설문/연동)을
-                                붙이면 자연스럽게 확장됩니다.
-                            </div>
+                                    소비금액부터 보기
+                                </BaseButton>
+                            </BaseButtonContainer>
                         </div>
                     </div>
                 </section>
 
                 {/* ======================
-                 * 2) 이번달 또 없어질 돈(누수)
+                 * 2) 이번달 또 없어질 돈(소비금액)
                  * ====================== */}
-                <section className="panel" aria-label="이번 달 또 없어질 돈">
+                <section className="card" aria-label=" 또 없어질 돈">
                     <div className="panel_head">
-                        <div className="panel_title">이번 달 누수</div>
+                        <div className="panel_title"> 소비금액</div>
                         <div className="panel_value leak">
                             {formatKoreanWon(cashflowModel.leakCost)}
                         </div>
@@ -891,26 +875,24 @@ export default function ScreenMain() {
                         <b className="plus">{formatKoreanWon(cashflowModel.leakSaved)}</b>
                     </div>
 
-                    <div className="leak_pipe_preview">
-                        <PipeLane
-                            title="이자·수수료·구독"
-                            value={cashflowModel.leakCost}
-                            tone="leak"
-                            thickness={pipeThickness.leak}
-                            particles={particles.leak}
-                            isUserEditing={isUserEditing}
-                            calculateFlowPosition={calculateFlowPosition}
-                            pulseValue={leakPulseValue}
-                        />
-                    </div>
+                    <PipeLane
+                        title="이자·수수료·구독"
+                        value={cashflowModel.leakCost}
+                        tone="leak"
+                        thickness={pipeThickness.leak}
+                        particles={particles.leak}
+                        isUserEditing={isUserEditing}
+                        calculateFlowPosition={calculateFlowPosition}
+                        pulseValue={leakPulseValue}
+                    />
                 </section>
 
                 {/* ======================
                  * 3) 고정비 상세내역
                  * ====================== */}
-                <section className="panel" aria-label="고정비 상세내역">
+                <section className="card" aria-label="고정비 상세내역">
                     <div className="panel_head">
-                        <div className="panel_title">지출 상세(생활비 + 누수)</div>
+                        <div className="panel_title">지출 상세</div>
                         <div className="panel_value">
                             {formatKoreanWon(cashflowModel.livingCost + cashflowModel.leakCost)}
                         </div>
@@ -922,25 +904,6 @@ export default function ScreenMain() {
                             <div className="detail_value">
                                 {formatKoreanWon(cashflowModel.livingCost)}
                             </div>
-                            <input
-                                className="detail_input"
-                                inputMode="numeric"
-                                value={inputForm.livingCostInput}
-                                onFocus={() => setIsUserEditing(true)}
-                                onChange={(event) => {
-                                    setInputForm((previousInputForm) => {
-                                        return {
-                                            ...previousInputForm,
-                                            livingCostInput: event.target.value,
-                                        };
-                                    });
-                                }}
-                                onBlur={commitDetailCostsInput}
-                                onKeyDown={(keyboardEvent) => {
-                                    handleEnterToCommit(keyboardEvent, commitDetailCostsInput);
-                                }}
-                                aria-label="생활비 입력"
-                            />
                         </div>
 
                         <div className="detail_item">
@@ -948,25 +911,6 @@ export default function ScreenMain() {
                             <div className="detail_value">
                                 {formatKoreanWon(cashflowModel.interestCost)}
                             </div>
-                            <input
-                                className="detail_input"
-                                inputMode="numeric"
-                                value={inputForm.interestCostInput}
-                                onFocus={() => setIsUserEditing(true)}
-                                onChange={(event) => {
-                                    setInputForm((previousInputForm) => {
-                                        return {
-                                            ...previousInputForm,
-                                            interestCostInput: event.target.value,
-                                        };
-                                    });
-                                }}
-                                onBlur={commitDetailCostsInput}
-                                onKeyDown={(keyboardEvent) => {
-                                    handleEnterToCommit(keyboardEvent, commitDetailCostsInput);
-                                }}
-                                aria-label="이자 입력"
-                            />
                         </div>
 
                         <div className="detail_item">
@@ -974,25 +918,6 @@ export default function ScreenMain() {
                             <div className="detail_value">
                                 {formatKoreanWon(cashflowModel.feeCost)}
                             </div>
-                            <input
-                                className="detail_input"
-                                inputMode="numeric"
-                                value={inputForm.feeCostInput}
-                                onFocus={() => setIsUserEditing(true)}
-                                onChange={(event) => {
-                                    setInputForm((previousInputForm) => {
-                                        return {
-                                            ...previousInputForm,
-                                            feeCostInput: event.target.value,
-                                        };
-                                    });
-                                }}
-                                onBlur={commitDetailCostsInput}
-                                onKeyDown={(keyboardEvent) => {
-                                    handleEnterToCommit(keyboardEvent, commitDetailCostsInput);
-                                }}
-                                aria-label="수수료 입력"
-                            />
                         </div>
 
                         <div className="detail_item">
@@ -1000,39 +925,16 @@ export default function ScreenMain() {
                             <div className="detail_value">
                                 {formatKoreanWon(cashflowModel.subscriptionCost)}
                             </div>
-                            <input
-                                className="detail_input"
-                                inputMode="numeric"
-                                value={inputForm.subscriptionCostInput}
-                                onFocus={() => setIsUserEditing(true)}
-                                onChange={(event) => {
-                                    setInputForm((previousInputForm) => {
-                                        return {
-                                            ...previousInputForm,
-                                            subscriptionCostInput: event.target.value,
-                                        };
-                                    });
-                                }}
-                                onBlur={commitDetailCostsInput}
-                                onKeyDown={(keyboardEvent) => {
-                                    handleEnterToCommit(keyboardEvent, commitDetailCostsInput);
-                                }}
-                                aria-label="구독 입력"
-                            />
                         </div>
-                    </div>
-
-                    <div className="panel_sub muted" style={{ marginTop: 10 }}>
-                        입력 중에는 흐름이 멈추고, 확정하면 다시 흐릅니다.
                     </div>
                 </section>
 
                 {/* ======================
                  * 4) 이번달 잔액 (기존 남는 돈 → 잔액)
                  * ====================== */}
-                <section className="panel" aria-label="이번 달 잔액">
+                <section className="card" aria-label=" 잔액">
                     <div className="panel_head">
-                        <div className="panel_title">이번 달 잔액</div>
+                        <div className="panel_title"> 잔액</div>
                         <div
                             className={`panel_value ${cashflowModel.remainingMoney >= 0 ? "good" : "bad"}`}
                         >
@@ -1070,11 +972,6 @@ export default function ScreenMain() {
                                     );
                                 })}
                             </div>
-                        </div>
-
-                        <div className="drop_note">
-                            <b>핵심:</b> <b className="leak">누수</b>를 줄이면 <b>이번 달 잔액</b>이
-                            커집니다.
                         </div>
                     </div>
                 </section>
