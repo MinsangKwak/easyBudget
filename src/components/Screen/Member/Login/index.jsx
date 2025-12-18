@@ -166,7 +166,9 @@ const ScreenLogin = ({
                         {isBusy ? (
                             <ScreenLoading
                                 message={
-                                    isCertificateMode ? "금융인증서 로그인 중입니다." : "로그인 중입니다."
+                                    isCertificateMode
+                                        ? "금융인증서 로그인 중입니다."
+                                        : "로그인 중입니다."
                                 }
                             />
                         ) : isCertificateMode ? (
@@ -270,7 +272,7 @@ const ScreenLogin = ({
                             </form>
                         )}
 
-                        <div className="login_secondary_actions">
+                        {/* <BaseButtonContainer>
                             {isCertificateMode ? (
                                 <BaseButton
                                     type="button"
@@ -310,7 +312,7 @@ const ScreenLogin = ({
                             >
                                 계정이 없으시다면 회원가입
                             </BaseButton>
-                        </div>
+                        </BaseButtonContainer> */}
                     </Inner>
                 </section>
             </Screen>

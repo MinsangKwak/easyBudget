@@ -1,57 +1,53 @@
 import "./index.css";
 import BaseButton from "../../Form/BaseButton";
+import BaseButtonContainer from "../../Form/BaseButtonContainer";
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import Inner from "../../Content/Inner";
 
 import Subtitle from "../../Content/SubTitle";
-// import LottieIcon from "../../Common/LottieIcon";
-// import { LOTTIE_SOURCES } from "../../../constants/lottieSources";
 
+import IconLock from "../../../components/Common/IconLock";
 const ScreenIntro = ({ onClickLoginEmail, onClickLoginCertificate, onClickGoJoin }) => {
-  return (
-    <Screen className="screen_main">
-      {/* <div className="screen_visual">
-        <LottieIcon
-          src={LOTTIE_SOURCES.introPulse}
-          ariaLabel="인증 안내 애니메이션"
-        />
-      </div> */}
-      <Title>
-        로그인 방식을
-        <br />
-        선택해주세요
-      </Title>
-      <Subtitle>시작하기 전에 로그인 방식을 먼저 선택해주세요.</Subtitle>
-      <Inner>
-        <p className="intro_text">원하시는 방식으로 로그인/회원가입을 진행해주세요.</p>
-        <BaseButton
-          type="button"
-          style="solid__primary"
-          className="btn_intro_action"
-          onClick={onClickLoginEmail}
-        >
-          이메일로 로그인하기
-        </BaseButton>
-        <BaseButton
-          type="button"
-          style="outline__black"
-          className="btn_intro_action"
-          onClick={onClickLoginCertificate}
-        >
-          금융인증서로 로그인하기
-        </BaseButton>
-        <BaseButton
-          type="button"
-          style="line__black"
-          className="btn_intro_action"
-          onClick={onClickGoJoin}
-        >
-          아직 계정이 없으신가요? 회원가입
-        </BaseButton>
-      </Inner>
-    </Screen>
-  );
+    return (
+        <Screen className="screen_main">
+            <Title>시작하기</Title>
+            <Subtitle>로그인 방식을 먼저 선택해주세요.</Subtitle>
+            <Inner>
+                <IconLock />
+                <BaseButtonContainer>
+                    <BaseButton
+                        type="button"
+                        size="md"
+                        style="solid__primary"
+                        className="btn_intro_action"
+                        onClick={onClickLoginEmail}
+                    >
+                        이메일로 로그인하기
+                    </BaseButton>
+                    <BaseButton
+                        type="button"
+                        size="md"
+                        style="outline__black"
+                        className="btn_intro_action"
+                        onClick={onClickLoginCertificate}
+                    >
+                        금융인증서로 로그인하기
+                    </BaseButton>
+                    <span className="spacer">또는</span>
+                    <BaseButton
+                        type="button"
+                        size="md"
+                        style="line__black"
+                        className="btn_intro_action"
+                        onClick={onClickGoJoin}
+                    >
+                        아직 계정이 없으신가요? 회원가입
+                    </BaseButton>
+                </BaseButtonContainer>
+            </Inner>
+        </Screen>
+    );
 };
 
 export default ScreenIntro;
