@@ -1,6 +1,5 @@
 import { useState } from "react";
 import BaseButton from "../components/Form/BaseButton";
-import Button from "../components/Form/Button";
 import BaseButtonWrapper from "../components/Form/BaseButtonWrapper";
 import BaseButtonContainer from "../components/Form/BaseButtonContainer";
 import FormFieldWrapper from "../components/Form/FormFieldWrapper";
@@ -17,7 +16,7 @@ export const Buttons = {
   render: () => (
     <BaseButtonContainer>
       <BaseButton style="solid__primary">기본 버튼</BaseButton>
-      <Button style="line__black">라인 버튼</Button>
+      <BaseButton style="line__black">라인 버튼</BaseButton>
     </BaseButtonContainer>
   ),
 };
@@ -27,8 +26,8 @@ export const ButtonLayouts = {
   render: () => (
     <BaseButtonWrapper>
       <BaseButtonContainer>
-        <Button style="solid__primary">확인</Button>
-        <Button style="line__black">취소</Button>
+        <BaseButton style="solid__primary">확인</BaseButton>
+        <BaseButton style="line__black">취소</BaseButton>
       </BaseButtonContainer>
     </BaseButtonWrapper>
   ),

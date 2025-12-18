@@ -97,7 +97,7 @@
 
 .btn_icon{}
 
-/* .btn_inline {
+.btn_inline {
   width: auto;
   height: auto;
   padding: 0.6rem 1.2rem;
@@ -109,102 +109,16 @@
   box-shadow: none;
 }
 
-.btn:hover {
-  background: #ededed;
-}
-
-.btn:active {
-  transform: translateY(1px);
-}
-
-.btn_solid__primary {
-  background: var(--color-primary);
-  color: var(--color-white);
-  border-color: var(--color-primary);
-}
-
-.btn_solid__primary:hover {
-  background: #6f27de;
-  border-color: #6f27de;
-}
-
-.btn_outline__black {
-  background: var(--color-white);
-  border-color: var(--color-black-100);
-  color: var(--color-black-100);
-}
-
 .btn_line__primary {
   background-color: var(--color-white);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-.btn_captcha {
-  height: auto;
-  width: auto;
-  padding: 0.8rem 1.2rem;
-  border-radius: var(--radius-md);
-  background: var(--color-white);
-  color: var(--color-primary);
   border: 1px solid var(--color-primary);
-  font-size: 1.3rem;
-}
-
-.btn_captcha__refresh::before {
-  content: "\21bb";
-  margin-right: 0.35rem;
-}
-
-.btn_captcha__audio::before {
-  content: "\1F50A";
-  margin-right: 0.35rem;
-}
-
-.btn_back {
-  width: 44px;
-  height: 44px;
-  padding: 0.75rem 1.1rem;
-  border-radius: var(--radius-md);
-  background-color: var(--color-white);
   color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  font-weight: 500;
 }
 
-.btn_bank {
-  justify-content: space-between;
+.btn_line__black {
   background: var(--color-white);
-  color: var(--color-black-100);
   border: 1px solid var(--color-grey-100);
-  padding: 1.1rem 1.4rem;
-  text-align: left;
-}
-
-.btn_bank__woori,
-.btn_bank__kb,
-.btn_bank__shinhan,
-.btn_bank__hana,
-.btn_bank__nh,
-.btn_bank__ibk,
-.btn_bank__kakao {
-  border-color: var(--color-primary);
-}
-
-.btn_wait__complete {
-  margin-bottom: 0.75rem;
-}
-
-.btn_cert__ask_auth {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border-color: var(--color-primary);
-}
-
-.btn_cert__back {
-  background-color: var(--color-white);
-  color: var(--color-black-100);
-  border-color: var(--color-black-100);
+  color: var(--color-black);
 }
 
 .btn_email_join_submit,
@@ -217,4 +131,4 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-} */
+}

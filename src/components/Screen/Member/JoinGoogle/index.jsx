@@ -2,7 +2,7 @@ import "./index.css";
 import { useEffect } from "react";
 import Screen from "../../../Layout/Screen";
 import Inner from "../../../Content/Inner";
-import Button from "../../../Form/Button";
+import BaseButton from "../../../Form/BaseButton";
 import Title from "../../../Content/Title";
 // import LottieIcon from "../../../Common/LottieIcon";
 // import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
@@ -64,14 +64,15 @@ const ScreenJoinGoogle = ({ onSignUpComplete }) => {
       <Title>Google 계정으로 가입</Title>
       <Inner>
         <div className="btn_container">
-          <Button
+          <BaseButton
             type="button"
             style="line__black"
+            size="md"
             className="btn_google_join"
             onClick={handleClickGoogle}
           >
             Google 계정으로 계속하기
-          </Button>
+          </BaseButton>
         </div>
       </Inner>
     </Screen>

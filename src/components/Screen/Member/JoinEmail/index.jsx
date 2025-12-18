@@ -6,7 +6,7 @@ import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
 import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
-import Button from "../../../Form/Button";
+import BaseButton from "../../../Form/BaseButton";
 import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 import ErrorMessage from "../../../Form/ErrorMessage";
 import FormFieldInput from "../../../Form/FormFieldInput";
@@ -87,18 +87,18 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
           {error && <ErrorMessage aria-live="polite">{error}</ErrorMessage>}
 
           <BaseButtonContainer>
-            <Button type="submit" style="solid__primary" className="btn_email_join_submit">
+            <BaseButton type="submit" style="solid__primary" className="btn_email_join_submit">
               이메일로 가입하기
-            </Button>
+            </BaseButton>
             <span className="spacer">또는</span>
-            <Button
+            <BaseButton
               type="button"
               style="line__black"
               className="btn_email_join_submit"
               onClick={handleGmailConnect}
             >
               빠르게 GMAIL 연동하기
-            </Button>
+            </BaseButton>
           </BaseButtonContainer>
         </form>
       </Inner>

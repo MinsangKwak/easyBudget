@@ -4,7 +4,7 @@ import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
 import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
-import Button from "../../../Form/Button";
+import BaseButton from "../../../Form/BaseButton";
 import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 
 import IconLock from "../../../Common/IconLock";
@@ -24,7 +24,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
       <Inner>
         <IconLock />
         <BaseButtonContainer>
-          <Button
+          <BaseButton
             type="button"
             size="md"
             style="solid__primary"
@@ -32,9 +32,9 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
           >
             <MdMailOutline aria-hidden="true" />
             일반 회원가입 / GMAIL 연동
-          </Button>
+          </BaseButton>
           <span className="spacer">또는</span>
-          <Button
+          <BaseButton
             type="button"
             size="md"
             style="outline__black"
@@ -42,7 +42,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
           >
             <FaIdBadge aria-hidden="true" />
             사용하는 금융인증서로 가입
-          </Button>
+          </BaseButton>
         </BaseButtonContainer>
       </Inner>
     </Screen>
