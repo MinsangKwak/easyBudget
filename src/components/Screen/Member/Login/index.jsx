@@ -14,11 +14,16 @@ import FormFieldInput from "../../../Form/FormFieldInput";
 import FormFieldWrapper from "../../../Form/FormFieldWrapper";
 import { useAuth } from "../../../../contexts/AuthContext";
 
-import { MdMailOutline } from "react-icons/md";
-
 import IconLock from "../../../Common/IconLock";
 
-const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
+const ScreenLogin = ({
+    mode = "email",
+    onLoginSuccess,
+    onClickSignUp,
+    onClickBack,
+    onClickSwitchToEmail,
+    onClickSwitchToCertificate,
+}) => {
     const { loginWithEmail, loginWithCertificate } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -137,47 +142,96 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
         }, 800);
     };
 
-    const isBusy = isLoading || isCertLoading;
+    const isCertificateMode = mode === "certificate";
+    const isBusy = isCertificateMode ? isCertLoading : isLoading;
+
+    const handleClickBack = () => {
+        resetError();
+        resetCertError();
+        onClickBack?.();
+    };
 
     return (
         <>
             <Screen className="screen_join__email">
                 <section>
-                    <Title>로그인</Title>
-                    <Subtitle>방식을 선택해주세요.</Subtitle>
+                    <Title>{isCertificateMode ? "은행 인증서로 로그인" : "이메일로 로그인"}</Title>
+                    <Subtitle>
+                        {isCertificateMode
+                            ? "인증서를 선택 후 개인정보와 추가정보를 입력해주세요."
+                            : "정보를 입력해주세요."}
+                    </Subtitle>
                     <Inner>
                         <IconLock />
-                        <BaseButtonContainer>
-                            <BaseButton type="submit" size="md" style="solid__primary">
-                                <MdMailOutline aria-hidden="true" />
-                                로그인 / GMAIL로 로그인
-                            </BaseButton>
-                            <BaseButton type="submit" size="md" style="outline__black">
-                                사용하는 금융인증서로 로그인
-                            </BaseButton>
-                            <span class="spacer">또는</span>
-                            <BaseButton
-                                type="button"
-                                size="md"
-                                style="outline__black"
-                                onClick={handleClickSignUp}
-                                disabled={isLoading}
-                            >
-                                계정이 없으시다면 여기로 회원가입
-                            </BaseButton>
-                        </BaseButtonContainer>
-                    </Inner>
-                </section>
-                <section>
-                    <Title>로그인</Title>
-                    <Subtitle>정보를 입력해주세요.</Subtitle>
-                    <Inner>
                         {isBusy ? (
                             <ScreenLoading
                                 message={
-                                    isLoading ? "로그인 중입니다." : "금융인증서 로그인 중입니다."
+                                    isCertificateMode ? "금융인증서 로그인 중입니다." : "로그인 중입니다."
                                 }
                             />
+                        ) : isCertificateMode ? (
+                            <form className="form_email_join" onSubmit={handleCertificateSubmit}>
+                                <label className="form_field__label" htmlFor="cert_bank">
+                                    인증서 선택
+                                </label>
+                                <select
+                                    id="cert_bank"
+                                    value={certBankName}
+                                    onChange={(e) => setCertBankName(e.target.value)}
+                                    disabled={isBusy}
+                                    className="cert_bank_select"
+                                >
+                                    <option value="KB국민은행">KB국민은행</option>
+                                    <option value="신한은행">신한은행</option>
+                                    <option value="우리은행">우리은행</option>
+                                    <option value="농협은행">농협은행</option>
+                                </select>
+
+                                <FormFieldWrapper>
+                                    <FormFieldInput
+                                        id="cert_name"
+                                        type="text"
+                                        label="이름"
+                                        placeholder="홍길동"
+                                        value={certName}
+                                        onChange={(e) => setCertName(e.target.value)}
+                                        disabled={isBusy}
+                                    />
+                                    <FormFieldInput
+                                        id="cert_birth"
+                                        type="text"
+                                        label="생년월일"
+                                        placeholder="YYYYMMDD"
+                                        value={certBirth}
+                                        onChange={(e) => setCertBirth(e.target.value)}
+                                        disabled={isBusy}
+                                    />
+                                    <FormFieldInput
+                                        id="cert_phone"
+                                        type="text"
+                                        label="휴대폰번호"
+                                        placeholder="01012345678"
+                                        value={certPhone}
+                                        onChange={(e) => setCertPhone(e.target.value)}
+                                        disabled={isBusy}
+                                    />
+                                </FormFieldWrapper>
+
+                                {certError && (
+                                    <ErrorMessage aria-live="polite">{certError}</ErrorMessage>
+                                )}
+
+                                <BaseButtonContainer>
+                                    <BaseButton
+                                        type="submit"
+                                        size="md"
+                                        style="solid__primary"
+                                        disabled={isBusy}
+                                    >
+                                        금융인증서로 로그인
+                                    </BaseButton>
+                                </BaseButtonContainer>
+                            </form>
                         ) : (
                             <form className="form_email_join" onSubmit={handleSubmit}>
                                 <FormFieldWrapper>
@@ -212,87 +266,51 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
                                     >
                                         로그인
                                     </BaseButton>
-                                    {/* <span className="spacer">또는</span>
-                                    <BaseButton
-                                        type="button"
-                                        size="md"
-                                        style="outline__black"
-                                        onClick={handleClickSignUp}
-                                        disabled={isLoading}
-                                    >
-                                        계정이 없으시다면 여기로 회원가입
-                                    </BaseButton> */}
                                 </BaseButtonContainer>
                             </form>
                         )}
-                    </Inner>
-                </section>
-                <section>
-                    <Title>은행 인증서 로그인</Title>
-                    <Subtitle>인증서를 선택 후 개인정보와 추가정보를 입력해주세요.</Subtitle>
-                    <Inner>
-                        <form className="form_email_join" onSubmit={handleCertificateSubmit}>
-                            <label className="form_field__label" htmlFor="cert_bank">
-                                인증서 선택
-                            </label>
-                            <select
-                                id="cert_bank"
-                                value={certBankName}
-                                onChange={(e) => setCertBankName(e.target.value)}
-                                disabled={isBusy}
-                                className="cert_bank_select"
-                            >
-                                <option value="KB국민은행">KB국민은행</option>
-                                <option value="신한은행">신한은행</option>
-                                <option value="우리은행">우리은행</option>
-                                <option value="농협은행">농협은행</option>
-                            </select>
 
-                            <FormFieldWrapper>
-                                <FormFieldInput
-                                    id="cert_name"
-                                    type="text"
-                                    label="이름"
-                                    placeholder="홍길동"
-                                    value={certName}
-                                    onChange={(e) => setCertName(e.target.value)}
-                                    disabled={isBusy}
-                                />
-                                <FormFieldInput
-                                    id="cert_birth"
-                                    type="text"
-                                    label="생년월일"
-                                    placeholder="YYYYMMDD"
-                                    value={certBirth}
-                                    onChange={(e) => setCertBirth(e.target.value)}
-                                    disabled={isBusy}
-                                />
-                                <FormFieldInput
-                                    id="cert_phone"
-                                    type="text"
-                                    label="휴대폰번호"
-                                    placeholder="01012345678"
-                                    value={certPhone}
-                                    onChange={(e) => setCertPhone(e.target.value)}
-                                    disabled={isBusy}
-                                />
-                            </FormFieldWrapper>
-
-                            {certError && (
-                                <ErrorMessage aria-live="polite">{certError}</ErrorMessage>
-                            )}
-
-                            <BaseButtonContainer>
+                        <div className="login_secondary_actions">
+                            {isCertificateMode ? (
                                 <BaseButton
-                                    type="submit"
+                                    type="button"
                                     size="md"
-                                    style="solid__primary"
+                                    style="outline__black"
+                                    onClick={onClickSwitchToEmail}
                                     disabled={isBusy}
                                 >
-                                    금융인증서로 로그인
+                                    이메일 로그인으로 진행하기
                                 </BaseButton>
-                            </BaseButtonContainer>
-                        </form>
+                            ) : (
+                                <BaseButton
+                                    type="button"
+                                    size="md"
+                                    style="outline__black"
+                                    onClick={onClickSwitchToCertificate}
+                                    disabled={isBusy}
+                                >
+                                    금융인증서 로그인으로 진행하기
+                                </BaseButton>
+                            )}
+                            <BaseButton
+                                type="button"
+                                size="md"
+                                style="line__black"
+                                onClick={handleClickBack}
+                                disabled={isBusy}
+                            >
+                                로그인 방식 다시 선택하기
+                            </BaseButton>
+                            <BaseButton
+                                type="button"
+                                size="md"
+                                style="line__black"
+                                onClick={handleClickSignUp}
+                                disabled={isBusy}
+                            >
+                                계정이 없으시다면 회원가입
+                            </BaseButton>
+                        </div>
                     </Inner>
                 </section>
             </Screen>

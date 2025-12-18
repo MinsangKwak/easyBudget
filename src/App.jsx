@@ -18,7 +18,9 @@ const App = () => {
   const { currentUser, logout, loginWithCertificate } = useAuth();
   const [screen, setScreen] = useState(SCREEN_NAMES.MAIN);
 
-  const handleGoLogin = () => setScreen(SCREEN_NAMES.LOGIN);
+  const handleGoLogin = () => setScreen(SCREEN_NAMES.INTRO);
+  const handleGoLoginEmail = () => setScreen(SCREEN_NAMES.LOGIN);
+  const handleGoLoginCertificate = () => setScreen(SCREEN_NAMES.LOGIN_CERTIFICATE);
   const handleGoJoin = () => setScreen(SCREEN_NAMES.JOIN);
   const handleGoCertFlow = () => setScreen(SCREEN_NAMES.CERT_FLOW);
   const handleGoEmailFlow = () => setScreen(SCREEN_NAMES.EMAIL_FLOW);
@@ -54,13 +56,30 @@ const App = () => {
       />
       <Suspense fallback={<ScreenLoading />}>
         {screen === SCREEN_NAMES.INTRO && (
-          <ScreenIntro onClickGoJoin={handleGoJoin} />
+          <ScreenIntro
+            onClickLoginEmail={handleGoLoginEmail}
+            onClickLoginCertificate={handleGoLoginCertificate}
+            onClickGoJoin={handleGoJoin}
+          />
         )}
 
         {screen === SCREEN_NAMES.LOGIN && (
           <ScreenLogin
+            mode="email"
             onLoginSuccess={handleLoginComplete}
             onClickSignUp={handleGoJoin}
+            onClickBack={handleGoLogin}
+            onClickSwitchToCertificate={handleGoLoginCertificate}
+          />
+        )}
+
+        {screen === SCREEN_NAMES.LOGIN_CERTIFICATE && (
+          <ScreenLogin
+            mode="certificate"
+            onLoginSuccess={handleLoginComplete}
+            onClickSignUp={handleGoJoin}
+            onClickBack={handleGoLogin}
+            onClickSwitchToEmail={handleGoLoginEmail}
           />
         )}
 
