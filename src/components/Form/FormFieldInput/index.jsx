@@ -1,5 +1,5 @@
 import "./index.css";
-import Button from "../Button";
+import BaseButton from "../BaseButton";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const FormFieldInput = ({
@@ -48,7 +48,7 @@ const FormFieldInput = ({
           onFocus={onFocus}
           disabled={disabled}
         />
-        <Button
+        <BaseButton
           type="button"
           style={["inline", "ghost"]}
           className="form_field__clear"
@@ -58,7 +58,7 @@ const FormFieldInput = ({
           disabled={disabled}
         >
           <IoIosCloseCircleOutline aria-hidden="true" />
-        </Button>
+        </BaseButton>
       </div>
     </div>
   );

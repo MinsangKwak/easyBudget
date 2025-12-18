@@ -3,6 +3,8 @@ import "./index.css";
 const SIZE_CLASSNAMES = {
   sm: "btn_sm",
   md: "btn_md",
+  small: "btn_sm",
+  medium: "btn_md",
 };
 
 const normalizeStyles = (style) => {
@@ -11,6 +13,13 @@ const normalizeStyles = (style) => {
   return styleList
     .flatMap((value) => value.split(" ").filter(Boolean))
     .map((value) => (value.startsWith("btn_") ? value : `btn_${value}`));
+};
+
+const normalizeSize = (size) => {
+  if (!size) return "";
+
+  const normalizedSize = `${size}`.trim().toLowerCase();
+  return SIZE_CLASSNAMES[normalizedSize] ?? "";
 };
 
 const BaseButton = ({
@@ -22,7 +31,7 @@ const BaseButton = ({
   children,
   ...rest
 }) => {
-  const sizeClassName = size ? SIZE_CLASSNAMES[size] ?? `btn_${size}` : "";
+  const sizeClassName = normalizeSize(size);
   const styleClassNames = normalizeStyles(style);
   const composedClassName = ["btn", sizeClassName, ...styleClassNames, className]
     .filter(Boolean)

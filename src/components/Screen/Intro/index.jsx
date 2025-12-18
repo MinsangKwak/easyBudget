@@ -1,5 +1,5 @@
 import "./index.css";
-import Button from "../../Form/Button";
+import BaseButton from "../../Form/BaseButton";
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import Inner from "../../Content/Inner";
@@ -20,13 +20,13 @@ const ScreenIntro = ({ onClickGoJoin }) => {
         <p className="intro_text">
           원하시는 방식으로 로그인/회원가입을 진행해주세요.
         </p>
-        <Button
+        <BaseButton
           type="button"
           style="solid__primary"
           onClick={onClickGoJoin}
         >
           회원가입 / 로그인 하러가기
-        </Button>
+        </BaseButton>
       </Inner>
     </Screen>
   );

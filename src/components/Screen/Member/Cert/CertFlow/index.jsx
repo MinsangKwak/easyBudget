@@ -4,7 +4,6 @@ import ScreenCertSelect from "../ScreenCertSelect";
 import ScreenUser from "../ScreenUser";
 import ScreenWait from "../ScreenWait";
 import { bankList } from "../../../../../constants/bankList";
-import Button from "../../../../Form/Button";
 
 const CERT_STEPS = {
   STEP1: "CERT_SELECT",

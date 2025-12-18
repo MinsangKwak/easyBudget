@@ -6,7 +6,7 @@ import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
 import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
-import Button from "../../../Form/Button";
+import BaseButton from "../../../Form/BaseButton";
 import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 import ErrorMessage from "../../../Form/ErrorMessage";
 import ScreenLoading from "../../Common/Loading";
@@ -96,16 +96,16 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
             {error && <ErrorMessage aria-live="polite">{error}</ErrorMessage>}
 
             <BaseButtonContainer>
-              <Button
+              <BaseButton
                 type="submit"
                 size="md"
                 style="solid__primary"
                 disabled={isLoading}
               >
                 로그인
-              </Button>
+              </BaseButton>
               <span className="spacer">또는</span>
-              <Button
+              <BaseButton
                 type="button"
                 size="md"
                 style="outline__black"
@@ -113,7 +113,7 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
                 disabled={isLoading}
               >
                 계정이 없으시다면 여기로 회원가입
-              </Button>
+              </BaseButton>
             </BaseButtonContainer>
           </form>
         )}
