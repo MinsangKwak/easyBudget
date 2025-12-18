@@ -87,12 +87,18 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
           {error && <ErrorMessage aria-live="polite">{error}</ErrorMessage>}
 
           <BaseButtonContainer>
-            <BaseButton type="submit" style="solid__primary" className="btn_email_join_submit">
+            <BaseButton
+              type="submit"
+              size="md"
+              style="solid__primary"
+              className="btn_email_join_submit"
+            >
               이메일로 가입하기
             </BaseButton>
             <span className="spacer">또는</span>
             <BaseButton
               type="button"
+              size="md"
               style="line__black"
               className="btn_email_join_submit"
               onClick={handleGmailConnect}

@@ -15,7 +15,7 @@ const ScreenJoin = ({ onClickCert, onClickEmail }) => {
   return (
     <Screen className="screen_join">
       <Title>
-        안녕하세요 <br/>
+        안녕하세요 <br />
         신규 가입을 환영합니다.
       </Title>
       <Subtitle>
