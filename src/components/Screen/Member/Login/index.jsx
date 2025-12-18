@@ -149,14 +149,11 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
                         <IconLock />
                         <BaseButtonContainer>
                             <BaseButton type="submit" size="md" style="solid__primary">
-                                로그인
-                            </BaseButton>
-                            <BaseButton type="submit" size="md" style="solid__primary">
                                 <MdMailOutline aria-hidden="true" />
-                                GMAIL로 로그인
+                                로그인 / GMAIL로 로그인
                             </BaseButton>
                             <BaseButton type="submit" size="md" style="outline__black">
-                                금융인증서로 로그인
+                                사용하는 금융인증서로 로그인
                             </BaseButton>
                             <span class="spacer">또는</span>
                             <BaseButton
