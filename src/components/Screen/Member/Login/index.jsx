@@ -12,8 +12,10 @@ import ErrorMessage from "../../../Form/ErrorMessage";
 import ScreenLoading from "../../Common/Loading";
 import FormFieldInput from "../../../Form/FormFieldInput";
 import FormFieldWrapper from "../../../Form/FormFieldWrapper";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
+  const { loginWithEmail } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -41,8 +43,22 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
     setIsLoading(true);
 
     loadingTimeoutRef.current = setTimeout(() => {
-      setIsLoading(false);
-      onLoginSuccess?.();
+      try {
+        loginWithEmail(email, password);
+        onLoginSuccess?.();
+      } catch (loginError) {
+        if (loginError.message === "ACCOUNT_NOT_FOUND") {
+          setError("가입된 이메일이 아닙니다. 회원가입을 진행해주세요.");
+        } else if (loginError.message === "INVALID_PASSWORD") {
+          setError("비밀번호가 일치하지 않습니다.");
+        } else if (loginError.message === "BANK_CERT_REQUIRED") {
+          setError("은행인증서 계정입니다. 금융인증서 로그인으로 진행해주세요.");
+        } else {
+          setError("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }, 1000);
   };
 

@@ -8,4 +8,5 @@ export const SCREEN_NAMES = {
   EMAIL_FLOW: "EMAIL_FLOW",
   WELCOME: "WELCOME",
   MAIN: "MAIN",
+  PROFILE: "PROFILE",
 };

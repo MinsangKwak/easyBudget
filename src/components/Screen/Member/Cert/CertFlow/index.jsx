@@ -35,6 +35,7 @@ const CertFlow = ({ onComplete, onExit }) => {
   const [step, setStep] = useState(CERT_STEPS.STEP1);
   const [selectedBank, setSelectedBank] = useState(null);
   const [userInfo, setUserInfo] = useState(EMPTY_USER);
+  const [validatedUser, setValidatedUser] = useState(null);
   const [captchaValue, setCaptchaValue] = useState("");
   const [captchaCode, setCaptchaCode] = useState(generateCaptchaCode);
   const [errorMessage, setErrorMessage] = useState("");
@@ -52,6 +53,7 @@ const CertFlow = ({ onComplete, onExit }) => {
     setCaptchaCode(generateCaptchaCode());
     setCaptchaValue("");
     setUserInfo(EMPTY_USER);
+    setValidatedUser(null);
     setErrorMessage("");
     setAttemptCount(0);
     setStep(CERT_STEPS.STEP2);
@@ -102,11 +104,19 @@ const CertFlow = ({ onComplete, onExit }) => {
     setAttemptCount(0);
     setCaptchaValue("");
     setCaptchaCode(generateCaptchaCode());
+    setValidatedUser({
+      name: userInfo.name.trim(),
+      birth: userInfo.birth.trim(),
+      phone: userInfo.phone.trim(),
+    });
     setStep(CERT_STEPS.STEP3);
   };
 
   const handleFinishCert = () => {
-    onComplete?.();
+    onComplete?.({
+      bank: selectedBank,
+      user: validatedUser ?? userInfo,
+    });
   };
 
   const handleBack = () => {

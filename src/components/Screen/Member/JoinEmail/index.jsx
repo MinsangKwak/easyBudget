@@ -11,8 +11,10 @@ import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 import ErrorMessage from "../../../Form/ErrorMessage";
 import FormFieldInput from "../../../Form/FormFieldInput";
 import FormFieldWrapper from "../../../Form/FormFieldWrapper";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 const ScreenJoinEmail = ({ onSignUpComplete }) => {
+  const { registerEmailUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -36,13 +38,43 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
       return;
     }
 
-    setError("");
-    onSignUpComplete?.();
+    try {
+      setError("");
+      registerEmailUser({ email, password, connectionType: "email" });
+      onSignUpComplete?.();
+    } catch (registerError) {
+      if (registerError.message === "DUPLICATE_ACCOUNT") {
+        setError("이미 가입된 이메일입니다. 로그인해주세요.");
+      } else {
+        setError("가입에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      }
+    }
   };
 
   const handleGmailConnect = () => {
-    setError("");
-    onSignUpComplete?.();
+    if (!email) {
+      setError("G-Mail 연동을 위해 이메일을 입력해주세요.");
+      return;
+    }
+
+    if (!email.toLowerCase().endsWith("@gmail.com")) {
+      setError("G-Mail 연동은 @gmail.com 주소로만 가능합니다.");
+      return;
+    }
+
+    const nextPassword = password.length >= 8 ? password : "gmail-connect";
+
+    try {
+      setError("");
+      registerEmailUser({ email, password: nextPassword, connectionType: "gmail" });
+      onSignUpComplete?.();
+    } catch (registerError) {
+      if (registerError.message === "DUPLICATE_ACCOUNT") {
+        setError("이미 G-Mail로 가입된 계정입니다.");
+      } else {
+        setError("G-Mail 연동에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      }
+    }
   };
 
   return (

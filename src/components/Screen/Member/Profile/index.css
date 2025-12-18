@@ -1,0 +1,46 @@
+.profile_card {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 2rem;
+  padding: 1.6rem;
+  border: 1px solid var(--color-grey-100);
+  border-radius: 12px;
+  background: var(--color-white);
+  box-shadow: 0 10px 22px rgba(66, 83, 99, 0.08);
+}
+
+.profile_card--empty {
+  text-align: center;
+  color: var(--color-grey-400);
+}
+
+.profile_field {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px dashed var(--color-grey-100);
+}
+
+.profile_field:last-child {
+  border-bottom: none;
+}
+
+.profile_field__label {
+  font-size: 1.4rem;
+  color: var(--color-grey-400);
+}
+
+.profile_field__value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-black);
+  text-align: right;
+  word-break: break-all;
+}
+
+.btn_profile_home {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
