@@ -11,6 +11,11 @@ export const LoadingIndicator = {
   render: () => <ScreenLoading />,
 };
 
+export const LoadingIndicatorWithMessage = {
+  name: "Loading (Custom Message)",
+  render: () => <ScreenLoading message="로그인 중입니다." />,
+};
+
 // export const LottieIconPulse = {
 //   name: "LottieIcon",
 //   render: () => (
