@@ -25,11 +25,11 @@ export const ScreenWithInnerGrid = {
   name: "ScreenInnerGrid",
   render: () => (
     <Screen>
-      <ScreenInnerGrid
-        top={<p>상단 콘텐츠</p>}
-        bottom={<Button variant="solid__primary">하단 버튼</Button>}
-      />
-    </Screen>
+        <ScreenInnerGrid
+          top={<p>상단 콘텐츠</p>}
+          bottom={<Button style="solid__primary">하단 버튼</Button>}
+        />
+      </Screen>
   ),
 };
 

@@ -66,7 +66,7 @@ const ScreenJoinGoogle = ({ onSignUpComplete }) => {
         <div className="btn_container">
           <Button
             type="button"
-            variant="line__black"
+            style="line__black"
             className="btn_google_join"
             onClick={handleClickGoogle}
           >

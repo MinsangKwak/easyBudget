@@ -28,7 +28,6 @@ const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
         {showAuthAction && (
           <Button
             type="button"
-            variant=""
             className="btn_menu"
               aria-label="메뉴"
             onClick={onAuthClick}

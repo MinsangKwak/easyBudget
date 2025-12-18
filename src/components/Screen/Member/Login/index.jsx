@@ -98,7 +98,8 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
             <BaseButtonContainer>
               <Button
                 type="submit"
-                className="btn_md btn_solid__primary"
+                size="md"
+                style="solid__primary"
                 disabled={isLoading}
               >
                 로그인
@@ -106,7 +107,8 @@ const ScreenLogin = ({ onLoginSuccess, onClickSignUp }) => {
               <span className="spacer">또는</span>
               <Button
                 type="button"
-                className="btn_md btn_outline__black"
+                size="md"
+                style="outline__black"
                 onClick={handleClickSignUp}
                 disabled={isLoading}
               >

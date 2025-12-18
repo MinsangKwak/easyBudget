@@ -16,8 +16,8 @@ export const Buttons = {
   name: "Buttons",
   render: () => (
     <BaseButtonContainer>
-      <BaseButton className="btn_solid__primary">기본 버튼</BaseButton>
-      <Button variant="line__black">라인 버튼</Button>
+      <BaseButton style="solid__primary">기본 버튼</BaseButton>
+      <Button style="line__black">라인 버튼</Button>
     </BaseButtonContainer>
   ),
 };
@@ -27,8 +27,8 @@ export const ButtonLayouts = {
   render: () => (
     <BaseButtonWrapper>
       <BaseButtonContainer>
-        <Button variant="solid__primary">확인</Button>
-        <Button variant="line__black">취소</Button>
+        <Button style="solid__primary">확인</Button>
+        <Button style="line__black">취소</Button>
       </BaseButtonContainer>
     </BaseButtonWrapper>
   ),

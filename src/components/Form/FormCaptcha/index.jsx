@@ -3,7 +3,6 @@ import Button from "../Button";
 import { IoRefreshCircleOutline } from "react-icons/io5";
 import { HiMiniSpeakerWave } from "react-icons/hi2";
 
-
 import FormFieldInput from "../FormFieldInput";
 
 const FormCaptcha = ({
@@ -34,7 +33,8 @@ const FormCaptcha = ({
 
         <Button
           type="button"
-          className="btn_sm btn_outline__grey"
+          size="sm"
+          style="outline__grey"
           data-captcha-refresh
           onClick={handleRefresh}
         >
@@ -44,7 +44,8 @@ const FormCaptcha = ({
 
         <Button
           type="button"
-          className="btn_sm btn_outline__grey"
+          size="sm"
+          style="outline__grey"
           data-captcha-audio
           onClick={handleAudio}
         >
