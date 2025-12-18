@@ -2,6 +2,7 @@ import { Suspense, lazy, useState } from "react";
 import "./App.css";
 import { SCREEN_NAMES } from "./constants/screenNames";
 import AppHeader from "./components/Layout/AppHeader";
+import { useAuth } from "./contexts/AuthContext";
 
 import ScreenLoading from "./components/Screen/Common/Loading";
 const ScreenIntro = lazy(() => import("./components/Screen/Intro"));
@@ -11,8 +12,10 @@ const ScreenJoin = lazy(() => import("./components/Screen/Member/Join"));
 const CertFlow = lazy(() => import("./components/Screen/Member/Cert/CertFlow"));
 const ScreenJoinEmail = lazy(() => import("./components/Screen/Member/JoinEmail"));
 const ScreenWelcome = lazy(() => import("./components/Screen/Common/Welcome"));
+const ScreenProfile = lazy(() => import("./components/Screen/Member/Profile"));
 
 const App = () => {
+  const { currentUser, logout, loginWithCertificate } = useAuth();
   const [screen, setScreen] = useState(SCREEN_NAMES.MAIN);
 
   const handleGoLogin = () => setScreen(SCREEN_NAMES.LOGIN);
@@ -22,33 +25,32 @@ const App = () => {
   const handleFlowComplete = () => setScreen(SCREEN_NAMES.WELCOME);
   const handleWelcomeTimeout = () => setScreen(SCREEN_NAMES.MAIN);
   const handleLoginComplete = () => setScreen(SCREEN_NAMES.MAIN);
+  const handleGoHome = () => setScreen(SCREEN_NAMES.MAIN);
+  const handleGoProfile = () => setScreen(SCREEN_NAMES.PROFILE);
 
-  const showBackButton = screen !== SCREEN_NAMES.MAIN;
-  const showAuthAction = screen === SCREEN_NAMES.MAIN;
+  const handleLogout = () => {
+    logout();
+    setScreen(SCREEN_NAMES.MAIN);
+  };
 
-  const handlePrev = () => {
-    if (screen === SCREEN_NAMES.LOGIN) {
-      setScreen(SCREEN_NAMES.MAIN);
-    } else if (screen === SCREEN_NAMES.JOIN) {
-      setScreen(SCREEN_NAMES.LOGIN);
-    } else if (screen === SCREEN_NAMES.EMAIL_FLOW) {
-      setScreen(SCREEN_NAMES.JOIN);
-    } else if (screen === SCREEN_NAMES.CERT_FLOW) {
-      setScreen(SCREEN_NAMES.JOIN);
-    } else if (screen === SCREEN_NAMES.WELCOME) {
-      setScreen(SCREEN_NAMES.MAIN);
-    } else if (screen === SCREEN_NAMES.INTRO) {
-      setScreen(SCREEN_NAMES.MAIN);
-    }
+  const handleCertComplete = ({ bank, user }) => {
+    loginWithCertificate({
+      bankName: bank?.name,
+      name: user?.name,
+      phone: user?.phone,
+      birth: user?.birth,
+    });
+    handleFlowComplete();
   };
 
   return (
     <main className="app">
       <AppHeader
-        showBackButton={showBackButton}
-        showAuthAction={showAuthAction}
-        onAuthClick={handleGoLogin}
-        onBack={handlePrev}
+        isAuthenticated={!!currentUser}
+        onLogoClick={handleGoHome}
+        onLoginClick={handleGoLogin}
+        onProfileClick={handleGoProfile}
+        onLogoutClick={handleLogout}
       />
       <Suspense fallback={<ScreenLoading />}>
         {screen === SCREEN_NAMES.INTRO && (
@@ -71,7 +73,7 @@ const App = () => {
 
         {screen === SCREEN_NAMES.CERT_FLOW && (
           <CertFlow
-            onComplete={handleFlowComplete}
+            onComplete={handleCertComplete}
             onExit={() => setScreen(SCREEN_NAMES.JOIN)}
           />
         )}
@@ -85,6 +87,10 @@ const App = () => {
         )}
 
         {screen === SCREEN_NAMES.MAIN && <ScreenMain />}
+
+        {screen === SCREEN_NAMES.PROFILE && (
+          <ScreenProfile onGoHome={handleGoHome} />
+        )}
       </Suspense>
     </main>
   );

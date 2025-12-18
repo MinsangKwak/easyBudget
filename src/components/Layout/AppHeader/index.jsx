@@ -1,40 +1,59 @@
 import "./index.css";
 import BaseButton from "../../Form/BaseButton";
-import { IoChevronBack } from "react-icons/io5";
-import { AiOutlineMenu } from "react-icons/ai";
 
-
-const AppHeader = ({ showBackButton, showAuthAction, onAuthClick, onBack }) => {
+const AppHeader = ({
+  isAuthenticated,
+  onLogoClick,
+  onLoginClick,
+  onProfileClick,
+  onLogoutClick,
+}) => {
   return (
     <header className="header">
       <div className="header__inner">
-        <div className="header__brand">
-          {showBackButton ? (
+        <button
+          type="button"
+          className="header__logo_button"
+          aria-label="서비스 로고"
+          onClick={onLogoClick}
+        >
+          <span className="header__logo">LOGO</span>
+        </button>
+
+        <div className="header__actions">
+          {isAuthenticated ? (
+            <>
+              <BaseButton
+                type="button"
+                size="sm"
+                style="line__black"
+                className="btn_inline"
+                onClick={onProfileClick}
+              >
+                마이프로필
+              </BaseButton>
+              <BaseButton
+                type="button"
+                size="sm"
+                style="outline__grey"
+                className="btn_inline"
+                onClick={onLogoutClick}
+              >
+                로그아웃
+              </BaseButton>
+            </>
+          ) : (
             <BaseButton
               type="button"
-              className="btn_back"
-              aria-label="뒤로가기"
-              onClick={onBack}
+              size="sm"
+              style="solid__primary"
+              className="btn_inline"
+              onClick={onLoginClick}
             >
-              <IoChevronBack aria-hidden="true" />
+              로그인
             </BaseButton>
-          ) : (
-            <div className="header__logo" aria-label="서비스 로고">
-              LOGO
-            </div>
           )}
         </div>
-
-        {showAuthAction && (
-          <BaseButton
-            type="button"
-            className="btn_menu"
-              aria-label="메뉴"
-            onClick={onAuthClick}
-          >
-            <AiOutlineMenu aria-hidden="true"/>
-          </BaseButton>
-        )}
       </div>
     </header>
   );
