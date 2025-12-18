@@ -35,16 +35,16 @@ export const ScreenWithInnerGrid = {
 
 export const AppHeaderWithBackButton = {
   name: "AppHeader",
-  render: () => <AppHeader showBackButton onBack={() => {}} />,
+  render: () => <AppHeader showBackButton onBackClick={() => {}} />,
 };
 
 export const AppHeaderWithAuthAction = {
   name: "AppHeader (Main)",
   render: () => (
     <AppHeader
-      showBackButton={false}
-      showAuthAction
-      onAuthClick={() => {}}
+      isAuthenticated={false}
+      onLogoClick={() => {}}
+      onLoginClick={() => {}}
     />
   ),
 };

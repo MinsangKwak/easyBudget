@@ -39,6 +39,7 @@ const DEFAULT_USERS = [
                     providerUserId: "gmail-sub-1001",
                     email: "test@gmail.com",
                     emailVerified: true,
+                    password: "1234qwer",
                     pictureUrl: "https://example.com/profile-gmail.png",
                     connectedAt: "2025-12-18T00:00:00Z",
                 },
@@ -89,7 +90,7 @@ const DEFAULT_USERS = [
             providers: {
                 local: {
                     email: "test@test.com",
-                    passwordHash: "1234qwer",
+                    password: "1234qwer",
                     emailVerified: false,
                     connectedAt: "2025-12-18T00:00:00Z",
                 },
@@ -198,7 +199,7 @@ const DEFAULT_USERS = [
                 },
                 local: {
                     email: "all@test.com",
-                    passwordHash: "$2b$10$dummy_all_hash",
+                    password: "1234qwer",
                     emailVerified: true,
                     connectedAt: "2025-12-18T00:00:00Z",
                 },
@@ -251,7 +252,7 @@ const DEFAULT_USERS = [
 
 const buildDefaultState = () => ({
     users: DEFAULT_USERS,
-    currentUserId: DEFAULT_USERS[0].id,
+    currentUserId: null,
     lastSyncedAt: new Date().toISOString(),
 });
 
@@ -474,12 +475,8 @@ export const AuthProvider = ({ children }) => {
         }
 
         const providerData = matchedProvider?.providerData ?? {};
-        const hasStoredPassword = providerData.password || providerData.passwordHash;
-        const isPasswordValid = !hasStoredPassword
-            ? true
-            : providerData.password
-              ? providerData.password === password
-              : password === "password1234";
+        const storedPassword = providerData.password ?? providerData.passwordHash;
+        const isPasswordValid = storedPassword ? storedPassword === password : true;
 
         if (!isPasswordValid) {
             throw new Error("INVALID_PASSWORD");

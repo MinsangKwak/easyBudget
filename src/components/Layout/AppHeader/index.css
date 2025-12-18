@@ -21,11 +21,33 @@
   gap: 1rem;
 }
 
+.header__inner--back_only {
+  justify-content: flex-start;
+}
+
 .header__logo_button {
   background: none;
   border: none;
   padding: 0.8rem 0;
   cursor: pointer;
+}
+
+.header__back_button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  padding: 0.8rem 0;
+  cursor: pointer;
+  color: var(--color-black);
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.header__back_icon {
+  font-size: 1.6rem;
+  line-height: 1;
 }
 
 .header__logo {

@@ -5,7 +5,7 @@
 ## 주요 기능
 
 - **화면 전환 상태 관리**: `src/App.jsx`에서 화면 상태를 관리하며, 메인에서 바로 로그인/회원가입 플로우로 진입할 수 있습니다.
-- **동적 헤더**: 메인 화면에서는 로고와 "로그인 / 회원가입" 버튼을 좌우에 배치하고, 이후 화면에서는 "뒤로가기" 버튼으로 한 단계 전으로 이동할 수 있습니다.(`src/components/Layout/AppHeader`)
+- **동적 헤더**: 메인 화면에서는 로고와 "로그인 / 회원가입" 버튼을 좌우에 배치하고, 로그인 진입 시(인트로 화면)에는 로고 대신 뒤로가기 버튼 한 개만 노출되어 홈으로 돌아갈 수 있습니다.(`src/components/Layout/AppHeader`)
 - **Storybook 전체 커버리지**: `src/components` 아래 모든 UI 요소(공통, 레이아웃, 콘텐츠, 폼, 화면)를 Storybook 스토리로 등록해 독립적으로 확인할 수 있습니다.(`src/stories/*Components.stories.jsx`)
 - **금융인증서 가입 플로우 복원**:
   - 은행 선택 → 본인 정보 입력/수정 + 캡차 입력 → 은행 앱 인증 대기 → 완료 순서로 진행됩니다.
@@ -20,6 +20,14 @@
 - `src/components/Screen/Member/Join*`: 가입 방식 선택, 이메일 가입 화면
 - `src/components/Screen/Common/Welcome`: 가입 완료 후 메인으로 이동을 안내하는 화면
 - `src/constants`: 화면 이름(`screenNames.js`), 은행 정보(`bankList.js`) 등 상수 정의
+
+## 테스트 계정 안내
+
+로그인 검증을 편하게 할 수 있도록 모든 테스트 계정의 비밀번호를 `1234qwer`로 통일했습니다.
+
+- `test@test.com` / `1234qwer`
+- `test@gmail.com` / `1234qwer`
+- 기타 기본 샘플 계정(금융인증/올인원 등)도 동일한 비밀번호를 사용합니다.
 
 ## Storybook 사용 안내
 
