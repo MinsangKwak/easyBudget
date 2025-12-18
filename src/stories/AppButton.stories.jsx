@@ -25,12 +25,12 @@ export const Variants = {
   render: () => (
     <>
       <BaseButton>기본 버튼</BaseButton>
-      <Button variant="solid__primary">프라이머리</Button>
-      <Button variant="line__primary">라인 프라이머리</Button>
-      <Button variant="line__black">라인 블랙</Button>
-      <Button className="btn_inline">인라인 버튼</Button>
-      <Button className="btn_captcha">캡챠 버튼</Button>
-      <Button className="btn_back">뒤로가기</Button>
+      <Button style="solid__primary">프라이머리</Button>
+      <Button style="line__primary">라인 프라이머리</Button>
+      <Button style="line__black">라인 블랙</Button>
+      <Button style="inline">인라인 버튼</Button>
+      <Button style="captcha">캡챠 버튼</Button>
+      <Button style="back">뒤로가기</Button>
     </>
   ),
 };

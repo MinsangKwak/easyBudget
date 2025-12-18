@@ -50,7 +50,8 @@ const FormFieldInput = ({
         />
         <Button
           type="button"
-          className="btn_inline btn_ghost form_field__clear"
+          style={["inline", "ghost"]}
+          className="form_field__clear"
           aria-label="입력 지우기"
           hidden={!showClear}
           onClick={handleClickClear}

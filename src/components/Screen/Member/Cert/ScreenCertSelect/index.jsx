@@ -22,7 +22,7 @@ const ScreenCertSelect = ({ bankList, onSelectBank }) => {
           items={Object.entries(bankList)}
           renderItem={([key, item]) => (
             <BaseButton
-              className={`btn_bank btn_bank__${item.bankType}`}
+              style={["bank", `bank__${item.bankType}`]}
               onClick={() => onSelectBank(key)}
             >
                 <img src={item.logoSrc} />

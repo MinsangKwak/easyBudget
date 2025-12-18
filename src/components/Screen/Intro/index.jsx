@@ -22,7 +22,7 @@ const ScreenIntro = ({ onClickGoJoin }) => {
         </p>
         <Button
           type="button"
-          variant="solid__primary"
+          style="solid__primary"
           onClick={onClickGoJoin}
         >
           회원가입 / 로그인 하러가기

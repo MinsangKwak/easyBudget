@@ -50,14 +50,16 @@ const ScreenWait = ({ selectedBank, onNext }) => {
           bottom={
             <BaseButtonContainer>
               <BaseButton
-                className="btn_md btn_solid__primary"
+                size="md"
+                style="solid__primary"
                 onClick={onNext}
               >
                 인증 완료
               </BaseButton>
               <span className="spacer">또는</span>
               <BaseButton
-                className="btn_md btn_outline__grey"
+                size="md"
+                style="outline__grey"
                 data-modal-target="auth_help"
               >
                 <span className="btn_text">인증이 잘 안되시나요?</span>
