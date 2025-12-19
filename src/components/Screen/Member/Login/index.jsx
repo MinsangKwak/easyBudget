@@ -144,12 +144,19 @@ const ScreenLogin = ({
 
     const isCertificateMode = mode === "certificate";
     const isBusy = isCertificateMode ? isCertLoading : isLoading;
+    const loadingMessage = isCertificateMode
+        ? "금융인증서 로그인 중입니다. 잠시만 기다려 주세요."
+        : "로그인 중입니다. 잠시만 기다려 주세요.";
 
     const handleClickBack = () => {
         resetError();
         resetCertError();
         onClickBack?.();
     };
+
+    if (isBusy) {
+        return <ScreenLoading message={loadingMessage} showSubtitle={false} />;
+    }
 
     return (
         <>
@@ -163,16 +170,7 @@ const ScreenLogin = ({
                     </Subtitle>
                     <Inner>
                         <IconLock />
-                        {isBusy ? (
-                            <ScreenLoading
-                                message={
-                                    isCertificateMode
-                                        ? "금융인증서 로그인 중입니다. 잠시만 기다려 주세요."
-                                        : "로그인 중입니다. 잠시만 기다려 주세요."
-                                }
-                                showSubtitle={false}
-                            />
-                        ) : isCertificateMode ? (
+                        {isCertificateMode ? (
                             <form className="form_email_join" onSubmit={handleCertificateSubmit}>
                                 <label className="form_field__label" htmlFor="cert_bank">
                                     인증서 선택

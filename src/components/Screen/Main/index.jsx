@@ -1006,8 +1006,8 @@ export default function ScreenMain({ onRequestSignUp }) {
                     </div>
 
                     <ul className="cat_list" aria-label="카테고리 리스트">
-                        {categorySummaries.map((c, index) => {
-                            const dotTone = index === 0 ? "primary" : index === 1 ? "dark" : "soft";
+                        {categorySummaries.map((c) => {
+                            const dotTone = c.tone || "soft";
 
                             return (
                                 <li key={c.key} className="cat_row">

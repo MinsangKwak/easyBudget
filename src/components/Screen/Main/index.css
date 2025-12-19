@@ -374,21 +374,21 @@
 }
 
 .dot_primary {
-    background: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-white) 22%);
 }
 .dot_dark {
-    background: color-mix(in srgb, var(--color-black-100) 80%, var(--color-white) 20%);
+    background: color-mix(in srgb, var(--color-black-100) 86%, var(--color-white) 14%);
 }
 
 .dot_green {
-    stroke: color-mix(in srgb, var(--color-primary) 26%, green 74%);
+    background: color-mix(in srgb, var(--color-primary) 26%, green 74%);
 }
 
 .dot_orange {
-    stroke: color-mix(in srgb, var(--color-primary) 26%, orange 74%);
+    background: color-mix(in srgb, var(--color-primary) 26%, orange 74%);
 }
 .dot_soft {
-    background: color-mix(in srgb, var(--color-primary) 22%, var(--color-white) 78%);
+    background: color-mix(in srgb, var(--color-primary) 26%, var(--color-white) 74%);
 }
 
 .cat_text {

@@ -34,6 +34,8 @@
 ## Storybook 사용 안내
 
 - 개발 서버와 별도로 Storybook을 실행하려면 `npm run storybook`을 사용합니다.
+- CI나 빠른 헬스체크를 위해서는 `npm run storybook -- --ci --smoke-test`로 번들/프리뷰 구성을 확인할 수 있습니다.
+- Vite와 동일하게 `@vitejs/plugin-react-swc`를 사용하도록 설정되어 있으며, `@` 별칭으로 `src` 경로를 바로 불러올 수 있습니다.
 - 등록된 주요 스토리:
     - `src/stories/CommonComponents.stories.jsx`: 로딩 인디케이터, Lottie 아이콘
     - `src/stories/LayoutComponents.stories.jsx`: 화면 레이아웃, 상단 헤더, 내부 그리드
@@ -61,3 +63,4 @@ npm run build # 프로덕션 번들 빌드
 - 인트로 이후 화면에서 자동으로 노출되는 상단 뒤로가기 버튼을 추가해 화면 전환 동선이 명확합니다.
 - 로그인/회원가입 플로우에서 잘못된 이메일/비밀번호 입력 시 에러 메시지를 안내하고, 정상 로그인 시 로딩 화면 이후 메인으로 이동합니다.
 - Storybook에 모든 UI 컴포넌트를 등록하여 개발/디자인 확인이 용이합니다.(`npm run storybook`)
+- 메인 화면의 카테고리 리스트 도트 색상이 도넛 그래프의 색상과 동일하게 맞춰져 가독성이 높아졌습니다.
