@@ -4,8 +4,6 @@ import Screen from "../../../Layout/Screen";
 import Inner from "../../../Content/Inner";
 import BaseButton from "../../../Form/BaseButton";
 import Title from "../../../Content/Title";
-// import LottieIcon from "../../../Common/LottieIcon";
-// import { LOTTIE_SOURCES } from "../../../../constants/lottieSources";
 
 const ScreenJoinGoogle = ({ onSignUpComplete }) => {
     const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
