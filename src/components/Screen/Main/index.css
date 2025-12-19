@@ -114,6 +114,32 @@
     font-weight: 900;
     color: var(--color-black-100);
 }
+.kpi_label_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+.kpi_edit_btn {
+    min-width: 36px;
+    height: 28px;
+    padding: 0 8px;
+}
+.inline_input {
+    width: 120px;
+    height: 32px;
+    border-radius: 10px;
+    border: 2px solid var(--color-black-100);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 10px;
+    font-weight: 800;
+    color: var(--color-black-100);
+    text-align: right;
+}
+.inline_input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
 
 .kpi_box .kpi_value {
     font-size: 18px;
@@ -335,6 +361,44 @@
     display: grid;
     place-items: center;
     background: rgba(255, 255, 255, 0.95);
+}
+.add_form {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid var(--color-black-100);
+    background: color-mix(in srgb, var(--color-white) 90%, var(--color-white-100) 10%);
+    box-shadow: 4px 4px 0 color-mix(in srgb, var(--color-primary) 12%, transparent);
+    display: grid;
+    gap: 10px;
+}
+.add_form__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px 10px;
+}
+.add_field {
+    display: grid;
+    gap: 6px;
+}
+.add_field__label {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--color-black-100);
+}
+.add_field input,
+.add_field select {
+    height: 38px;
+    border-radius: 10px;
+    border: 2px solid var(--color-black-100);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 10px;
+    font-weight: 900;
+    color: var(--color-black-100);
+}
+.add_actions {
+    display: flex;
+    justify-content: flex-end;
 }
 
 /* =========================

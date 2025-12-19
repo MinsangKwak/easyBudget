@@ -46,6 +46,12 @@ const formatKoreanWonShort = (value) => {
     return `${sign}${absoluteValue.toLocaleString("ko-KR")}`;
 };
 
+const slugifyKey = (value, fallback = "item") => {
+    const base = String(value || "").trim().toLowerCase();
+    if (!base) return fallback;
+    return base.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "") || fallback;
+};
+
 /* =========================
  * RAF loop (donut 살짝 숨쉬기)
  * ========================= */
@@ -78,40 +84,113 @@ function useRequestAnimationFrameLoop(isEnabled, onFrame) {
 }
 
 /* =========================
- * demo transactions
+ * default data
  * ========================= */
 
-const makeTx = (id, title, amount, date, sub) => ({ id, title, amount, date, sub });
+const CATEGORY_OPTIONS = [
+    { key: "cat_food", label: "식비·외식비", defaultTone: "primary" },
+    { key: "cat_loan", label: "대출", defaultTone: "dark" },
+    { key: "cat_ins", label: "보험", defaultTone: "soft" },
+    { key: "cat_house", label: "주거·관리", defaultTone: "soft" },
+    { key: "cat_misc", label: "결제·소통", defaultTone: "soft" },
+];
 
-const DEMO_TRANSACTIONS = {
-    card_shinhan: [
-        makeTx("c1", "스타벅스", 6500, "10/18", "카드"),
-        makeTx("c2", "GS25", 4200, "10/18", "카드"),
-        makeTx("c3", "쿠팡", 38900, "10/17", "카드"),
-    ],
-    card_hyundai: [
-        makeTx("c4", "버거킹", 12400, "10/16", "카드"),
-        makeTx("c5", "교보문고", 18500, "10/15", "카드"),
-    ],
-    card_kb: [
-        makeTx("c6", "넷플릭스", 17000, "10/12", "구독"),
-        makeTx("c7", "유튜브 프리미엄", 14900, "10/12", "구독"),
-    ],
-    cash: [makeTx("m1", "현금 인출", 50000, "10/10", "현금")],
-
-    cat_food: [
-        makeTx("t1", "김밥천국", 12000, "10/18", "식비"),
-        makeTx("t2", "스타벅스", 6500, "10/18", "외식비"),
-        makeTx("t3", "마켓컬리", 54000, "10/16", "식비"),
-    ],
-    cat_loan: [makeTx("t4", "대출 이자", 210000, "10/15", "대출")],
-    cat_ins: [makeTx("t5", "실손보험", 200000, "10/08", "보험")],
-    cat_house: [makeTx("t6", "관리비", 140000, "10/03", "주거")],
-    cat_misc: [
-        makeTx("t7", "통신요금", 45000, "10/02", "통신"),
-        makeTx("t8", "수수료", 12000, "10/01", "수수료"),
-    ],
+const PAYMENT_GROUP_META = {
+    card: { key: "card", label: "카드지출" },
+    cash: { key: "cash", label: "현금지출" },
 };
+
+const DEFAULT_INCOME_ENTRIES = [
+    { id: "income-salary", label: "급여", amount: 3200000 },
+    { id: "income-side", label: "기타 수입", amount: 580000 },
+];
+
+const DEFAULT_SPEND_ENTRIES = [
+    {
+        id: "cat_food_shinhan",
+        categoryKey: "cat_food",
+        categoryLabel: "식비·외식비",
+        amount: 360000,
+        paymentKey: "card_shinhan",
+        paymentLabel: "신한카드",
+        paymentLogo: "S",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "paid",
+        dateLabel: "10/18",
+    },
+    {
+        id: "cat_food_hyundai",
+        categoryKey: "cat_food",
+        categoryLabel: "식비·외식비",
+        amount: 300000,
+        paymentKey: "card_hyundai",
+        paymentLabel: "현대카드",
+        paymentLogo: "H",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "planned",
+        dateLabel: "10/22",
+    },
+    {
+        id: "cat_loan_hyundai",
+        categoryKey: "cat_loan",
+        categoryLabel: "대출",
+        amount: 550000,
+        paymentKey: "card_hyundai",
+        paymentLabel: "현대카드",
+        paymentLogo: "H",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "regular",
+        status: "planned",
+        dateLabel: "10/25",
+    },
+    {
+        id: "cat_ins_kb",
+        categoryKey: "cat_ins",
+        categoryLabel: "보험",
+        amount: 200000,
+        paymentKey: "card_kb",
+        paymentLabel: "KB국민카드",
+        paymentLogo: "K",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "regular",
+        status: "paid",
+        dateLabel: "10/08",
+    },
+    {
+        id: "cat_house_cash",
+        categoryKey: "cat_house",
+        categoryLabel: "주거·관리",
+        amount: 140000,
+        paymentKey: "cash",
+        paymentLabel: "현금",
+        paymentLogo: "₩",
+        paymentGroupKey: "cash",
+        paymentGroupLabel: "현금지출",
+        spendType: "regular",
+        status: "paid",
+        dateLabel: "10/03",
+    },
+    {
+        id: "cat_misc_card",
+        categoryKey: "cat_misc",
+        categoryLabel: "결제·소통",
+        amount: 45000,
+        paymentKey: "card_other",
+        paymentLabel: "우리카드",
+        paymentLogo: "W",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "paid",
+        dateLabel: "10/02",
+    },
+];
 
 /* =========================
  * ScreenMain (Mobile)
@@ -119,95 +198,43 @@ const DEMO_TRANSACTIONS = {
 
 export default function ScreenMain({ onRequestSignUp }) {
     const { currentUser } = useAuth();
-    const isLinkedAccount =
-        currentUser?.email?.toLowerCase?.() === "test@test.com" || false;
+    const isLinkedAccount = ["test@test.com", "test@gmail.com"].includes(
+        currentUser?.email?.toLowerCase?.() || "",
+    );
 
     const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
     /* ---------- month ---------- */
     const [monthLabel] = useState("10월");
 
-    /* ---------- 리포트 요약 (데모) ---------- */
-    const report = useMemo(() => {
-        return {
-            incomeTotal: 0,
-            incomeHint: 3780000,
-
-            spendTotal: 1570000,
-            spendHint: 3500000,
-
-            regularPlanned: 400000,
-            regularPaid: 925000,
-            regularCountPlanned: 3,
-            regularCountPaid: 4,
-
-            variablePlanned: 1865000,
-            variablePaid: 595000,
-            variableHint: 1270000,
-        };
-    }, []);
-
-    /* ---------- 지출 수단 (데모) ---------- */
-    const [paymentGroups] = useState([
-        {
-            key: "card",
-            label: "카드지출",
-            total: 649000,
-            items: [
-                { key: "card_shinhan", label: "신한카드", amount: 240000, logoText: "S" },
-                { key: "card_hyundai", label: "현대카드", amount: 185000, logoText: "H" },
-                { key: "card_kb", label: "KB국민카드", amount: 175000, logoText: "K" },
-                { key: "card_other", label: "우리카드", amount: 49000, logoText: "W" },
-            ],
-        },
-        {
-            key: "cash",
-            label: "현금지출",
-            total: 50000,
-            items: [{ key: "cash", label: "현금", amount: 50000, logoText: "₩" }],
-        },
-    ]);
-
-    /* ---------- 카테고리별 지출 ---------- */
-    const [isCategoryEditMode, setIsCategoryEditMode] = useState(false);
-
-    const [categorySpend, setCategorySpend] = useState([
-        { key: "cat_food", label: "식비·외식비", amount: 660000, percent: 38 },
-        { key: "cat_loan", label: "대출", amount: 550000, percent: 35 },
-        { key: "cat_ins", label: "보험", amount: 200000, percent: 13 },
-        { key: "cat_house", label: "주거·관리", amount: 140000, percent: 8 },
-        { key: "cat_misc", label: "결제·소통", amount: 45000, percent: 3 },
-    ]);
-
-    /* ---------- 편집 입력 (문자열) ---------- */
-    const [categoryAmountInput, setCategoryAmountInput] = useState(() => {
-        const next = {};
-        categorySpend.forEach((c) => (next[c.key] = String(c.amount)));
-        return next;
+    const [incomeEntries, setIncomeEntries] = useState(DEFAULT_INCOME_ENTRIES);
+    const [spendEntries, setSpendEntries] = useState(DEFAULT_SPEND_ENTRIES);
+    const [planBudget, setPlanBudget] = useState({
+        incomeBudget: 3780000,
+        spendBudget: 3500000,
+        variableBudget: 1270000,
+    });
+    const [budgetInputs, setBudgetInputs] = useState({
+        incomeBudget: "3780000",
+        spendBudget: "3500000",
+        variableBudget: "1270000",
     });
 
-    useEffect(() => {
-        // 카테고리 목록 변경 시 입력도 보정
-        setCategoryAmountInput((prev) => {
-            const next = { ...prev };
-            categorySpend.forEach((c) => {
-                if (next[c.key] == null) next[c.key] = String(c.amount);
-            });
-            return next;
-        });
-    }, [categorySpend]);
-
-    const categoryTotal = useMemo(() => {
-        return categorySpend.reduce((acc, c) => acc + Math.max(0, c.amount), 0);
-    }, [categorySpend]);
-
-    const categorySegments = useMemo(() => {
-        // 도넛 색을 "CSS class 톤"으로 구분 (living/leak 느낌보다 category tone)
-        // 여기선 2종만 쓰고, 나머지는 동일 톤으로 처리
-        return categorySpend.map((c, index) => {
-            const tone = index === 0 ? "primary" : index === 1 ? "dark" : "soft";
-            return { key: c.key, label: c.label, value: c.amount, tone };
-        });
-    }, [categorySpend]);
+    /* ---------- 편집 입력 (문자열) ---------- */
+    const [categoryAmountInput, setCategoryAmountInput] = useState({});
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+    const [newEntryDraft, setNewEntryDraft] = useState({
+        entryType: "spend",
+        paymentLabel: "",
+        paymentLogo: "",
+        paymentKey: "",
+        amount: "",
+        categoryKey: CATEGORY_OPTIONS[0].key,
+        paymentGroupKey: "card",
+        spendType: "variable",
+        status: "paid",
+        dateLabel: "",
+    });
 
     const ensureLinkedAccount = () => {
         if (!isLinkedAccount) {
@@ -216,6 +243,81 @@ export default function ScreenMain({ onRequestSignUp }) {
         }
         return true;
     };
+
+    useEffect(() => {
+        setBudgetInputs({
+            incomeBudget: String(planBudget.incomeBudget),
+            spendBudget: String(planBudget.spendBudget),
+            variableBudget: String(planBudget.variableBudget),
+        });
+    }, [planBudget]);
+
+    const incomeTotal = useMemo(
+        () => incomeEntries.reduce((acc, entry) => acc + Math.max(0, entry.amount), 0),
+        [incomeEntries],
+    );
+
+    const spendTotal = useMemo(
+        () => spendEntries.reduce((acc, entry) => acc + Math.max(0, entry.amount), 0),
+        [spendEntries],
+    );
+
+    const categorySummaries = useMemo(() => {
+        const map = new Map();
+        spendEntries.forEach((entry) => {
+            const current = map.get(entry.categoryKey) ?? {
+                key: entry.categoryKey,
+                label:
+                    CATEGORY_OPTIONS.find((option) => option.key === entry.categoryKey)?.label ||
+                    entry.categoryLabel,
+                amount: 0,
+                entries: [],
+            };
+            current.amount += Math.max(0, entry.amount);
+            current.entries.push(entry);
+            map.set(entry.categoryKey, current);
+        });
+
+        const total = Array.from(map.values()).reduce((acc, category) => acc + category.amount, 0);
+        const ordered = CATEGORY_OPTIONS.map((option, index) => {
+            const summary = map.get(option.key) ?? {
+                key: option.key,
+                label: option.label,
+                amount: 0,
+                entries: [],
+            };
+            const percent = total > 0 ? Math.round((summary.amount / total) * 100) : 0;
+            return {
+                ...summary,
+                percent,
+                tone: option.defaultTone || (index === 0 ? "primary" : "soft"),
+            };
+        });
+
+        return ordered;
+    }, [spendEntries]);
+
+    const categoryTotal = useMemo(
+        () => categorySummaries.reduce((acc, category) => acc + category.amount, 0),
+        [categorySummaries],
+    );
+
+    useEffect(() => {
+        const next = {};
+        categorySummaries.forEach((c) => {
+            next[c.key] = String(c.amount);
+        });
+        setCategoryAmountInput(next);
+    }, [categorySummaries]);
+
+    const categorySegments = useMemo(() => {
+        return categorySummaries.map((c) => ({
+            key: c.key,
+            label: c.label,
+            value: c.amount,
+            tone: c.tone,
+        }));
+    }, [categorySummaries]);
 
     const handleClickSignUp = () => {
         setIsSignUpModalOpen(false);
@@ -237,6 +339,81 @@ export default function ScreenMain({ onRequestSignUp }) {
         return categorySegments.map((segment) => ({ ...segment, value: 0 }));
     }, [categorySegments, isLinkedAccount]);
 
+    const paymentGroups = useMemo(() => {
+        const groupMap = new Map();
+
+        spendEntries.forEach((entry) => {
+            const groupKey = entry.paymentGroupKey || "other";
+            const groupMeta = PAYMENT_GROUP_META[groupKey];
+            const groupLabel = groupMeta?.label || entry.paymentGroupLabel || "기타 지출수단";
+
+            if (!groupMap.has(groupKey)) {
+                groupMap.set(groupKey, {
+                    key: groupKey,
+                    label: groupLabel,
+                    total: 0,
+                    items: new Map(),
+                });
+            }
+
+            const group = groupMap.get(groupKey);
+            const existingItem =
+                group.items.get(entry.paymentKey) || {
+                    key: entry.paymentKey,
+                    label: entry.paymentLabel || entry.paymentKey,
+                    logoText: entry.paymentLogo || entry.paymentLabel?.[0] || "•",
+                    amount: 0,
+                };
+
+            existingItem.amount += Math.max(0, entry.amount);
+            group.items.set(entry.paymentKey, existingItem);
+            group.total += Math.max(0, entry.amount);
+        });
+
+        return Array.from(groupMap.values()).map((group) => ({
+            ...group,
+            items: Array.from(group.items.values()),
+        }));
+    }, [spendEntries]);
+
+    const buildSpendStats = (targetType) => {
+        const targetEntries = spendEntries.filter((entry) => entry.spendType === targetType);
+        const plannedEntries = targetEntries.filter((entry) => entry.status === "planned");
+        const paidEntries = targetEntries.filter((entry) => entry.status !== "planned");
+
+        const plannedAmount = plannedEntries.reduce(
+            (acc, entry) => acc + Math.max(0, entry.amount),
+            0,
+        );
+        const paidAmount = paidEntries.reduce((acc, entry) => acc + Math.max(0, entry.amount), 0);
+
+        return {
+            plannedAmount,
+            paidAmount,
+            plannedCount: plannedEntries.length,
+            paidCount: paidEntries.length,
+        };
+    };
+
+    const regularStats = useMemo(() => buildSpendStats("regular"), [spendEntries]);
+    const variableStats = useMemo(() => buildSpendStats("variable"), [spendEntries]);
+
+    const report = useMemo(() => {
+        return {
+            incomeTotal,
+            incomeHint: planBudget.incomeBudget,
+            spendTotal,
+            spendHint: planBudget.spendBudget,
+            regularPlanned: regularStats.plannedAmount,
+            regularPaid: regularStats.paidAmount,
+            regularCountPlanned: regularStats.plannedCount,
+            regularCountPaid: regularStats.paidCount,
+            variablePlanned: variableStats.plannedAmount,
+            variablePaid: variableStats.paidAmount,
+            variableHint: planBudget.variableBudget,
+        };
+    }, [incomeTotal, planBudget, regularStats, spendTotal, variableStats]);
+
     /* ---------- 바텀시트(내역 드릴다운) ---------- */
     const [sheetState, setSheetState] = useState({
         isOpen: false,
@@ -256,7 +433,7 @@ export default function ScreenMain({ onRequestSignUp }) {
 
     /* ---------- animation time (도넛 숨쉬기) ---------- */
     const [animationTime, setAnimationTime] = useState(0);
-    useRequestAnimationFrameLoop(!isCategoryEditMode, (dt) => {
+    useRequestAnimationFrameLoop(!isEditMode, (dt) => {
         setAnimationTime((t) => t + dt);
     });
 
@@ -264,34 +441,64 @@ export default function ScreenMain({ onRequestSignUp }) {
      * handlers
      * ========================= */
 
+    const resolveCategoryLabel = (categoryKey) =>
+        CATEGORY_OPTIONS.find((option) => option.key === categoryKey)?.label || "카테고리";
+
+    const buildSheetItems = (entries) =>
+        entries.map((entry) => ({
+            id: entry.id,
+            title: entry.paymentLabel || resolveCategoryLabel(entry.categoryKey),
+            amount: entry.amount,
+            date: entry.dateLabel || monthLabel,
+            sub: `${resolveCategoryLabel(entry.categoryKey)} · ${
+                entry.spendType === "regular" ? "정기" : "변동"
+            }${entry.status === "planned" ? " 예정" : ""}`,
+        }));
+
     const handleClickPaymentItem = (itemKey, label) => {
         if (!ensureLinkedAccount()) return;
-        const items = DEMO_TRANSACTIONS[itemKey] || [];
-        openSheet({ title: `${label} 내역`, items });
+        const items = spendEntries.filter((entry) => entry.paymentKey === itemKey);
+        openSheet({ title: `${label} 내역`, items: buildSheetItems(items) });
     };
 
     const handleClickCategoryRow = (categoryKey, label) => {
         if (!ensureLinkedAccount()) return;
-        const items = DEMO_TRANSACTIONS[categoryKey] || [];
-        openSheet({ title: `${label} 내역`, items });
+        const items = spendEntries.filter((entry) => entry.categoryKey === categoryKey);
+        openSheet({ title: `${label} 내역`, items: buildSheetItems(items) });
     };
 
     const handleToggleEditMode = () => {
         if (!ensureLinkedAccount()) return;
-        setIsCategoryEditMode((v) => !v);
+        setIsEditMode((v) => !v);
     };
 
     const handleClickAddMyData = () => {
         if (!ensureLinkedAccount()) return;
+        setIsAddFormOpen((prev) => !prev);
     };
 
     const commitCategoryAmount = (categoryKey) => {
         const raw = categoryAmountInput[categoryKey];
         const parsed = clampValue(parseNumberSafely(raw), 0, 20000000);
 
-        setCategorySpend((prev) =>
-            prev.map((c) => (c.key === categoryKey ? { ...c, amount: parsed } : c)),
-        );
+        setSpendEntries((prev) => {
+            const entriesForCategory = prev.filter((entry) => entry.categoryKey === categoryKey);
+            if (!entriesForCategory.length) return prev;
+
+            const [primary] = entriesForCategory;
+            const totalCurrent = entriesForCategory.reduce(
+                (acc, entry) => acc + Math.max(0, entry.amount),
+                0,
+            );
+            const delta = parsed - totalCurrent;
+            const nextPrimaryAmount = Math.max(0, (primary.amount || 0) + delta);
+
+            return prev.map((entry) => {
+                if (entry.categoryKey !== categoryKey) return entry;
+                if (entry.id === primary.id) return { ...entry, amount: nextPrimaryAmount };
+                return entry;
+            });
+        });
 
         setCategoryAmountInput((prev) => ({ ...prev, [categoryKey]: String(parsed) }));
     };
@@ -300,6 +507,66 @@ export default function ScreenMain({ onRequestSignUp }) {
         if (event.key !== "Enter") return;
         event.currentTarget.blur();
         commitCategoryAmount(categoryKey);
+    };
+
+    const commitBudgetInput = (key) => {
+        const parsed = clampValue(parseNumberSafely(budgetInputs[key]), 0, 5000000000);
+        setPlanBudget((prev) => ({ ...prev, [key]: parsed }));
+        setBudgetInputs((prev) => ({ ...prev, [key]: String(parsed) }));
+    };
+
+    const handleSubmitMyData = (event) => {
+        event?.preventDefault?.();
+        if (!ensureLinkedAccount()) return;
+
+        const parsedAmount = clampValue(parseNumberSafely(newEntryDraft.amount), 0, 20000000);
+        if (!parsedAmount) return;
+
+        if (newEntryDraft.entryType === "income") {
+            const label = newEntryDraft.paymentLabel?.trim() || "추가 수입";
+            const nextIncome = {
+                id: `income-${Date.now()}`,
+                label,
+                amount: parsedAmount,
+            };
+            setIncomeEntries((prev) => [...prev, nextIncome]);
+        } else {
+            const categoryLabel = resolveCategoryLabel(newEntryDraft.categoryKey);
+            const paymentLabel = newEntryDraft.paymentLabel?.trim() || "새 지출수단";
+            const paymentKey =
+                newEntryDraft.paymentKey ||
+                `${newEntryDraft.paymentGroupKey}-${slugifyKey(paymentLabel, "payment")}`;
+            const paymentLogo =
+                (newEntryDraft.paymentLogo || paymentLabel[0] || "•").toUpperCase().slice(0, 1);
+
+            const nextEntry = {
+                id: `entry-${Date.now()}`,
+                categoryKey: newEntryDraft.categoryKey,
+                categoryLabel,
+                amount: parsedAmount,
+                paymentKey,
+                paymentLabel,
+                paymentLogo,
+                paymentGroupKey: newEntryDraft.paymentGroupKey,
+                paymentGroupLabel:
+                    PAYMENT_GROUP_META[newEntryDraft.paymentGroupKey]?.label || "지출수단",
+                spendType: newEntryDraft.spendType,
+                status: newEntryDraft.status,
+                dateLabel: newEntryDraft.dateLabel || monthLabel,
+            };
+
+            setSpendEntries((prev) => [...prev, nextEntry]);
+        }
+
+        setNewEntryDraft((prev) => ({
+            ...prev,
+            paymentLabel: "",
+            paymentLogo: "",
+            paymentKey: "",
+            amount: "",
+            dateLabel: "",
+        }));
+        setIsAddFormOpen(false);
     };
 
     return (
@@ -325,22 +592,106 @@ export default function ScreenMain({ onRequestSignUp }) {
 
                         <div className="report_kpi">
                             <div className="kpi_box kpi_income">
-                                <div className="kpi_label">총 수입</div>
+                                <div className="kpi_label_row">
+                                    <div className="kpi_label">총 수입</div>
+                                    {isLinkedAccount && (
+                                        <BaseButton
+                                            type="button"
+                                            size="sm"
+                                            style={
+                                                isEditMode
+                                                    ? "btn_solid__primary"
+                                                    : "btn_outline__grey"
+                                            }
+                                            className="kpi_edit_btn"
+                                            onClick={handleToggleEditMode}
+                                            aria-label="예산 편집"
+                                            title="예산 편집"
+                                        >
+                                            <FiEdit3 />
+                                        </BaseButton>
+                                    )}
+                                </div>
                                 <div className="kpi_value">
                                     {formatMaskedKoreanWon(report.incomeTotal)}
                                 </div>
                                 <div className="kpi_hint muted">
-                                    예산 {formatMaskedKoreanWon(report.incomeHint)}
+                                    예산{" "}
+                                    {isEditMode ? (
+                                        <input
+                                            className="inline_input"
+                                            inputMode="numeric"
+                                            value={budgetInputs.incomeBudget}
+                                            onChange={(e) =>
+                                                setBudgetInputs((prev) => ({
+                                                    ...prev,
+                                                    incomeBudget: e.target.value,
+                                                }))
+                                            }
+                                            onBlur={() => commitBudgetInput("incomeBudget")}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    e.currentTarget.blur();
+                                                    commitBudgetInput("incomeBudget");
+                                                }
+                                            }}
+                                            aria-label="총 수입 예산 수정"
+                                        />
+                                    ) : (
+                                        formatMaskedKoreanWon(report.incomeHint)
+                                    )}
                                 </div>
                             </div>
 
                             <div className="kpi_box kpi_spend">
-                                <div className="kpi_label">총 지출</div>
+                                <div className="kpi_label_row">
+                                    <div className="kpi_label">총 지출</div>
+                                    {isLinkedAccount && (
+                                        <BaseButton
+                                            type="button"
+                                            size="sm"
+                                            style={
+                                                isEditMode
+                                                    ? "btn_solid__primary"
+                                                    : "btn_outline__grey"
+                                            }
+                                            className="kpi_edit_btn"
+                                            onClick={handleToggleEditMode}
+                                            aria-label="예산 편집"
+                                            title="예산 편집"
+                                        >
+                                            <FiEdit3 />
+                                        </BaseButton>
+                                    )}
+                                </div>
                                 <div className="kpi_value">
                                     {formatMaskedKoreanWon(report.spendTotal)}
                                 </div>
                                 <div className="kpi_hint muted">
-                                    예산 {formatMaskedKoreanWon(report.spendHint)}
+                                    예산{" "}
+                                    {isEditMode ? (
+                                        <input
+                                            className="inline_input"
+                                            inputMode="numeric"
+                                            value={budgetInputs.spendBudget}
+                                            onChange={(e) =>
+                                                setBudgetInputs((prev) => ({
+                                                    ...prev,
+                                                    spendBudget: e.target.value,
+                                                }))
+                                            }
+                                            onBlur={() => commitBudgetInput("spendBudget")}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    e.currentTarget.blur();
+                                                    commitBudgetInput("spendBudget");
+                                                }
+                                            }}
+                                            aria-label="총 지출 예산 수정"
+                                        />
+                                    ) : (
+                                        formatMaskedKoreanWon(report.spendHint)
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -412,7 +763,7 @@ export default function ScreenMain({ onRequestSignUp }) {
                         <div className="panel_head">
                             <div className="panel_title">지출수단</div>
                             <div className="panel_value">
-                                {formatMaskedKoreanWon(report.regularPaid)}
+                                {formatMaskedKoreanWon(report.spendTotal)}
                             </div>
                         </div>
 
@@ -469,6 +820,162 @@ export default function ScreenMain({ onRequestSignUp }) {
                             >
                                 마이데이터 추가 <span className="add_plus">+</span>
                             </button>
+
+                            {isAddFormOpen && (
+                                <form className="add_form" onSubmit={handleSubmitMyData}>
+                                    <div className="add_form__grid">
+                                        <label className="add_field">
+                                            <span className="add_field__label">데이터 유형</span>
+                                            <select
+                                                value={newEntryDraft.entryType}
+                                                onChange={(e) =>
+                                                    setNewEntryDraft((prev) => ({
+                                                        ...prev,
+                                                        entryType: e.target.value,
+                                                    }))
+                                                }
+                                            >
+                                                <option value="spend">지출</option>
+                                                <option value="income">수입</option>
+                                            </select>
+                                        </label>
+
+                                        <label className="add_field">
+                                            <span className="add_field__label">
+                                                {newEntryDraft.entryType === "income"
+                                                    ? "수입 이름"
+                                                    : "지출수단 이름"}
+                                            </span>
+                                            <input
+                                                type="text"
+                                                value={newEntryDraft.paymentLabel}
+                                                onChange={(e) =>
+                                                    setNewEntryDraft((prev) => ({
+                                                        ...prev,
+                                                        paymentLabel: e.target.value,
+                                                    }))
+                                                }
+                                                placeholder="예) 알바, 신한카드"
+                                            />
+                                        </label>
+
+                                        <label className="add_field">
+                                            <span className="add_field__label">금액</span>
+                                            <input
+                                                type="number"
+                                                inputMode="numeric"
+                                                value={newEntryDraft.amount}
+                                                onChange={(e) =>
+                                                    setNewEntryDraft((prev) => ({
+                                                        ...prev,
+                                                        amount: e.target.value,
+                                                    }))
+                                                }
+                                                placeholder="0"
+                                            />
+                                        </label>
+
+                                        {newEntryDraft.entryType === "spend" && (
+                                            <>
+                                                <label className="add_field">
+                                                    <span className="add_field__label">
+                                                        카테고리
+                                                    </span>
+                                                    <select
+                                                        value={newEntryDraft.categoryKey}
+                                                        onChange={(e) =>
+                                                            setNewEntryDraft((prev) => ({
+                                                                ...prev,
+                                                                categoryKey: e.target.value,
+                                                            }))
+                                                        }
+                                                    >
+                                                        {CATEGORY_OPTIONS.map((option) => (
+                                                            <option key={option.key} value={option.key}>
+                                                                {option.label}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </label>
+
+                                                <label className="add_field">
+                                                    <span className="add_field__label">
+                                                        지출 수단
+                                                    </span>
+                                                    <select
+                                                        value={newEntryDraft.paymentGroupKey}
+                                                        onChange={(e) =>
+                                                            setNewEntryDraft((prev) => ({
+                                                                ...prev,
+                                                                paymentGroupKey: e.target.value,
+                                                            }))
+                                                        }
+                                                    >
+                                                        {Object.values(PAYMENT_GROUP_META).map((group) => (
+                                                            <option key={group.key} value={group.key}>
+                                                                {group.label}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </label>
+
+                                                <label className="add_field">
+                                                    <span className="add_field__label">지출 구분</span>
+                                                    <select
+                                                        value={newEntryDraft.spendType}
+                                                        onChange={(e) =>
+                                                            setNewEntryDraft((prev) => ({
+                                                                ...prev,
+                                                                spendType: e.target.value,
+                                                            }))
+                                                        }
+                                                    >
+                                                        <option value="regular">정기</option>
+                                                        <option value="variable">변동</option>
+                                                    </select>
+                                                </label>
+
+                                                <label className="add_field">
+                                                    <span className="add_field__label">상태</span>
+                                                    <select
+                                                        value={newEntryDraft.status}
+                                                        onChange={(e) =>
+                                                            setNewEntryDraft((prev) => ({
+                                                                ...prev,
+                                                                status: e.target.value,
+                                                            }))
+                                                        }
+                                                    >
+                                                        <option value="paid">완료</option>
+                                                        <option value="planned">예정</option>
+                                                    </select>
+                                                </label>
+
+                                                <label className="add_field">
+                                                    <span className="add_field__label">표시 날짜</span>
+                                                    <input
+                                                        type="text"
+                                                        value={newEntryDraft.dateLabel}
+                                                        onChange={(e) =>
+                                                            setNewEntryDraft((prev) => ({
+                                                                ...prev,
+                                                                dateLabel: e.target.value,
+                                                            }))
+                                                        }
+                                                        placeholder="10/30"
+                                                    />
+                                                </label>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    <div className="add_actions">
+                                        <BaseButton type="submit" style="btn_solid__primary">
+                                            추가하기
+                                        </BaseButton>
+                                    </div>
+                                </form>
+                            )}
                         </div>
                     </section>
 
@@ -479,7 +986,9 @@ export default function ScreenMain({ onRequestSignUp }) {
                         <div className="panel_head">
                             <div className="panel_title">
                                 카테고리별 지출{" "}
-                                <span className="muted">({formatMaskedCount(categorySpend.length)}개)</span>
+                                <span className="muted">
+                                    ({formatMaskedCount(categorySummaries.length)}개)
+                                </span>
                             </div>
 
                             <BaseButtonContainer className="cat_actions">
@@ -487,9 +996,7 @@ export default function ScreenMain({ onRequestSignUp }) {
                                     type="button"
                                     size="sm"
                                     style={
-                                        isCategoryEditMode
-                                            ? "btn_solid__primary"
-                                            : "btn_outline__grey"
+                                        isEditMode ? "btn_solid__primary" : "btn_outline__grey"
                                     }
                                     onClick={handleToggleEditMode}
                                     aria-label="편집 모드 토글"
@@ -507,13 +1014,13 @@ export default function ScreenMain({ onRequestSignUp }) {
                                 centerValue={categoryTotal}
                                 centerBottomLabel="이번 달"
                                 animationTime={animationTime}
-                                isPaused={isCategoryEditMode}
+                                isPaused={isEditMode}
                                 isMasked={!isLinkedAccount}
                             />
                         </div>
 
                         <ul className="cat_list" aria-label="카테고리 리스트">
-                            {categorySpend.map((c, index) => {
+                            {categorySummaries.map((c, index) => {
                                 const dotTone =
                                     index === 0 ? "primary" : index === 1 ? "dark" : "soft";
 
@@ -533,7 +1040,7 @@ export default function ScreenMain({ onRequestSignUp }) {
                                         </div>
 
                                         <div className="cat_right">
-                                            {!isCategoryEditMode ? (
+                                            {!isEditMode ? (
                                                 <b className="cat_value">
                                                     {formatMaskedKoreanWon(c.amount)}
                                                 </b>
