@@ -1,7 +1,3 @@
-
-/* =========================
- * Login Hero Row (가로 3개)
- * ========================= */
 .icon_lock_row {
     display: flex;
     justify-content: center;
@@ -9,9 +5,6 @@
     margin: 0 auto 16px;
 }
 
-/* =========================
- * Login Hero Card (1개)
- * ========================= */
 .icon_lock {
     position: relative;
     width: 14rem;
@@ -28,26 +21,10 @@
     overflow: hidden;
 }
 
-/* shine */
-/* .icon_lock::before {
-    content: "";
-    position: absolute;
-    inset: -40%;
-    background: linear-gradient(90deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, .45) 40%,
-            rgba(255, 255, 255, 0) 80%);
-    transform: rotate(18deg);
-    animation: loginShine 2.8s ease-in-out infinite;
-    opacity: .55;
-    pointer-events: none;
-} */
-
-/* pulse ring */
 .icon_lock::after {
     content: "";
     position: absolute;
-    left:44px;
+    left: 44px;
     width: 52px;
     height: 52px;
     border-radius: 999px;
@@ -57,11 +34,6 @@
     pointer-events: none;
 }
 
-/* =========================
- * Icons
- * ========================= */
-
-/* 중앙 자물쇠 */
 .icon_lock__icon {
     justify-self: center;
     font-size: 40px;
@@ -69,7 +41,6 @@
     animation: lockFloat 2.2s ease-in-out infinite;
 }
 
-/* 좌/우 보조 아이콘 */
 .icon_lock__side {
     font-size: 20px;
     color: rgba(124, 58, 237, .45);
@@ -87,9 +58,6 @@
     animation-delay: .6s;
 }
 
-/* =========================
- * Animations
- * ========================= */
 @keyframes loginShine {
     0% {
         transform: translateX(-35%) rotate(18deg);
@@ -160,9 +128,6 @@
     }
 }
 
-/* =========================
- * Reduced motion
- * ========================= */
 @media (prefers-reduced-motion: reduce) {
 
     .icon_lock::before,

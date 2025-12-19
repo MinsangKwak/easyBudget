@@ -2,6 +2,7 @@ import Title from "../components/Content/Title";
 import Inner from "../components/Content/Inner";
 import List from "../components/Content/List";
 import ProgressStatus from "../components/Content/ProgressStatus";
+import Subtitle from "../components/Content/SubTitle";
 import { bankList } from "../constants/bankList";
 
 export default {
@@ -11,6 +12,11 @@ export default {
 export const SectionTitle = {
   name: "Title",
   render: () => <Title>콘텐츠 타이틀</Title>,
+};
+
+export const SectionSubtitle = {
+  name: "Subtitle",
+  render: () => <Subtitle>콘텐츠 서브 타이틀</Subtitle>,
 };
 
 export const InnerBox = {

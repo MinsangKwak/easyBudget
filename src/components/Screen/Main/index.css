@@ -1,7 +1,3 @@
-/* =========================
- * ScreenMain (mobile stack)
- * ========================= */
-
 .screen_main .content_inner {
     margin-top: 1.6rem;
 }
@@ -12,10 +8,6 @@
     line-height: 1.5;
     color: var(--muted);
 }
-
-/* =========================
- * Card base
- * ========================= */
 
 .card {
     padding: 1.6rem;
@@ -35,30 +27,11 @@
     border: 2px dashed var(--color-black-100);
 }
 
-/* .card_title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-}
-
-.panel_title {
-    font-size: 14px;
-    font-weight: 900;
-    color: var(--color-black-100);
-    letter-spacing: -0.01em;
-} */
-
 .card_value {
     font-size: 14px;
     font-weight: 900;
     color: var(--color-black-100);
 }
-
-/* =========================
- * Report
- * ========================= */
 
 .card_head {
     display: flex;
@@ -216,10 +189,6 @@
     color: var(--color-black-100);
 }
 
-/* =========================
- * List (payment/category)
- * ========================= */
-
 .list,
 .cat_list,
 .tx_list {
@@ -288,10 +257,6 @@
     display: grid;
     place-items: center;
 }
-
-/* =========================
- * Payment groups
- * ========================= */
 
 .pay_groups {
     display: grid;
@@ -394,17 +359,12 @@
     justify-content: flex-end;
 }
 
-/* =========================
- * Category donut + list
- * ========================= */
-
 .cat_donut {
     display: grid;
     place-items: center;
     padding: 12px 0 6px;
 }
 
-/* dots */
 .dot {
     width: 12px;
     height: 12px;
@@ -450,7 +410,6 @@
     border-color: var(--color-primary);
 }
 
-/* donut */
 .donut {
     position: relative;
     display: grid;
@@ -510,10 +469,6 @@
     font-size: 12px;
     font-weight: 800;
 }
-
-/* =========================
- * BottomSheet
- * ========================= */
 
 html.is_sheet_open,
 html.is_sheet_open body {
@@ -623,10 +578,6 @@ html.is_sheet_open body {
     font-weight: 900;
     color: var(--color-black-100);
 }
-
-/* =========================
- * Auth required modal
- * ========================= */
 
 .modal {
     position: fixed;

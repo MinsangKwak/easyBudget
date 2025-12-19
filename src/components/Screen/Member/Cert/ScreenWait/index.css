@@ -1,20 +1,18 @@
-/* screen_certificate__wait */
 .screen_certificate__wait .content_inner {
     align-items: center;
     margin-top: 2.4rem;
 }
-.screen_certificate__wait .screen_inner_grid{
-    width:100%;
+.screen_certificate__wait .screen_inner_grid {
+    width: 100%;
 }
 
-.screen_certificate__wait .grid_top{
-    width:fit-content;
-    margin:0 auto;
+.screen_certificate__wait .grid_top {
+    width: fit-content;
+    margin: 0 auto;
 }
-
 
 .screen_certificate__wait .btn_container {
     margin-top: 4rem;
-    flex-grow:1;
-    width:100%;
+    flex-grow: 1;
+    width: 100%;
 }
