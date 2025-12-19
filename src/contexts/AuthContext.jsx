@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const AUTH_STORAGE_KEY = "demo-auth-state";
+const DEFAULT_USERS_ENDPOINT = "/api/auth/default-users";
+const API_BASE_URL = (import.meta.env?.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 // const DEFAULT_USERS = [
 //     {
@@ -256,6 +258,30 @@ const buildDefaultState = () => ({
     lastSyncedAt: new Date().toISOString(),
 });
 
+const resolveDefaultUsersUrl = () =>
+    API_BASE_URL ? `${API_BASE_URL}${DEFAULT_USERS_ENDPOINT}` : DEFAULT_USERS_ENDPOINT;
+
+const fetchDefaultUsersFromApi = async () => {
+    if (typeof fetch === "undefined") return DEFAULT_USERS;
+
+    try {
+        const response = await fetch(resolveDefaultUsersUrl());
+        if (!response.ok) {
+            throw new Error(`Failed to fetch default users (${response.status})`);
+        }
+
+        const payload = await response.json();
+        if (Array.isArray(payload)) return payload;
+        if (Array.isArray(payload?.users)) return payload.users;
+
+        console.warn("Unexpected default users payload shape", payload);
+        return DEFAULT_USERS;
+    } catch (error) {
+        console.error("Failed to load default users from API", error);
+        return DEFAULT_USERS;
+    }
+};
+
 const generateUserId = () => {
     const cryptoApi = typeof globalThis !== "undefined" ? globalThis.crypto : null;
     if (cryptoApi?.randomUUID) return cryptoApi.randomUUID();
@@ -361,10 +387,93 @@ const normalizeUserShape = (user) => {
     };
 };
 
+const mergeUserRecords = (baseUser = {}, incomingUser = {}) => ({
+    ...baseUser,
+    ...incomingUser,
+    auth: {
+        primaryProvider: incomingUser?.auth?.primaryProvider ?? baseUser?.auth?.primaryProvider,
+        providers: {
+            ...(baseUser.auth?.providers ?? {}),
+            ...(incomingUser.auth?.providers ?? {}),
+        },
+    },
+    profile: { ...(baseUser.profile ?? {}), ...(incomingUser.profile ?? {}) },
+    identity: { ...(baseUser.identity ?? {}), ...(incomingUser.identity ?? {}) },
+    agreements: { ...(baseUser.agreements ?? {}), ...(incomingUser.agreements ?? {}) },
+    security: { ...(baseUser.security ?? {}), ...(incomingUser.security ?? {}) },
+    meta: { ...(baseUser.meta ?? {}), ...(incomingUser.meta ?? {}) },
+});
+
+const findExistingUserIndex = (userList = [], userPayload) => {
+    const payloadEmails = collectUserEmails(userPayload);
+    const payloadPhoneBirth = buildPhoneBirthKey(userPayload);
+
+    return userList.findIndex((user) => {
+        if (userPayload.id && user.id === userPayload.id) return true;
+
+        const userEmails = collectUserEmails(user);
+        if (payloadEmails.some((email) => userEmails.includes(email))) return true;
+
+        const userPhoneBirth = buildPhoneBirthKey(user);
+        return Boolean(
+            payloadPhoneBirth && userPhoneBirth && payloadPhoneBirth === userPhoneBirth,
+        );
+    });
+};
+
+const mergeUserIntoList = (users = [], userPayload) => {
+    const nextUsers = [...users];
+    let resolvedUser = userPayload;
+
+    const existingIndex = findExistingUserIndex(nextUsers, userPayload);
+    if (existingIndex >= 0) {
+        resolvedUser = mergeUserRecords(nextUsers[existingIndex], userPayload);
+        nextUsers[existingIndex] = resolvedUser;
+    } else {
+        resolvedUser = mergeUserRecords(userPayload.id ? {} : { id: generateUserId() }, userPayload);
+        nextUsers.push(resolvedUser);
+    }
+
+    return { nextUsers, resolvedUser };
+};
+
+const mergeUsersIntoList = (users = [], incomingUsers = []) => {
+    let nextUsers = [...users];
+    incomingUsers.forEach((incomingUser) => {
+        const mergeResult = mergeUserIntoList(nextUsers, incomingUser);
+        nextUsers = mergeResult.nextUsers;
+    });
+    return nextUsers;
+};
+
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [state, setState] = useState(loadAuthState);
+
+    useEffect(() => {
+        let isCancelled = false;
+
+        const hydrateDefaultUsers = async () => {
+            const apiUsers = await fetchDefaultUsersFromApi();
+            if (isCancelled || !apiUsers?.length) return;
+
+            setState((previous) => {
+                const nextUsers = mergeUsersIntoList(previous.users, apiUsers);
+                return {
+                    ...previous,
+                    users: nextUsers,
+                    lastSyncedAt: new Date().toISOString(),
+                };
+            });
+        };
+
+        hydrateDefaultUsers();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, []);
 
     useEffect(() => {
         const nextState = { ...state, lastSyncedAt: new Date().toISOString() };
@@ -382,54 +491,12 @@ export const AuthProvider = ({ children }) => {
         let resolvedUser = userPayload;
 
         setState((previous) => {
-            const nextUsers = [...previous.users];
-            const payloadEmails = collectUserEmails(userPayload);
-            const payloadPhoneBirth = buildPhoneBirthKey(userPayload);
-
-            const existingIndex = nextUsers.findIndex((user) => {
-                if (userPayload.id && user.id === userPayload.id) return true;
-
-                const userEmails = collectUserEmails(user);
-                if (payloadEmails.some((email) => userEmails.includes(email))) return true;
-
-                const userPhoneBirth = buildPhoneBirthKey(user);
-                return Boolean(
-                    payloadPhoneBirth && userPhoneBirth && payloadPhoneBirth === userPhoneBirth,
-                );
-            });
-
-            const mergeUser = (baseUser = {}, incomingUser = {}) => ({
-                ...baseUser,
-                ...incomingUser,
-                auth: {
-                    primaryProvider:
-                        incomingUser?.auth?.primaryProvider ?? baseUser?.auth?.primaryProvider,
-                    providers: {
-                        ...(baseUser.auth?.providers ?? {}),
-                        ...(incomingUser.auth?.providers ?? {}),
-                    },
-                },
-                profile: { ...(baseUser.profile ?? {}), ...(incomingUser.profile ?? {}) },
-                identity: { ...(baseUser.identity ?? {}), ...(incomingUser.identity ?? {}) },
-                agreements: { ...(baseUser.agreements ?? {}), ...(incomingUser.agreements ?? {}) },
-                security: { ...(baseUser.security ?? {}), ...(incomingUser.security ?? {}) },
-                meta: { ...(baseUser.meta ?? {}), ...(incomingUser.meta ?? {}) },
-            });
-
-            if (existingIndex >= 0) {
-                resolvedUser = mergeUser(nextUsers[existingIndex], userPayload);
-                nextUsers[existingIndex] = resolvedUser;
-            } else {
-                resolvedUser = mergeUser(
-                    userPayload.id ? {} : { id: generateUserId() },
-                    userPayload,
-                );
-                nextUsers.push(resolvedUser);
-            }
+            const mergeResult = mergeUserIntoList(previous.users, userPayload);
+            resolvedUser = mergeResult.resolvedUser;
 
             return {
                 ...previous,
-                users: nextUsers,
+                users: mergeResult.nextUsers,
                 currentUserId: resolvedUser.id ?? previous.currentUserId,
             };
         });

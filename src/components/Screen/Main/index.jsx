@@ -10,6 +10,7 @@ import BaseButtonContainer from "../../Form/BaseButtonContainer";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FiEdit3, FiX, FiChevronDown } from "react-icons/fi";
+import { useAuth } from "../../../contexts/AuthContext";
 
 /* =========================
  * utils
@@ -116,7 +117,12 @@ const DEMO_TRANSACTIONS = {
  * ScreenMain (Mobile)
  * ========================= */
 
-export default function ScreenMain() {
+export default function ScreenMain({ onRequestSignUp }) {
+    const { currentUser } = useAuth();
+    const isLinkedAccount =
+        currentUser?.email?.toLowerCase?.() === "test@test.com" || false;
+
+    const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
     /* ---------- month ---------- */
     const [monthLabel] = useState("10월");
 
@@ -203,6 +209,34 @@ export default function ScreenMain() {
         });
     }, [categorySpend]);
 
+    const ensureLinkedAccount = () => {
+        if (!isLinkedAccount) {
+            setIsSignUpModalOpen(true);
+            return false;
+        }
+        return true;
+    };
+
+    const handleClickSignUp = () => {
+        setIsSignUpModalOpen(false);
+        onRequestSignUp?.();
+    };
+
+    const maskText = "??";
+
+    const formatMaskedKoreanWon = (value) =>
+        isLinkedAccount ? formatKoreanWon(value) : maskText;
+
+    const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
+
+    const formatMaskedPercent = (value) =>
+        isLinkedAccount ? `${value}%` : maskText;
+
+    const displayCategorySegments = useMemo(() => {
+        if (isLinkedAccount) return categorySegments;
+        return categorySegments.map((segment) => ({ ...segment, value: 0 }));
+    }, [categorySegments, isLinkedAccount]);
+
     /* ---------- 바텀시트(내역 드릴다운) ---------- */
     const [sheetState, setSheetState] = useState({
         isOpen: false,
@@ -231,13 +265,24 @@ export default function ScreenMain() {
      * ========================= */
 
     const handleClickPaymentItem = (itemKey, label) => {
+        if (!ensureLinkedAccount()) return;
         const items = DEMO_TRANSACTIONS[itemKey] || [];
         openSheet({ title: `${label} 내역`, items });
     };
 
     const handleClickCategoryRow = (categoryKey, label) => {
+        if (!ensureLinkedAccount()) return;
         const items = DEMO_TRANSACTIONS[categoryKey] || [];
         openSheet({ title: `${label} 내역`, items });
+    };
+
+    const handleToggleEditMode = () => {
+        if (!ensureLinkedAccount()) return;
+        setIsCategoryEditMode((v) => !v);
+    };
+
+    const handleClickAddMyData = () => {
+        if (!ensureLinkedAccount()) return;
     };
 
     const commitCategoryAmount = (categoryKey) => {
@@ -282,20 +327,20 @@ export default function ScreenMain() {
                             <div className="kpi_box kpi_income">
                                 <div className="kpi_label">총 수입</div>
                                 <div className="kpi_value">
-                                    {formatKoreanWon(report.incomeTotal)}
+                                    {formatMaskedKoreanWon(report.incomeTotal)}
                                 </div>
                                 <div className="kpi_hint muted">
-                                    예산 {formatKoreanWon(report.incomeHint)}
+                                    예산 {formatMaskedKoreanWon(report.incomeHint)}
                                 </div>
                             </div>
 
                             <div className="kpi_box kpi_spend">
                                 <div className="kpi_label">총 지출</div>
                                 <div className="kpi_value">
-                                    {formatKoreanWon(report.spendTotal)}
+                                    {formatMaskedKoreanWon(report.spendTotal)}
                                 </div>
                                 <div className="kpi_hint muted">
-                                    예산 {formatKoreanWon(report.spendHint)}
+                                    예산 {formatMaskedKoreanWon(report.spendHint)}
                                 </div>
                             </div>
                         </div>
@@ -306,10 +351,11 @@ export default function ScreenMain() {
                                     <div className="block_title">정기지출</div>
                                     <div className="block_badges">
                                         <span className="badge">
-                                            지출 예정 {report.regularCountPlanned}건
+                                            지출 예정 {formatMaskedCount(report.regularCountPlanned)}
+                                            건
                                         </span>
                                         <span className="badge">
-                                            지출 완료 {report.regularCountPaid}건
+                                            지출 완료 {formatMaskedCount(report.regularCountPaid)}건
                                         </span>
                                     </div>
                                 </div>
@@ -318,13 +364,13 @@ export default function ScreenMain() {
                                     <div className="row">
                                         <span className="row_label muted">지출 예정</span>
                                         <b className="row_value">
-                                            {formatKoreanWon(report.regularPlanned)}
+                                            {formatMaskedKoreanWon(report.regularPlanned)}
                                         </b>
                                     </div>
                                     <div className="row">
                                         <span className="row_label muted">지출 완료</span>
                                         <b className="row_value">
-                                            {formatKoreanWon(report.regularPaid)}
+                                            {formatMaskedKoreanWon(report.regularPaid)}
                                         </b>
                                     </div>
                                 </div>
@@ -339,19 +385,19 @@ export default function ScreenMain() {
                                     <div className="row">
                                         <span className="row_label muted">지출 예산</span>
                                         <b className="row_value">
-                                            {formatKoreanWon(report.variablePlanned)}
+                                            {formatMaskedKoreanWon(report.variablePlanned)}
                                         </b>
                                     </div>
                                     <div className="row">
                                         <span className="row_label muted">지출</span>
                                         <b className="row_value">
-                                            {formatKoreanWon(report.variablePaid)}
+                                            {formatMaskedKoreanWon(report.variablePaid)}
                                         </b>
                                     </div>
                                     <div className="row row_hint">
                                         <span className="row_label muted">예상</span>
                                         <b className="row_value muted">
-                                            {formatKoreanWon(report.variableHint)}
+                                            {formatMaskedKoreanWon(report.variableHint)}
                                         </b>
                                     </div>
                                 </div>
@@ -365,7 +411,9 @@ export default function ScreenMain() {
                     <section className="card pay" aria-label="지출 수단">
                         <div className="panel_head">
                             <div className="panel_title">지출수단</div>
-                            <div className="panel_value">{formatKoreanWon(report.regularPaid)}</div>
+                            <div className="panel_value">
+                                {formatMaskedKoreanWon(report.regularPaid)}
+                            </div>
                         </div>
 
                         <div className="pay_groups">
@@ -374,7 +422,7 @@ export default function ScreenMain() {
                                     <div className="pay_group__head">
                                         <div className="pay_group__title">{group.label}</div>
                                         <div className="pay_group__total">
-                                            {formatKoreanWon(group.total)}
+                                            {formatMaskedKoreanWon(group.total)}
                                         </div>
                                     </div>
 
@@ -390,7 +438,7 @@ export default function ScreenMain() {
 
                                                 <div className="list_right">
                                                     <b className="list_value">
-                                                        {formatKoreanWon(item.amount)}
+                                                        {formatMaskedKoreanWon(item.amount)}
                                                     </b>
                                                     <button
                                                         type="button"
@@ -414,7 +462,11 @@ export default function ScreenMain() {
                         </div>
 
                         <div className="pay_add">
-                            <button type="button" className="add_btn">
+                            <button
+                                type="button"
+                                className="add_btn"
+                                onClick={handleClickAddMyData}
+                            >
                                 마이데이터 추가 <span className="add_plus">+</span>
                             </button>
                         </div>
@@ -427,7 +479,7 @@ export default function ScreenMain() {
                         <div className="panel_head">
                             <div className="panel_title">
                                 카테고리별 지출{" "}
-                                <span className="muted">({categorySpend.length}개)</span>
+                                <span className="muted">({formatMaskedCount(categorySpend.length)}개)</span>
                             </div>
 
                             <BaseButtonContainer className="cat_actions">
@@ -439,7 +491,7 @@ export default function ScreenMain() {
                                             ? "btn_solid__primary"
                                             : "btn_outline__grey"
                                     }
-                                    onClick={() => setIsCategoryEditMode((v) => !v)}
+                                    onClick={handleToggleEditMode}
                                     aria-label="편집 모드 토글"
                                     title="편집"
                                 >
@@ -450,12 +502,13 @@ export default function ScreenMain() {
 
                         <div className="cat_donut">
                             <DonutChart
-                                segments={categorySegments}
+                                segments={displayCategorySegments}
                                 centerTopLabel="지출 합계"
                                 centerValue={categoryTotal}
                                 centerBottomLabel="이번 달"
                                 animationTime={animationTime}
                                 isPaused={isCategoryEditMode}
+                                isMasked={!isLinkedAccount}
                             />
                         </div>
 
@@ -473,14 +526,16 @@ export default function ScreenMain() {
                                             />
                                             <div className="cat_text">
                                                 <div className="cat_label">{c.label}</div>
-                                                <div className="cat_meta muted">{c.percent}%</div>
+                                                <div className="cat_meta muted">
+                                                    {formatMaskedPercent(c.percent)}
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div className="cat_right">
                                             {!isCategoryEditMode ? (
                                                 <b className="cat_value">
-                                                    {formatKoreanWon(c.amount)}
+                                                    {formatMaskedKoreanWon(c.amount)}
                                                 </b>
                                             ) : (
                                                 <input
@@ -519,6 +574,12 @@ export default function ScreenMain() {
                 </div>
             </Inner>
 
+            <AuthRequiredModal
+                isOpen={isSignUpModalOpen}
+                onClose={() => setIsSignUpModalOpen(false)}
+                onConfirm={handleClickSignUp}
+            />
+
             {/* ======================
              * BottomSheet
              * ====================== */}
@@ -543,6 +604,7 @@ function DonutChart({
     centerBottomLabel,
     animationTime,
     isPaused,
+    isMasked,
 }) {
     const size = 210;
     const strokeWidth = 18;
@@ -608,8 +670,38 @@ function DonutChart({
 
             <div className="donut_center">
                 <div className="donut_top muted">{centerTopLabel}</div>
-                <div className="donut_value">{formatKoreanWonShort(centerValue)}</div>
+                <div className="donut_value">
+                    {isMasked ? "??" : formatKoreanWonShort(centerValue)}
+                </div>
                 <div className="donut_bottom muted">{centerBottomLabel}</div>
+            </div>
+        </div>
+    );
+}
+
+function AuthRequiredModal({ isOpen, onClose, onConfirm }) {
+    return (
+        <div className={`modal ${isOpen ? "is_open" : ""}`} aria-hidden={!isOpen}>
+            <div className="modal_dim" onClick={onClose} />
+            <div className="modal_panel" role="dialog" aria-modal="true">
+                <div className="modal_title">회원가입시 사용 가능합니다</div>
+                <p className="modal_desc">
+                    로그인 또는 회원가입 후 마이데이터를 연동하면 지출/수입 정보를 확인하고
+                    수정할 수 있어요.
+                </p>
+
+                <div className="modal_actions">
+                    <button type="button" className="modal_btn" onClick={onClose}>
+                        닫기
+                    </button>
+                    <button
+                        type="button"
+                        className="modal_btn modal_btn__primary"
+                        onClick={onConfirm}
+                    >
+                        회원가입 하기
+                    </button>
+                </div>
             </div>
         </div>
     );

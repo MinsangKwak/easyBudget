@@ -571,6 +571,78 @@ html.is_sheet_open body {
     color: var(--color-black-100);
 }
 
+/* =========================
+ * Auth required modal
+ * ========================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 20;
+}
+
+.modal.is_open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal_dim {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-black-100) 20%, transparent);
+}
+
+.modal_panel {
+    position: relative;
+    width: min(420px, calc(100% - 32px));
+    border-radius: 18px;
+    border: 2px solid var(--color-black-100);
+    background: color-mix(in srgb, var(--color-white) 94%, var(--color-white-100) 6%);
+    padding: 18px 18px 16px;
+    box-shadow: 10px 10px 0 color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+
+.modal_title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--color-black-100);
+}
+
+.modal_desc {
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--color-black-100);
+}
+
+.modal_actions {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal_btn {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 2px solid var(--color-black-100);
+    background: rgba(255, 255, 255, 0.95);
+    font-weight: 900;
+    color: var(--color-black-100);
+}
+
+.modal_btn__primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
 .muted {
     color: var(--muted);
 }
