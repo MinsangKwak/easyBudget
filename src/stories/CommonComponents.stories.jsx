@@ -1,7 +1,7 @@
 import IconLock from "../components/Common/IconLock";
-import LottieIcon from "../components/Common/LottieIcon";
+// import LottieIcon from "../components/Common/LottieIcon";
 import ScreenLoading from "../components/Screen/Common/Loading";
-import { LOTTIE_SOURCES } from "../constants/lottieSources";
+// import { LOTTIE_SOURCES } from "../constants/lottieSources";
 
 export default {
   title: "Components/Common",
@@ -26,13 +26,13 @@ export const SecurityLockIcon = {
   ),
 };
 
-export const LottieIconPulse = {
-  name: "LottieIcon",
-  render: () => (
-    <LottieIcon
-      src={LOTTIE_SOURCES.introPulse}
-      ariaLabel="애니메이션 예시"
-      size={120}
-    />
-  ),
+// export const LottieIconPulse = {
+//   name: "LottieIcon",
+//   render: () => (
+//     <LottieIcon
+//       src={LOTTIE_SOURCES.introPulse}
+//       ariaLabel="애니메이션 예시"
+//       size={120}
+//     />
+//   ),
 };
