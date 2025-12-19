@@ -2,22 +2,15 @@
  * ScreenMain (mobile stack)
  * ========================= */
 
-.screen_main.mobile_budget .content_inner {
+.screen_main .content_inner {
     margin-top: 1.6rem;
 }
 
-.screen_main.mobile_budget .description {
+.screen_main .description {
     margin-top: 1.2rem;
     font-size: 1.4rem;
     line-height: 1.5;
     color: var(--muted);
-}
-
-.stack {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: 14px 0 28px;
 }
 
 /* =========================
@@ -38,7 +31,11 @@
         0 14px 30px color-mix(in srgb, var(--color-black-100) 16%, transparent);
 }
 
-.panel_head {
+.card.style_dash {
+    border: 2px dashed var(--color-black-100);
+}
+
+/* .card_title {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -51,9 +48,9 @@
     font-weight: 900;
     color: var(--color-black-100);
     letter-spacing: -0.01em;
-}
+} */
 
-.panel_value {
+.card_value {
     font-size: 14px;
     font-weight: 900;
     color: var(--color-black-100);
@@ -63,14 +60,14 @@
  * Report
  * ========================= */
 
-.report_head {
+.card_head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
 }
 
-.report_title {
+.card_title {
     font-size: 14px;
     font-weight: 900;
     color: var(--color-black-100);
@@ -92,14 +89,14 @@
     font-size: 16px;
 }
 
-.report_kpi {
+.card_body {
     margin-top: 12px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
-.kpi_box {
+.card_item {
     border-radius: 16px;
     padding: 14px;
     border: 2px solid var(--color-black-100);
@@ -109,22 +106,18 @@
     gap: 6px;
 }
 
-.kpi_box .kpi_label {
+.card_item .item_title {
     font-size: 12px;
     font-weight: 900;
     color: var(--color-black-100);
 }
-.kpi_label_row {
+.item_head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 8px;
 }
-.kpi_edit_btn {
-    min-width: 36px;
-    height: 28px;
-    padding: 0 8px;
-}
+
 .inline_input {
     width: 120px;
     height: 32px;
@@ -141,14 +134,14 @@
     border-color: var(--color-primary);
 }
 
-.kpi_box .kpi_value {
+.card_item .item_value {
     font-size: 18px;
     font-weight: 900;
     letter-spacing: -0.02em;
     color: var(--color-black-100);
 }
 
-.kpi_box .kpi_hint {
+.card_item .item_hint {
     font-size: 12px;
 }
 
@@ -404,10 +397,6 @@
 /* =========================
  * Category donut + list
  * ========================= */
-
-.cat_actions {
-    margin: 0;
-}
 
 .cat_donut {
     display: grid;

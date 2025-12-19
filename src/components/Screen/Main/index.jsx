@@ -47,7 +47,9 @@ const formatKoreanWonShort = (value) => {
 };
 
 const slugifyKey = (value, fallback = "item") => {
-    const base = String(value || "").trim().toLowerCase();
+    const base = String(value || "")
+        .trim()
+        .toLowerCase();
     if (!base) return fallback;
     return base.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "") || fallback;
 };
@@ -326,13 +328,11 @@ export default function ScreenMain({ onRequestSignUp }) {
 
     const maskText = "??";
 
-    const formatMaskedKoreanWon = (value) =>
-        isLinkedAccount ? formatKoreanWon(value) : maskText;
+    const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
 
     const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
 
-    const formatMaskedPercent = (value) =>
-        isLinkedAccount ? `${value}%` : maskText;
+    const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
 
     const displayCategorySegments = useMemo(() => {
         if (isLinkedAccount) return categorySegments;
@@ -357,13 +357,12 @@ export default function ScreenMain({ onRequestSignUp }) {
             }
 
             const group = groupMap.get(groupKey);
-            const existingItem =
-                group.items.get(entry.paymentKey) || {
-                    key: entry.paymentKey,
-                    label: entry.paymentLabel || entry.paymentKey,
-                    logoText: entry.paymentLogo || entry.paymentLabel?.[0] || "•",
-                    amount: 0,
-                };
+            const existingItem = group.items.get(entry.paymentKey) || {
+                key: entry.paymentKey,
+                label: entry.paymentLabel || entry.paymentKey,
+                logoText: entry.paymentLogo || entry.paymentLabel?.[0] || "•",
+                amount: 0,
+            };
 
             existingItem.amount += Math.max(0, entry.amount);
             group.items.set(entry.paymentKey, existingItem);
@@ -536,8 +535,9 @@ export default function ScreenMain({ onRequestSignUp }) {
             const paymentKey =
                 newEntryDraft.paymentKey ||
                 `${newEntryDraft.paymentGroupKey}-${slugifyKey(paymentLabel, "payment")}`;
-            const paymentLogo =
-                (newEntryDraft.paymentLogo || paymentLabel[0] || "•").toUpperCase().slice(0, 1);
+            const paymentLogo = (newEntryDraft.paymentLogo || paymentLabel[0] || "•")
+                .toUpperCase()
+                .slice(0, 1);
 
             const nextEntry = {
                 id: `entry-${Date.now()}`,
@@ -570,515 +570,494 @@ export default function ScreenMain({ onRequestSignUp }) {
     };
 
     return (
-        <Screen className="screen_main mobile_budget">
+        <Screen className="screen_main">
             <Title>쉬운 가계부,</Title>
-            <Subtitle>마이데이터를 연결하면 자동으로 지출/수입을 분류해요.</Subtitle>
-            <p className="description">내 입맛에 맞게 카테고리를 재분류할 수 있어요.</p>
-
             <Inner>
-                <div className="stack">
-                    {/* ======================
-                     * 1) REPORT (첫 화면)
-                     * ====================== */}
-                    <section className="card report" aria-label="리포트">
-                        <div className="report_head">
-                            <div className="report_title">리포트</div>
-
-                            <button type="button" className="month_btn" aria-label="월 선택">
-                                <span className="month_btn__label">{monthLabel}</span>
-                                <FiChevronDown />
-                            </button>
+                <section className="card style_dash hero">
+                    <div className="card_head">
+                        <div className="card_title">
+                            내 입맛에 맞게 카테고리를 재분류할 수 있어요.
                         </div>
+                    </div>
+                </section>
+                {/* ======================
+                 * 1) REPORT (첫 화면)
+                 * ====================== */}
+                <section className="card report" aria-label="리포트">
+                    <div className="card_head">
+                        <div className="card_title">리포트</div>
 
-                        <div className="report_kpi">
-                            <div className="kpi_box kpi_income">
-                                <div className="kpi_label_row">
-                                    <div className="kpi_label">총 수입</div>
-                                    {isLinkedAccount && (
-                                        <BaseButton
-                                            type="button"
-                                            size="sm"
-                                            style={
-                                                isEditMode
-                                                    ? "btn_solid__primary"
-                                                    : "btn_outline__grey"
-                                            }
-                                            className="kpi_edit_btn"
-                                            onClick={handleToggleEditMode}
-                                            aria-label="예산 편집"
-                                            title="예산 편집"
-                                        >
-                                            <FiEdit3 />
-                                        </BaseButton>
-                                    )}
-                                </div>
-                                <div className="kpi_value">
-                                    {formatMaskedKoreanWon(report.incomeTotal)}
-                                </div>
-                                <div className="kpi_hint muted">
-                                    예산{" "}
-                                    {isEditMode ? (
-                                        <input
-                                            className="inline_input"
-                                            inputMode="numeric"
-                                            value={budgetInputs.incomeBudget}
-                                            onChange={(e) =>
-                                                setBudgetInputs((prev) => ({
-                                                    ...prev,
-                                                    incomeBudget: e.target.value,
-                                                }))
-                                            }
-                                            onBlur={() => commitBudgetInput("incomeBudget")}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                    e.currentTarget.blur();
-                                                    commitBudgetInput("incomeBudget");
-                                                }
-                                            }}
-                                            aria-label="총 수입 예산 수정"
-                                        />
-                                    ) : (
-                                        formatMaskedKoreanWon(report.incomeHint)
-                                    )}
-                                </div>
+                        <button type="button" className="month_btn" aria-label="월 선택">
+                            <span className="month_btn__label">{monthLabel}</span>
+                            <FiChevronDown />
+                        </button>
+                    </div>
+
+                    <div className="card_body">
+                        <div className="card_item">
+                            <div className="item_head">
+                                <div className="item_title">총 수입</div>
+                                {isLinkedAccount && (
+                                    <BaseButton
+                                        type="button"
+                                        size="xs"
+                                        style={
+                                            isEditMode ? "btn_solid__primary" : "btn_outline__grey"
+                                        }
+                                        onClick={handleToggleEditMode}
+                                        aria-label="예산 편집"
+                                        title="예산 편집"
+                                    >
+                                        <FiEdit3 />
+                                    </BaseButton>
+                                )}
                             </div>
-
-                            <div className="kpi_box kpi_spend">
-                                <div className="kpi_label_row">
-                                    <div className="kpi_label">총 지출</div>
-                                    {isLinkedAccount && (
-                                        <BaseButton
-                                            type="button"
-                                            size="sm"
-                                            style={
-                                                isEditMode
-                                                    ? "btn_solid__primary"
-                                                    : "btn_outline__grey"
+                            <div className="item_value">
+                                {formatMaskedKoreanWon(report.incomeTotal)}
+                            </div>
+                            <div className="item_hint muted">
+                                예산{" "}
+                                {isEditMode ? (
+                                    <input
+                                        className="inline_input"
+                                        inputMode="numeric"
+                                        value={budgetInputs.incomeBudget}
+                                        onChange={(e) =>
+                                            setBudgetInputs((prev) => ({
+                                                ...prev,
+                                                incomeBudget: e.target.value,
+                                            }))
+                                        }
+                                        onBlur={() => commitBudgetInput("incomeBudget")}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                e.currentTarget.blur();
+                                                commitBudgetInput("incomeBudget");
                                             }
-                                            className="kpi_edit_btn"
-                                            onClick={handleToggleEditMode}
-                                            aria-label="예산 편집"
-                                            title="예산 편집"
-                                        >
-                                            <FiEdit3 />
-                                        </BaseButton>
-                                    )}
-                                </div>
-                                <div className="kpi_value">
-                                    {formatMaskedKoreanWon(report.spendTotal)}
-                                </div>
-                                <div className="kpi_hint muted">
-                                    예산{" "}
-                                    {isEditMode ? (
-                                        <input
-                                            className="inline_input"
-                                            inputMode="numeric"
-                                            value={budgetInputs.spendBudget}
-                                            onChange={(e) =>
-                                                setBudgetInputs((prev) => ({
-                                                    ...prev,
-                                                    spendBudget: e.target.value,
-                                                }))
-                                            }
-                                            onBlur={() => commitBudgetInput("spendBudget")}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                    e.currentTarget.blur();
-                                                    commitBudgetInput("spendBudget");
-                                                }
-                                            }}
-                                            aria-label="총 지출 예산 수정"
-                                        />
-                                    ) : (
-                                        formatMaskedKoreanWon(report.spendHint)
-                                    )}
-                                </div>
+                                        }}
+                                        aria-label="총 수입 예산 수정"
+                                    />
+                                ) : (
+                                    formatMaskedKoreanWon(report.incomeHint)
+                                )}
                             </div>
                         </div>
 
-                        <div className="report_blocks">
-                            <div className="report_block">
-                                <div className="block_head">
-                                    <div className="block_title">정기지출</div>
-                                    <div className="block_badges">
-                                        <span className="badge">
-                                            지출 예정 {formatMaskedCount(report.regularCountPlanned)}
-                                            건
-                                        </span>
-                                        <span className="badge">
-                                            지출 완료 {formatMaskedCount(report.regularCountPaid)}건
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="block_rows">
-                                    <div className="row">
-                                        <span className="row_label muted">지출 예정</span>
-                                        <b className="row_value">
-                                            {formatMaskedKoreanWon(report.regularPlanned)}
-                                        </b>
-                                    </div>
-                                    <div className="row">
-                                        <span className="row_label muted">지출 완료</span>
-                                        <b className="row_value">
-                                            {formatMaskedKoreanWon(report.regularPaid)}
-                                        </b>
-                                    </div>
-                                </div>
+                        <div className="card_item kpi_spend">
+                            <div className="item_head">
+                                <div className="item_title">총 지출</div>
+                                {isLinkedAccount && (
+                                    <BaseButton
+                                        type="button"
+                                        size="xs"
+                                        style={
+                                            isEditMode ? "btn_solid__primary" : "btn_outline__grey"
+                                        }
+                                        onClick={handleToggleEditMode}
+                                        aria-label="예산 편집"
+                                        title="예산 편집"
+                                    >
+                                        <FiEdit3 />
+                                    </BaseButton>
+                                )}
                             </div>
-
-                            <div className="report_block">
-                                <div className="block_head">
-                                    <div className="block_title">변동지출</div>
-                                </div>
-
-                                <div className="block_rows">
-                                    <div className="row">
-                                        <span className="row_label muted">지출 예산</span>
-                                        <b className="row_value">
-                                            {formatMaskedKoreanWon(report.variablePlanned)}
-                                        </b>
-                                    </div>
-                                    <div className="row">
-                                        <span className="row_label muted">지출</span>
-                                        <b className="row_value">
-                                            {formatMaskedKoreanWon(report.variablePaid)}
-                                        </b>
-                                    </div>
-                                    <div className="row row_hint">
-                                        <span className="row_label muted">예상</span>
-                                        <b className="row_value muted">
-                                            {formatMaskedKoreanWon(report.variableHint)}
-                                        </b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* ======================
-                     * 2) PAYMENT METHODS
-                     * ====================== */}
-                    <section className="card pay" aria-label="지출 수단">
-                        <div className="panel_head">
-                            <div className="panel_title">지출수단</div>
-                            <div className="panel_value">
+                            <div className="item_value">
                                 {formatMaskedKoreanWon(report.spendTotal)}
                             </div>
+                            <div className="item_hint muted">
+                                예산{" "}
+                                {isEditMode ? (
+                                    <input
+                                        className="inline_input"
+                                        inputMode="numeric"
+                                        value={budgetInputs.spendBudget}
+                                        onChange={(e) =>
+                                            setBudgetInputs((prev) => ({
+                                                ...prev,
+                                                spendBudget: e.target.value,
+                                            }))
+                                        }
+                                        onBlur={() => commitBudgetInput("spendBudget")}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                e.currentTarget.blur();
+                                                commitBudgetInput("spendBudget");
+                                            }
+                                        }}
+                                        aria-label="총 지출 예산 수정"
+                                    />
+                                ) : (
+                                    formatMaskedKoreanWon(report.spendHint)
+                                )}
+                            </div>
                         </div>
+                    </div>
 
-                        <div className="pay_groups">
-                            {paymentGroups.map((group) => (
-                                <div key={group.key} className="pay_group">
-                                    <div className="pay_group__head">
-                                        <div className="pay_group__title">{group.label}</div>
-                                        <div className="pay_group__total">
-                                            {formatMaskedKoreanWon(group.total)}
-                                        </div>
-                                    </div>
-
-                                    <ul className="list">
-                                        {group.items.map((item) => (
-                                            <li key={item.key} className="list_row">
-                                                <div className="list_left">
-                                                    <span className="avatar" aria-hidden="true">
-                                                        {item.logoText}
-                                                    </span>
-                                                    <span className="list_label">{item.label}</span>
-                                                </div>
-
-                                                <div className="list_right">
-                                                    <b className="list_value">
-                                                        {formatMaskedKoreanWon(item.amount)}
-                                                    </b>
-                                                    <button
-                                                        type="button"
-                                                        className="arrow_btn"
-                                                        aria-label={`${item.label} 내역 보기`}
-                                                        onClick={() =>
-                                                            handleClickPaymentItem(
-                                                                item.key,
-                                                                item.label,
-                                                            )
-                                                        }
-                                                    >
-                                                        ›
-                                                    </button>
-                                                </div>
-                                            </li>
-                                        ))}
-                                    </ul>
+                    <div className="report_blocks">
+                        <div className="report_block">
+                            <div className="block_head">
+                                <div className="block_title">정기지출</div>
+                                <div className="block_badges">
+                                    <span className="badge">
+                                        지출 예정 {formatMaskedCount(report.regularCountPlanned)}건
+                                    </span>
+                                    <span className="badge">
+                                        지출 완료 {formatMaskedCount(report.regularCountPaid)}건
+                                    </span>
                                 </div>
-                            ))}
-                        </div>
-
-                        <div className="pay_add">
-                            <button
-                                type="button"
-                                className="add_btn"
-                                onClick={handleClickAddMyData}
-                            >
-                                마이데이터 추가 <span className="add_plus">+</span>
-                            </button>
-
-                            {isAddFormOpen && (
-                                <form className="add_form" onSubmit={handleSubmitMyData}>
-                                    <div className="add_form__grid">
-                                        <label className="add_field">
-                                            <span className="add_field__label">데이터 유형</span>
-                                            <select
-                                                value={newEntryDraft.entryType}
-                                                onChange={(e) =>
-                                                    setNewEntryDraft((prev) => ({
-                                                        ...prev,
-                                                        entryType: e.target.value,
-                                                    }))
-                                                }
-                                            >
-                                                <option value="spend">지출</option>
-                                                <option value="income">수입</option>
-                                            </select>
-                                        </label>
-
-                                        <label className="add_field">
-                                            <span className="add_field__label">
-                                                {newEntryDraft.entryType === "income"
-                                                    ? "수입 이름"
-                                                    : "지출수단 이름"}
-                                            </span>
-                                            <input
-                                                type="text"
-                                                value={newEntryDraft.paymentLabel}
-                                                onChange={(e) =>
-                                                    setNewEntryDraft((prev) => ({
-                                                        ...prev,
-                                                        paymentLabel: e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="예) 알바, 신한카드"
-                                            />
-                                        </label>
-
-                                        <label className="add_field">
-                                            <span className="add_field__label">금액</span>
-                                            <input
-                                                type="number"
-                                                inputMode="numeric"
-                                                value={newEntryDraft.amount}
-                                                onChange={(e) =>
-                                                    setNewEntryDraft((prev) => ({
-                                                        ...prev,
-                                                        amount: e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="0"
-                                            />
-                                        </label>
-
-                                        {newEntryDraft.entryType === "spend" && (
-                                            <>
-                                                <label className="add_field">
-                                                    <span className="add_field__label">
-                                                        카테고리
-                                                    </span>
-                                                    <select
-                                                        value={newEntryDraft.categoryKey}
-                                                        onChange={(e) =>
-                                                            setNewEntryDraft((prev) => ({
-                                                                ...prev,
-                                                                categoryKey: e.target.value,
-                                                            }))
-                                                        }
-                                                    >
-                                                        {CATEGORY_OPTIONS.map((option) => (
-                                                            <option key={option.key} value={option.key}>
-                                                                {option.label}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </label>
-
-                                                <label className="add_field">
-                                                    <span className="add_field__label">
-                                                        지출 수단
-                                                    </span>
-                                                    <select
-                                                        value={newEntryDraft.paymentGroupKey}
-                                                        onChange={(e) =>
-                                                            setNewEntryDraft((prev) => ({
-                                                                ...prev,
-                                                                paymentGroupKey: e.target.value,
-                                                            }))
-                                                        }
-                                                    >
-                                                        {Object.values(PAYMENT_GROUP_META).map((group) => (
-                                                            <option key={group.key} value={group.key}>
-                                                                {group.label}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </label>
-
-                                                <label className="add_field">
-                                                    <span className="add_field__label">지출 구분</span>
-                                                    <select
-                                                        value={newEntryDraft.spendType}
-                                                        onChange={(e) =>
-                                                            setNewEntryDraft((prev) => ({
-                                                                ...prev,
-                                                                spendType: e.target.value,
-                                                            }))
-                                                        }
-                                                    >
-                                                        <option value="regular">정기</option>
-                                                        <option value="variable">변동</option>
-                                                    </select>
-                                                </label>
-
-                                                <label className="add_field">
-                                                    <span className="add_field__label">상태</span>
-                                                    <select
-                                                        value={newEntryDraft.status}
-                                                        onChange={(e) =>
-                                                            setNewEntryDraft((prev) => ({
-                                                                ...prev,
-                                                                status: e.target.value,
-                                                            }))
-                                                        }
-                                                    >
-                                                        <option value="paid">완료</option>
-                                                        <option value="planned">예정</option>
-                                                    </select>
-                                                </label>
-
-                                                <label className="add_field">
-                                                    <span className="add_field__label">표시 날짜</span>
-                                                    <input
-                                                        type="text"
-                                                        value={newEntryDraft.dateLabel}
-                                                        onChange={(e) =>
-                                                            setNewEntryDraft((prev) => ({
-                                                                ...prev,
-                                                                dateLabel: e.target.value,
-                                                            }))
-                                                        }
-                                                        placeholder="10/30"
-                                                    />
-                                                </label>
-                                            </>
-                                        )}
-                                    </div>
-
-                                    <div className="add_actions">
-                                        <BaseButton type="submit" style="btn_solid__primary">
-                                            추가하기
-                                        </BaseButton>
-                                    </div>
-                                </form>
-                            )}
-                        </div>
-                    </section>
-
-                    {/* ======================
-                     * 3) CATEGORY SPEND (도넛+리스트)
-                     * ====================== */}
-                    <section className="card cat" aria-label="카테고리별 지출">
-                        <div className="panel_head">
-                            <div className="panel_title">
-                                카테고리별 지출{" "}
-                                <span className="muted">
-                                    ({formatMaskedCount(categorySummaries.length)}개)
-                                </span>
                             </div>
 
-                            <BaseButtonContainer className="cat_actions">
-                                <BaseButton
-                                    type="button"
-                                    size="sm"
-                                    style={
-                                        isEditMode ? "btn_solid__primary" : "btn_outline__grey"
-                                    }
-                                    onClick={handleToggleEditMode}
-                                    aria-label="편집 모드 토글"
-                                    title="편집"
-                                >
-                                    <FiEdit3 />
-                                </BaseButton>
-                            </BaseButtonContainer>
+                            <div className="block_rows">
+                                <div className="row">
+                                    <span className="row_label muted">지출 예정</span>
+                                    <b className="row_value">
+                                        {formatMaskedKoreanWon(report.regularPlanned)}
+                                    </b>
+                                </div>
+                                <div className="row">
+                                    <span className="row_label muted">지출 완료</span>
+                                    <b className="row_value">
+                                        {formatMaskedKoreanWon(report.regularPaid)}
+                                    </b>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="cat_donut">
-                            <DonutChart
-                                segments={displayCategorySegments}
-                                centerTopLabel="지출 합계"
-                                centerValue={categoryTotal}
-                                centerBottomLabel="이번 달"
-                                animationTime={animationTime}
-                                isPaused={isEditMode}
-                                isMasked={!isLinkedAccount}
-                            />
+                        <div className="report_block">
+                            <div className="block_head">
+                                <div className="block_title">변동지출</div>
+                            </div>
+
+                            <div className="block_rows">
+                                <div className="row">
+                                    <span className="row_label muted">지출 예산</span>
+                                    <b className="row_value">
+                                        {formatMaskedKoreanWon(report.variablePlanned)}
+                                    </b>
+                                </div>
+                                <div className="row">
+                                    <span className="row_label muted">지출</span>
+                                    <b className="row_value">
+                                        {formatMaskedKoreanWon(report.variablePaid)}
+                                    </b>
+                                </div>
+                                <div className="row row_hint">
+                                    <span className="row_label muted">예상</span>
+                                    <b className="row_value muted">
+                                        {formatMaskedKoreanWon(report.variableHint)}
+                                    </b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ======================
+                 * 2) PAYMENT METHODS
+                 * ====================== */}
+                <section className="card pay" aria-label="지출 수단">
+                    <div className="card_head">
+                        <div className="card_title">지출수단</div>
+                        <div className="card_value">{formatMaskedKoreanWon(report.spendTotal)}</div>
+                    </div>
+
+                    <div className="pay_groups">
+                        {paymentGroups.map((group) => (
+                            <div key={group.key} className="pay_group">
+                                <div className="pay_group__head">
+                                    <div className="pay_group__title">{group.label}</div>
+                                    <div className="pay_group__total">
+                                        {formatMaskedKoreanWon(group.total)}
+                                    </div>
+                                </div>
+
+                                <ul className="list">
+                                    {group.items.map((item) => (
+                                        <li key={item.key} className="list_row">
+                                            <div className="list_left">
+                                                <span className="avatar" aria-hidden="true">
+                                                    {item.logoText}
+                                                </span>
+                                                <span className="list_label">{item.label}</span>
+                                            </div>
+
+                                            <div className="list_right">
+                                                <b className="list_value">
+                                                    {formatMaskedKoreanWon(item.amount)}
+                                                </b>
+                                                <button
+                                                    type="button"
+                                                    className="arrow_btn"
+                                                    aria-label={`${item.label} 내역 보기`}
+                                                    onClick={() =>
+                                                        handleClickPaymentItem(item.key, item.label)
+                                                    }
+                                                >
+                                                    ›
+                                                </button>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="pay_add">
+                        <button type="button" className="add_btn" onClick={handleClickAddMyData}>
+                            마이데이터 추가 <span className="add_plus">+</span>
+                        </button>
+
+                        {isAddFormOpen && (
+                            <form className="add_form" onSubmit={handleSubmitMyData}>
+                                <div className="add_form__grid">
+                                    <label className="add_field">
+                                        <span className="add_field__label">데이터 유형</span>
+                                        <select
+                                            value={newEntryDraft.entryType}
+                                            onChange={(e) =>
+                                                setNewEntryDraft((prev) => ({
+                                                    ...prev,
+                                                    entryType: e.target.value,
+                                                }))
+                                            }
+                                        >
+                                            <option value="spend">지출</option>
+                                            <option value="income">수입</option>
+                                        </select>
+                                    </label>
+
+                                    <label className="add_field">
+                                        <span className="add_field__label">
+                                            {newEntryDraft.entryType === "income"
+                                                ? "수입 이름"
+                                                : "지출수단 이름"}
+                                        </span>
+                                        <input
+                                            type="text"
+                                            value={newEntryDraft.paymentLabel}
+                                            onChange={(e) =>
+                                                setNewEntryDraft((prev) => ({
+                                                    ...prev,
+                                                    paymentLabel: e.target.value,
+                                                }))
+                                            }
+                                            placeholder="예) 알바, 신한카드"
+                                        />
+                                    </label>
+
+                                    <label className="add_field">
+                                        <span className="add_field__label">금액</span>
+                                        <input
+                                            type="number"
+                                            inputMode="numeric"
+                                            value={newEntryDraft.amount}
+                                            onChange={(e) =>
+                                                setNewEntryDraft((prev) => ({
+                                                    ...prev,
+                                                    amount: e.target.value,
+                                                }))
+                                            }
+                                            placeholder="0"
+                                        />
+                                    </label>
+
+                                    {newEntryDraft.entryType === "spend" && (
+                                        <>
+                                            <label className="add_field">
+                                                <span className="add_field__label">카테고리</span>
+                                                <select
+                                                    value={newEntryDraft.categoryKey}
+                                                    onChange={(e) =>
+                                                        setNewEntryDraft((prev) => ({
+                                                            ...prev,
+                                                            categoryKey: e.target.value,
+                                                        }))
+                                                    }
+                                                >
+                                                    {CATEGORY_OPTIONS.map((option) => (
+                                                        <option key={option.key} value={option.key}>
+                                                            {option.label}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </label>
+
+                                            <label className="add_field">
+                                                <span className="add_field__label">지출 수단</span>
+                                                <select
+                                                    value={newEntryDraft.paymentGroupKey}
+                                                    onChange={(e) =>
+                                                        setNewEntryDraft((prev) => ({
+                                                            ...prev,
+                                                            paymentGroupKey: e.target.value,
+                                                        }))
+                                                    }
+                                                >
+                                                    {Object.values(PAYMENT_GROUP_META).map(
+                                                        (group) => (
+                                                            <option
+                                                                key={group.key}
+                                                                value={group.key}
+                                                            >
+                                                                {group.label}
+                                                            </option>
+                                                        ),
+                                                    )}
+                                                </select>
+                                            </label>
+
+                                            <label className="add_field">
+                                                <span className="add_field__label">지출 구분</span>
+                                                <select
+                                                    value={newEntryDraft.spendType}
+                                                    onChange={(e) =>
+                                                        setNewEntryDraft((prev) => ({
+                                                            ...prev,
+                                                            spendType: e.target.value,
+                                                        }))
+                                                    }
+                                                >
+                                                    <option value="regular">정기</option>
+                                                    <option value="variable">변동</option>
+                                                </select>
+                                            </label>
+
+                                            <label className="add_field">
+                                                <span className="add_field__label">상태</span>
+                                                <select
+                                                    value={newEntryDraft.status}
+                                                    onChange={(e) =>
+                                                        setNewEntryDraft((prev) => ({
+                                                            ...prev,
+                                                            status: e.target.value,
+                                                        }))
+                                                    }
+                                                >
+                                                    <option value="paid">완료</option>
+                                                    <option value="planned">예정</option>
+                                                </select>
+                                            </label>
+
+                                            <label className="add_field">
+                                                <span className="add_field__label">표시 날짜</span>
+                                                <input
+                                                    type="text"
+                                                    value={newEntryDraft.dateLabel}
+                                                    onChange={(e) =>
+                                                        setNewEntryDraft((prev) => ({
+                                                            ...prev,
+                                                            dateLabel: e.target.value,
+                                                        }))
+                                                    }
+                                                    placeholder="10/30"
+                                                />
+                                            </label>
+                                        </>
+                                    )}
+                                </div>
+
+                                <div className="add_actions">
+                                    <BaseButton type="submit" style="btn_solid__primary">
+                                        추가하기
+                                    </BaseButton>
+                                </div>
+                            </form>
+                        )}
+                    </div>
+                </section>
+
+                {/* ======================
+                 * 3) CATEGORY SPEND (도넛+리스트)
+                 * ====================== */}
+                <section className="card cat" aria-label="카테고리별 지출">
+                    <div className="card_head">
+                        <div className="card_title">
+                            카테고리별 지출{" "}
+                            <span className="muted">
+                                ({formatMaskedCount(categorySummaries.length)}개)
+                            </span>
                         </div>
 
-                        <ul className="cat_list" aria-label="카테고리 리스트">
-                            {categorySummaries.map((c, index) => {
-                                const dotTone =
-                                    index === 0 ? "primary" : index === 1 ? "dark" : "soft";
+                        <BaseButtonContainer>
+                            <BaseButton
+                                type="button"
+                                size="xs"
+                                style={isEditMode ? "btn_solid__primary" : "btn_outline__grey"}
+                                onClick={handleToggleEditMode}
+                                aria-label="편집 모드 토글"
+                                title="편집"
+                            >
+                                <FiEdit3 />
+                            </BaseButton>
+                        </BaseButtonContainer>
+                    </div>
 
-                                return (
-                                    <li key={c.key} className="cat_row">
-                                        <div className="cat_left">
-                                            <span
-                                                className={`dot dot_${dotTone}`}
-                                                aria-hidden="true"
-                                            />
-                                            <div className="cat_text">
-                                                <div className="cat_label">{c.label}</div>
-                                                <div className="cat_meta muted">
-                                                    {formatMaskedPercent(c.percent)}
-                                                </div>
+                    <div className="cat_donut">
+                        <DonutChart
+                            segments={displayCategorySegments}
+                            centerTopLabel="지출 합계"
+                            centerValue={categoryTotal}
+                            centerBottomLabel="이번 달"
+                            animationTime={animationTime}
+                            isPaused={isEditMode}
+                            isMasked={!isLinkedAccount}
+                        />
+                    </div>
+
+                    <ul className="cat_list" aria-label="카테고리 리스트">
+                        {categorySummaries.map((c, index) => {
+                            const dotTone = index === 0 ? "primary" : index === 1 ? "dark" : "soft";
+
+                            return (
+                                <li key={c.key} className="cat_row">
+                                    <div className="cat_left">
+                                        <span className={`dot dot_${dotTone}`} aria-hidden="true" />
+                                        <div className="cat_text">
+                                            <div className="cat_label">{c.label}</div>
+                                            <div className="cat_meta muted">
+                                                {formatMaskedPercent(c.percent)}
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div className="cat_right">
-                                            {!isEditMode ? (
-                                                <b className="cat_value">
-                                                    {formatMaskedKoreanWon(c.amount)}
-                                                </b>
-                                            ) : (
-                                                <input
-                                                    className="cat_input"
-                                                    inputMode="numeric"
-                                                    value={categoryAmountInput[c.key] ?? ""}
-                                                    onChange={(e) => {
-                                                        const nextValue = e.target.value;
-                                                        setCategoryAmountInput((prev) => ({
-                                                            ...prev,
-                                                            [c.key]: nextValue,
-                                                        }));
-                                                    }}
-                                                    onBlur={() => commitCategoryAmount(c.key)}
-                                                    onKeyDown={(e) => handleEnterCommit(e, c.key)}
-                                                    aria-label={`${c.label} 금액 수정`}
-                                                />
-                                            )}
+                                    <div className="cat_right">
+                                        {!isEditMode ? (
+                                            <b className="cat_value">
+                                                {formatMaskedKoreanWon(c.amount)}
+                                            </b>
+                                        ) : (
+                                            <input
+                                                className="cat_input"
+                                                inputMode="numeric"
+                                                value={categoryAmountInput[c.key] ?? ""}
+                                                onChange={(e) => {
+                                                    const nextValue = e.target.value;
+                                                    setCategoryAmountInput((prev) => ({
+                                                        ...prev,
+                                                        [c.key]: nextValue,
+                                                    }));
+                                                }}
+                                                onBlur={() => commitCategoryAmount(c.key)}
+                                                onKeyDown={(e) => handleEnterCommit(e, c.key)}
+                                                aria-label={`${c.label} 금액 수정`}
+                                            />
+                                        )}
 
-                                            <button
-                                                type="button"
-                                                className="arrow_btn"
-                                                aria-label={`${c.label} 내역 보기`}
-                                                onClick={() =>
-                                                    handleClickCategoryRow(c.key, c.label)
-                                                }
-                                            >
-                                                ›
-                                            </button>
-                                        </div>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </section>
-                </div>
+                                        <button
+                                            type="button"
+                                            className="arrow_btn"
+                                            aria-label={`${c.label} 내역 보기`}
+                                            onClick={() => handleClickCategoryRow(c.key, c.label)}
+                                        >
+                                            ›
+                                        </button>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </section>
             </Inner>
 
             <AuthRequiredModal
@@ -1193,8 +1172,8 @@ function AuthRequiredModal({ isOpen, onClose, onConfirm }) {
             <div className="modal_panel" role="dialog" aria-modal="true">
                 <div className="modal_title">회원가입시 사용 가능합니다</div>
                 <p className="modal_desc">
-                    로그인 또는 회원가입 후 마이데이터를 연동하면 지출/수입 정보를 확인하고
-                    수정할 수 있어요.
+                    로그인 또는 회원가입 후 마이데이터를 연동하면 지출/수입 정보를 확인하고 수정할
+                    수 있어요.
                 </p>
 
                 <div className="modal_actions">
