@@ -9,8 +9,10 @@ import BaseButton from "../../Form/BaseButton";
 import BaseButtonContainer from "../../Form/BaseButtonContainer";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FiEdit3, FiX, FiChevronDown } from "react-icons/fi";
+import { FiEdit3, FiChevronDown } from "react-icons/fi";
 import { useAuth } from "../../../contexts/AuthContext";
+import BottomSheet from "../../Common/Modal/BottomSheet";
+import Modal from "../../Common/Modal/Modal";
 
 /* =========================
  * utils
@@ -224,7 +226,7 @@ export default function ScreenMain({ onRequestSignUp }) {
 
     /* ---------- 편집 입력 (문자열) ---------- */
     const [categoryAmountInput, setCategoryAmountInput] = useState({});
-    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+    const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
     const [newEntryDraft, setNewEntryDraft] = useState({
         entryType: "spend",
         paymentLabel: "",
@@ -422,13 +424,18 @@ export default function ScreenMain({ onRequestSignUp }) {
 
     const openSheet = ({ title, items }) => {
         setSheetState({ isOpen: true, title, items });
-        document.documentElement.classList.add("is_sheet_open");
     };
 
     const closeSheet = () => {
         setSheetState((prev) => ({ ...prev, isOpen: false }));
-        document.documentElement.classList.remove("is_sheet_open");
     };
+
+    useEffect(() => {
+        const hasOpenSheet = sheetState.isOpen || isAddSheetOpen;
+        document.documentElement.classList.toggle("is_sheet_open", hasOpenSheet);
+
+        return () => document.documentElement.classList.remove("is_sheet_open");
+    }, [isAddSheetOpen, sheetState.isOpen]);
 
     /* ---------- animation time (도넛 숨쉬기) ---------- */
     const [animationTime, setAnimationTime] = useState(0);
@@ -473,7 +480,7 @@ export default function ScreenMain({ onRequestSignUp }) {
 
     const handleClickAddMyData = () => {
         if (!ensureLinkedAccount()) return;
-        setIsAddFormOpen((prev) => !prev);
+        setIsAddSheetOpen(true);
     };
 
     const commitCategoryAmount = (categoryKey) => {
@@ -566,7 +573,7 @@ export default function ScreenMain({ onRequestSignUp }) {
             amount: "",
             dateLabel: "",
         }));
-        setIsAddFormOpen(false);
+        setIsAddSheetOpen(false);
     };
 
     return (
@@ -807,163 +814,6 @@ export default function ScreenMain({ onRequestSignUp }) {
                         <button type="button" className="add_btn" onClick={handleClickAddMyData}>
                             마이데이터 추가 <span className="add_plus">+</span>
                         </button>
-
-                        {isAddFormOpen && (
-                            <form className="add_form" onSubmit={handleSubmitMyData}>
-                                <div className="add_form__grid">
-                                    <label className="add_field">
-                                        <span className="add_field__label">데이터 유형</span>
-                                        <select
-                                            value={newEntryDraft.entryType}
-                                            onChange={(e) =>
-                                                setNewEntryDraft((prev) => ({
-                                                    ...prev,
-                                                    entryType: e.target.value,
-                                                }))
-                                            }
-                                        >
-                                            <option value="spend">지출</option>
-                                            <option value="income">수입</option>
-                                        </select>
-                                    </label>
-
-                                    <label className="add_field">
-                                        <span className="add_field__label">
-                                            {newEntryDraft.entryType === "income"
-                                                ? "수입 이름"
-                                                : "지출수단 이름"}
-                                        </span>
-                                        <input
-                                            type="text"
-                                            value={newEntryDraft.paymentLabel}
-                                            onChange={(e) =>
-                                                setNewEntryDraft((prev) => ({
-                                                    ...prev,
-                                                    paymentLabel: e.target.value,
-                                                }))
-                                            }
-                                            placeholder="예) 알바, 신한카드"
-                                        />
-                                    </label>
-
-                                    <label className="add_field">
-                                        <span className="add_field__label">금액</span>
-                                        <input
-                                            type="number"
-                                            inputMode="numeric"
-                                            value={newEntryDraft.amount}
-                                            onChange={(e) =>
-                                                setNewEntryDraft((prev) => ({
-                                                    ...prev,
-                                                    amount: e.target.value,
-                                                }))
-                                            }
-                                            placeholder="0"
-                                        />
-                                    </label>
-
-                                    {newEntryDraft.entryType === "spend" && (
-                                        <>
-                                            <label className="add_field">
-                                                <span className="add_field__label">카테고리</span>
-                                                <select
-                                                    value={newEntryDraft.categoryKey}
-                                                    onChange={(e) =>
-                                                        setNewEntryDraft((prev) => ({
-                                                            ...prev,
-                                                            categoryKey: e.target.value,
-                                                        }))
-                                                    }
-                                                >
-                                                    {CATEGORY_OPTIONS.map((option) => (
-                                                        <option key={option.key} value={option.key}>
-                                                            {option.label}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </label>
-
-                                            <label className="add_field">
-                                                <span className="add_field__label">지출 수단</span>
-                                                <select
-                                                    value={newEntryDraft.paymentGroupKey}
-                                                    onChange={(e) =>
-                                                        setNewEntryDraft((prev) => ({
-                                                            ...prev,
-                                                            paymentGroupKey: e.target.value,
-                                                        }))
-                                                    }
-                                                >
-                                                    {Object.values(PAYMENT_GROUP_META).map(
-                                                        (group) => (
-                                                            <option
-                                                                key={group.key}
-                                                                value={group.key}
-                                                            >
-                                                                {group.label}
-                                                            </option>
-                                                        ),
-                                                    )}
-                                                </select>
-                                            </label>
-
-                                            <label className="add_field">
-                                                <span className="add_field__label">지출 구분</span>
-                                                <select
-                                                    value={newEntryDraft.spendType}
-                                                    onChange={(e) =>
-                                                        setNewEntryDraft((prev) => ({
-                                                            ...prev,
-                                                            spendType: e.target.value,
-                                                        }))
-                                                    }
-                                                >
-                                                    <option value="regular">정기</option>
-                                                    <option value="variable">변동</option>
-                                                </select>
-                                            </label>
-
-                                            <label className="add_field">
-                                                <span className="add_field__label">상태</span>
-                                                <select
-                                                    value={newEntryDraft.status}
-                                                    onChange={(e) =>
-                                                        setNewEntryDraft((prev) => ({
-                                                            ...prev,
-                                                            status: e.target.value,
-                                                        }))
-                                                    }
-                                                >
-                                                    <option value="paid">완료</option>
-                                                    <option value="planned">예정</option>
-                                                </select>
-                                            </label>
-
-                                            <label className="add_field">
-                                                <span className="add_field__label">표시 날짜</span>
-                                                <input
-                                                    type="text"
-                                                    value={newEntryDraft.dateLabel}
-                                                    onChange={(e) =>
-                                                        setNewEntryDraft((prev) => ({
-                                                            ...prev,
-                                                            dateLabel: e.target.value,
-                                                        }))
-                                                    }
-                                                    placeholder="10/30"
-                                                />
-                                            </label>
-                                        </>
-                                    )}
-                                </div>
-
-                                <div className="add_actions">
-                                    <BaseButton type="submit" style="btn_solid__primary">
-                                        추가하기
-                                    </BaseButton>
-                                </div>
-                            </form>
-                        )}
                     </div>
                 </section>
 
@@ -1060,6 +910,160 @@ export default function ScreenMain({ onRequestSignUp }) {
                 </section>
             </Inner>
 
+            <BottomSheet
+                isOpen={isAddSheetOpen}
+                title="마이데이터 추가"
+                onClose={() => setIsAddSheetOpen(false)}
+            >
+                <form className="add_form" onSubmit={handleSubmitMyData}>
+                    <div className="add_form__grid">
+                        <label className="add_field">
+                            <span className="add_field__label">데이터 유형</span>
+                            <select
+                                value={newEntryDraft.entryType}
+                                onChange={(e) =>
+                                    setNewEntryDraft((prev) => ({
+                                        ...prev,
+                                        entryType: e.target.value,
+                                    }))
+                                }
+                            >
+                                <option value="spend">지출</option>
+                                <option value="income">수입</option>
+                            </select>
+                        </label>
+
+                        <label className="add_field">
+                            <span className="add_field__label">
+                                {newEntryDraft.entryType === "income" ? "수입 이름" : "지출수단 이름"}
+                            </span>
+                            <input
+                                type="text"
+                                value={newEntryDraft.paymentLabel}
+                                onChange={(e) =>
+                                    setNewEntryDraft((prev) => ({
+                                        ...prev,
+                                        paymentLabel: e.target.value,
+                                    }))
+                                }
+                                placeholder="예) 알바, 신한카드"
+                            />
+                        </label>
+
+                        <label className="add_field">
+                            <span className="add_field__label">금액</span>
+                            <input
+                                type="number"
+                                inputMode="numeric"
+                                value={newEntryDraft.amount}
+                                onChange={(e) =>
+                                    setNewEntryDraft((prev) => ({
+                                        ...prev,
+                                        amount: e.target.value,
+                                    }))
+                                }
+                                placeholder="0"
+                            />
+                        </label>
+
+                        {newEntryDraft.entryType === "spend" && (
+                            <>
+                                <label className="add_field">
+                                    <span className="add_field__label">카테고리</span>
+                                    <select
+                                        value={newEntryDraft.categoryKey}
+                                        onChange={(e) =>
+                                            setNewEntryDraft((prev) => ({
+                                                ...prev,
+                                                categoryKey: e.target.value,
+                                            }))
+                                        }
+                                    >
+                                        {CATEGORY_OPTIONS.map((option) => (
+                                            <option key={option.key} value={option.key}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+
+                                <label className="add_field">
+                                    <span className="add_field__label">지출 수단</span>
+                                    <select
+                                        value={newEntryDraft.paymentGroupKey}
+                                        onChange={(e) =>
+                                            setNewEntryDraft((prev) => ({
+                                                ...prev,
+                                                paymentGroupKey: e.target.value,
+                                            }))
+                                        }
+                                    >
+                                        {Object.values(PAYMENT_GROUP_META).map((group) => (
+                                            <option key={group.key} value={group.key}>
+                                                {group.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+
+                                <label className="add_field">
+                                    <span className="add_field__label">지출 구분</span>
+                                    <select
+                                        value={newEntryDraft.spendType}
+                                        onChange={(e) =>
+                                            setNewEntryDraft((prev) => ({
+                                                ...prev,
+                                                spendType: e.target.value,
+                                            }))
+                                        }
+                                    >
+                                        <option value="regular">정기</option>
+                                        <option value="variable">변동</option>
+                                    </select>
+                                </label>
+
+                                <label className="add_field">
+                                    <span className="add_field__label">상태</span>
+                                    <select
+                                        value={newEntryDraft.status}
+                                        onChange={(e) =>
+                                            setNewEntryDraft((prev) => ({
+                                                ...prev,
+                                                status: e.target.value,
+                                            }))
+                                        }
+                                    >
+                                        <option value="paid">완료</option>
+                                        <option value="planned">예정</option>
+                                    </select>
+                                </label>
+
+                                <label className="add_field">
+                                    <span className="add_field__label">표시 날짜</span>
+                                    <input
+                                        type="text"
+                                        value={newEntryDraft.dateLabel}
+                                        onChange={(e) =>
+                                            setNewEntryDraft((prev) => ({
+                                                ...prev,
+                                                dateLabel: e.target.value,
+                                            }))
+                                        }
+                                        placeholder="10/30"
+                                    />
+                                </label>
+                            </>
+                        )}
+                    </div>
+
+                    <div className="add_actions">
+                        <BaseButton type="submit" style="btn_solid__primary">
+                            추가하기
+                        </BaseButton>
+                    </div>
+                </form>
+            </BottomSheet>
+
             <AuthRequiredModal
                 isOpen={isSignUpModalOpen}
                 onClose={() => setIsSignUpModalOpen(false)}
@@ -1072,9 +1076,30 @@ export default function ScreenMain({ onRequestSignUp }) {
             <BottomSheet
                 isOpen={sheetState.isOpen}
                 title={sheetState.title}
-                items={sheetState.items}
                 onClose={closeSheet}
-            />
+            >
+                {(!sheetState.items || sheetState.items.length === 0) && (
+                    <div className="sheet_empty muted">표시할 내역이 없어요.</div>
+                )}
+
+                {sheetState.items && sheetState.items.length > 0 && (
+                    <ul className="tx_list" aria-label="거래 내역">
+                        {sheetState.items.map((tx) => (
+                            <li key={tx.id} className="tx_row">
+                                <div className="tx_left">
+                                    <div className="tx_title">{tx.title}</div>
+                                    <div className="tx_meta muted">
+                                        {tx.date} · {tx.sub}
+                                    </div>
+                                </div>
+                                <div className="tx_right">
+                                    <b className="tx_amount">{formatKoreanWon(tx.amount)}</b>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </BottomSheet>
         </Screen>
     );
 }
@@ -1167,76 +1192,20 @@ function DonutChart({
 
 function AuthRequiredModal({ isOpen, onClose, onConfirm }) {
     return (
-        <div className={`modal ${isOpen ? "is_open" : ""}`} aria-hidden={!isOpen}>
-            <div className="modal_dim" onClick={onClose} />
-            <div className="modal_panel" role="dialog" aria-modal="true">
-                <div className="modal_title">회원가입시 사용 가능합니다</div>
-                <p className="modal_desc">
-                    로그인 또는 회원가입 후 마이데이터를 연동하면 지출/수입 정보를 확인하고 수정할
-                    수 있어요.
-                </p>
+        <Modal isOpen={isOpen} onClose={onClose} title="회원가입시 사용 가능합니다">
+            <p className="modal_desc">
+                로그인 또는 회원가입 후 마이데이터를 연동하면 지출/수입 정보를 확인하고 수정할 수
+                있어요.
+            </p>
 
-                <div className="modal_actions">
-                    <button type="button" className="modal_btn" onClick={onClose}>
-                        닫기
-                    </button>
-                    <button
-                        type="button"
-                        className="modal_btn modal_btn__primary"
-                        onClick={onConfirm}
-                    >
-                        회원가입 하기
-                    </button>
-                </div>
+            <div className="modal_actions">
+                <button type="button" className="modal_btn" onClick={onClose}>
+                    닫기
+                </button>
+                <button type="button" className="modal_btn modal_btn__primary" onClick={onConfirm}>
+                    회원가입 하기
+                </button>
             </div>
-        </div>
-    );
-}
-
-/* =========================
- * BottomSheet
- * ========================= */
-
-function BottomSheet({ isOpen, title, items, onClose }) {
-    return (
-        <div className={`sheet ${isOpen ? "is_open" : ""}`} aria-hidden={!isOpen}>
-            <div className="sheet_dim" onClick={onClose} />
-
-            <div className="sheet_panel" role="dialog" aria-label={title || "내역"}>
-                <div className="sheet_head">
-                    <div className="sheet_title">{title || "내역"}</div>
-                    <button
-                        type="button"
-                        className="sheet_close"
-                        onClick={onClose}
-                        aria-label="닫기"
-                    >
-                        <FiX />
-                    </button>
-                </div>
-
-                {(!items || items.length === 0) && (
-                    <div className="sheet_empty muted">표시할 내역이 없어요.</div>
-                )}
-
-                {items && items.length > 0 && (
-                    <ul className="tx_list" aria-label="거래 내역">
-                        {items.map((tx) => (
-                            <li key={tx.id} className="tx_row">
-                                <div className="tx_left">
-                                    <div className="tx_title">{tx.title}</div>
-                                    <div className="tx_meta muted">
-                                        {tx.date} · {tx.sub}
-                                    </div>
-                                </div>
-                                <div className="tx_right">
-                                    <b className="tx_amount">{formatKoreanWon(tx.amount)}</b>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-        </div>
+        </Modal>
     );
 }
