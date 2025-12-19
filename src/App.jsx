@@ -106,7 +106,9 @@ const App = () => {
                     <ScreenWelcome onTimeout={handleWelcomeTimeout} />
                 )}
 
-                {screen === SCREEN_NAMES.MAIN && <ScreenMain />}
+                {screen === SCREEN_NAMES.MAIN && (
+                    <ScreenMain onRequestSignUp={handleGoJoin} />
+                )}
 
                 {screen === SCREEN_NAMES.PROFILE && <ScreenProfile onGoHome={handleGoHome} />}
             </Suspense>
