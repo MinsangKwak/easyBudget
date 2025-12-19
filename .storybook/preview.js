@@ -1,5 +1,6 @@
 import "../src/index.css";
 import "../src/App.css";
+import { AuthProvider } from "../src/contexts/AuthContext.jsx";
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
@@ -17,6 +18,13 @@ const preview = {
             test: "todo",
         },
     },
+    decorators: [
+        (Story) => (
+            <AuthProvider>
+                <Story />
+            </AuthProvider>
+        ),
+    ],
 };
 
 export default preview;
