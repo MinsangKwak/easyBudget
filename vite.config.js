@@ -26,7 +26,7 @@ const copyIndexTo404 = () => ({
 });
 
 export default defineConfig({
-    base: "./",
+    base: "/auth",
     plugins: [react(), copyIndexTo404()],
     test: {
         projects: [
