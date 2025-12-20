@@ -18,17 +18,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run build
+
+      - name: Install
+        run: npm ci
+
+      # ✅ 배포 경로를 확실히 주입 (vite.config에서 읽어도 되고, 안 읽어도 무해)
+      - name: Build
+        env:
+          VITE_BASE: /auth/
+        run: npm run build
+
+      # ✅ dist/index.html이 "src/main.jsx"를 가리키는지 검사 (그럼 바로 실패시켜서 원인 추적 쉬움)
+      - name: Assert built index is production
+        run: |
+          test -f dist/index.html
+          if grep -q "/src/main" dist/index.html; then
+            echo "❌ dist/index.html still references /src/main.* (dev html). Build output is wrong."
+            exit 1
+          fi
+          echo "✅ dist/index.html looks like a production build."
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -36,13 +56,10 @@ jobs:
 
   deploy:
     needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
