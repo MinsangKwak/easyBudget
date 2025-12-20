@@ -11,7 +11,7 @@ const dirname =
     typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 const isGithubPages = process.env.GITHUB_ACTIONS === "true";
-const repoName = process.env.GITHUB_REPOSITORY?.split("/").pop();
+const basePath = isGithubPages ? "./" : "/";
 
 const copyIndexTo404 = () => ({
     name: "copy-index-to-404",
@@ -27,7 +27,7 @@ const copyIndexTo404 = () => ({
 });
 
 export default defineConfig({
-    base: isGithubPages && repoName ? `/${repoName}/` : "/",
+    base: basePath,
 
     plugins: [react(), copyIndexTo404()],
 
