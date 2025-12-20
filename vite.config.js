@@ -1,4 +1,3 @@
-/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "node:path";
@@ -13,7 +12,7 @@ const isGithubPages = process.env.GITHUB_ACTIONS === "true";
 const repoName = process.env.GITHUB_REPOSITORY?.split("/").pop();
 
 export default defineConfig({
-    base: isGithubPages && repoName ? `/${repoName}/` : "/",
+    base: "./",
 
     plugins: [react()],
 
