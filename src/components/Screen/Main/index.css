@@ -221,9 +221,9 @@
 
 .list_right,
 .cat_right {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
+display: inline-flex;
+align-items: center;
+gap: 10px;
 }
 
 .list_label,
