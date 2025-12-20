@@ -2,6 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "node:path";
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
@@ -12,10 +13,23 @@ const dirname =
 const isGithubPages = process.env.GITHUB_ACTIONS === "true";
 const repoName = process.env.GITHUB_REPOSITORY?.split("/").pop();
 
+const copyIndexTo404 = () => ({
+    name: "copy-index-to-404",
+    closeBundle() {
+        const distDir = path.resolve(dirname, "dist");
+        const indexPath = path.join(distDir, "index.html");
+        const fallbackPath = path.join(distDir, "404.html");
+
+        if (fs.existsSync(indexPath)) {
+            fs.copyFileSync(indexPath, fallbackPath);
+        }
+    },
+});
+
 export default defineConfig({
     base: isGithubPages && repoName ? `/${repoName}/` : "/",
 
-    plugins: [react()],
+    plugins: [react(), copyIndexTo404()],
 
     test: {
         projects: [
