@@ -64,13 +64,17 @@ const CategorySection = ({
                                 <span className={`dot dot_${dotTone}`} aria-hidden="true" />
                                 <div className="cat_text">
                                     <div className="cat_label">{category.label}</div>
-                                    <div className="cat_meta muted">{formatMaskedPercent(category.percent)}</div>
+                                    <div className="cat_meta muted">
+                                        {formatMaskedPercent(category.percent)}
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="cat_right">
                                 {!isEditMode ? (
-                                    <b className="cat_value">{formatMaskedKoreanWon(category.amount)}</b>
+                                    <b className="cat_value">
+                                        {formatMaskedKoreanWon(category.amount)}
+                                    </b>
                                 ) : (
                                     <input
                                         className="cat_input"

@@ -49,13 +49,15 @@ const ReportSection = ({
                     </div>
                     <div className="item_value">{formatMaskedKoreanWon(report.incomeTotal)}</div>
                     <div className="item_hint muted">
-                        예산 {" "}
+                        예산{" "}
                         {isEditMode ? (
                             <input
                                 className="inline_input"
                                 inputMode="numeric"
                                 value={budgetInputs.incomeBudget}
-                                onChange={(event) => onBudgetChange("incomeBudget", event.target.value)}
+                                onChange={(event) =>
+                                    onBudgetChange("incomeBudget", event.target.value)
+                                }
                                 onBlur={() => onBudgetCommit("incomeBudget")}
                                 onKeyDown={(event) => handleBudgetKeyDown(event, "incomeBudget")}
                                 aria-label="총 수입 예산 수정"
@@ -84,13 +86,15 @@ const ReportSection = ({
                     </div>
                     <div className="item_value">{formatMaskedKoreanWon(report.spendTotal)}</div>
                     <div className="item_hint muted">
-                        예산 {" "}
+                        예산{" "}
                         {isEditMode ? (
                             <input
                                 className="inline_input"
                                 inputMode="numeric"
                                 value={budgetInputs.spendBudget}
-                                onChange={(event) => onBudgetChange("spendBudget", event.target.value)}
+                                onChange={(event) =>
+                                    onBudgetChange("spendBudget", event.target.value)
+                                }
                                 onBlur={() => onBudgetCommit("spendBudget")}
                                 onKeyDown={(event) => handleBudgetKeyDown(event, "spendBudget")}
                                 aria-label="총 지출 예산 수정"
@@ -107,15 +111,21 @@ const ReportSection = ({
                     <div className="block_head">
                         <div className="block_title">정기지출</div>
                         <div className="block_badges">
-                            <span className="badge">지출 예정 {formatMaskedCount(report.regularCountPlanned)}건</span>
-                            <span className="badge">지출 완료 {formatMaskedCount(report.regularCountPaid)}건</span>
+                            <span className="badge">
+                                지출 예정 {formatMaskedCount(report.regularCountPlanned)}건
+                            </span>
+                            <span className="badge">
+                                지출 완료 {formatMaskedCount(report.regularCountPaid)}건
+                            </span>
                         </div>
                     </div>
 
                     <div className="block_rows">
                         <div className="row">
                             <span className="row_label muted">지출 예정</span>
-                            <b className="row_value">{formatMaskedKoreanWon(report.regularPlanned)}</b>
+                            <b className="row_value">
+                                {formatMaskedKoreanWon(report.regularPlanned)}
+                            </b>
                         </div>
                         <div className="row">
                             <span className="row_label muted">지출 완료</span>
@@ -132,15 +142,21 @@ const ReportSection = ({
                     <div className="block_rows">
                         <div className="row">
                             <span className="row_label muted">지출 예산</span>
-                            <b className="row_value">{formatMaskedKoreanWon(report.variablePlanned)}</b>
+                            <b className="row_value">
+                                {formatMaskedKoreanWon(report.variablePlanned)}
+                            </b>
                         </div>
                         <div className="row">
                             <span className="row_label muted">지출</span>
-                            <b className="row_value">{formatMaskedKoreanWon(report.variablePaid)}</b>
+                            <b className="row_value">
+                                {formatMaskedKoreanWon(report.variablePaid)}
+                            </b>
                         </div>
                         <div className="row row_hint">
                             <span className="row_label muted">예상</span>
-                            <b className="row_value muted">{formatMaskedKoreanWon(report.variableHint)}</b>
+                            <b className="row_value muted">
+                                {formatMaskedKoreanWon(report.variableHint)}
+                            </b>
                         </div>
                     </div>
                 </div>

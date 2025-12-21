@@ -71,7 +71,9 @@ const DonutChart = ({
 
             <div className="donut_center">
                 <div className="donut_top muted">{centerTopLabel}</div>
-                <div className="donut_value">{isMasked ? "??" : formatKoreanWonShort(centerValue)}</div>
+                <div className="donut_value">
+                    {isMasked ? "??" : formatKoreanWonShort(centerValue)}
+                </div>
                 <div className="donut_bottom muted">{centerBottomLabel}</div>
             </div>
         </div>

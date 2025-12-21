@@ -92,7 +92,9 @@ const ScreenMain = ({ onRequestSignUp }) => {
             <Inner>
                 <section className="card style_dash hero">
                     <div className="card_head">
-                        <div className="card_title">내 입맛에 맞게 카테고리를 재분류할 수 있어요.</div>
+                        <div className="card_title">
+                            내 입맛에 맞게 카테고리를 재분류할 수 있어요.
+                        </div>
                     </div>
                 </section>
 

@@ -1,4 +1,10 @@
-const PaymentMethodsSection = ({ paymentGroups, totalSpend, formatMaskedKoreanWon, onClickAdd, onClickPayment }) => {
+const PaymentMethodsSection = ({
+    paymentGroups,
+    totalSpend,
+    formatMaskedKoreanWon,
+    onClickAdd,
+    onClickPayment,
+}) => {
     return (
         <section className="card pay" aria-label="지출 수단">
             <div className="card_head">
@@ -11,7 +17,9 @@ const PaymentMethodsSection = ({ paymentGroups, totalSpend, formatMaskedKoreanWo
                     <div key={group.key} className="pay_group">
                         <div className="pay_group__head">
                             <div className="pay_group__title">{group.label}</div>
-                            <div className="pay_group__total">{formatMaskedKoreanWon(group.total)}</div>
+                            <div className="pay_group__total">
+                                {formatMaskedKoreanWon(group.total)}
+                            </div>
                         </div>
 
                         <ul className="list">
@@ -25,7 +33,9 @@ const PaymentMethodsSection = ({ paymentGroups, totalSpend, formatMaskedKoreanWo
                                     </div>
 
                                     <div className="list_right">
-                                        <b className="list_value">{formatMaskedKoreanWon(item.amount)}</b>
+                                        <b className="list_value">
+                                            {formatMaskedKoreanWon(item.amount)}
+                                        </b>
                                         <button
                                             type="button"
                                             className="arrow_btn"
