@@ -70,7 +70,7 @@
 }
 
 .card_item {
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     padding: 14px;
     border: 2px solid var(--color-black-100);
     background: color-mix(in srgb, var(--color-white) 84%, var(--color-white-100) 16%);
@@ -92,12 +92,13 @@
 }
 
 .inline_input {
-    width: 120px;
-    height: 32px;
-    border-radius: 10px;
+    /* width: 120px; */
+    width:100%;
+    height: 3.2rem;
+    border-radius: var(--radius-md);
     border: 2px solid var(--color-black-100);
     background: rgba(255, 255, 255, 0.95);
-    padding: 0 10px;
+    padding: 0 0.5rem;
     font-weight: 800;
     color: var(--color-black-100);
     text-align: right;
@@ -115,7 +116,16 @@
 }
 
 .card_item .item_hint {
-    font-size: 12px;
+}
+.card_item .item_hint__title {
+    display: inline-flex;
+    width:100%;
+    font-size: 1.2rem;
+}
+.card_item .item_subtitle{
+    display: inline-flex;
+    width:100%;
+    font-size: 1.4rem;
 }
 
 .kpi_spend {
@@ -373,21 +383,23 @@ gap: 10px;
 }
 
 .dot_primary {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-white) 22%);
+    background: color-mix(in srgb, var(--color-primary) 78%, transparent);
 }
+
 .dot_dark {
-    background: color-mix(in srgb, var(--color-black-100) 86%, var(--color-white) 14%);
+    background: color-mix(in srgb, var(--color-primary) 78%, rgb(72, 0, 106) 74%);
 }
 
 .dot_green {
-    background: color-mix(in srgb, var(--color-primary) 26%, green 74%);
+    background: color-mix(in srgb, var(--color-primary) 78%, rgb(0, 31, 78)4%);
 }
 
 .dot_orange {
-    background: color-mix(in srgb, var(--color-primary) 26%, orange 74%);
+    background: color-mix(in srgb, var(--color-primary) 78%, rgb(162, 0, 105) 50%);
 }
+
 .dot_soft {
-    background: color-mix(in srgb, var(--color-primary) 26%, var(--color-white) 74%);
+    background: color-mix(in srgb, var(--color-primary) 78%, rgb(155, 0, 150) 74%);
 }
 
 .cat_text {
@@ -441,19 +453,19 @@ gap: 10px;
 }
 
 .donut_seg.tone_dark {
-    stroke: color-mix(in srgb, var(--color-black-100) 86%, var(--color-white) 14%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(72, 0, 106) 74%);
 }
 
 .donut_seg.tone_green {
-    stroke: color-mix(in srgb, var(--color-primary) 26%, green 74%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(0, 31, 78)4%);
 }
 
 .donut_seg.tone_orange {
-    stroke: color-mix(in srgb, var(--color-primary) 26%, orange 74%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(162, 0, 105) 50%);
 }
 
 .donut_seg.tone_soft {
-    stroke: color-mix(in srgb, var(--color-primary) 26%, var(--color-white) 74%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(155, 0, 150) 74%);
 }
 
 .donut_center {

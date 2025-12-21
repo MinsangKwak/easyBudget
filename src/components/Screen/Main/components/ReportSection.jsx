@@ -49,7 +49,7 @@ const ReportSection = ({
                     </div>
                     <div className="item_value">{formatMaskedKoreanWon(report.incomeTotal)}</div>
                     <div className="item_hint muted">
-                        예산{" "}
+                        <span className="item_hint__title">예산</span>
                         {isEditMode ? (
                             <input
                                 className="inline_input"
@@ -63,7 +63,9 @@ const ReportSection = ({
                                 aria-label="총 수입 예산 수정"
                             />
                         ) : (
-                            formatMaskedKoreanWon(report.incomeHint)
+                            <span className="item_subtitle">
+                                {formatMaskedKoreanWon(report.incomeHint)}
+                            </span>
                         )}
                     </div>
                 </div>
@@ -86,7 +88,7 @@ const ReportSection = ({
                     </div>
                     <div className="item_value">{formatMaskedKoreanWon(report.spendTotal)}</div>
                     <div className="item_hint muted">
-                        예산{" "}
+                        <span className="item_hint__title">예산</span>
                         {isEditMode ? (
                             <input
                                 className="inline_input"
@@ -100,7 +102,9 @@ const ReportSection = ({
                                 aria-label="총 지출 예산 수정"
                             />
                         ) : (
-                            formatMaskedKoreanWon(report.spendHint)
+                            <span className="item_subtitle">
+                                {formatMaskedKoreanWon(report.spendHint)}
+                            </span>
                         )}
                     </div>
                 </div>

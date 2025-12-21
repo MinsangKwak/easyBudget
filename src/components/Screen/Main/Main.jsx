@@ -111,14 +111,6 @@ const ScreenMain = ({ onRequestSignUp }) => {
                     onBudgetCommit={commitBudgetInput}
                 />
 
-                <PaymentMethodsSection
-                    paymentGroups={paymentGroups}
-                    totalSpend={report.spendTotal}
-                    formatMaskedKoreanWon={formatMaskedKoreanWon}
-                    onClickAdd={handleClickAddMyData}
-                    onClickPayment={handleClickPaymentItem}
-                />
-
                 <CategorySection
                     categorySummaries={categorySummaries}
                     categoryTotal={categoryTotal}
@@ -135,6 +127,14 @@ const ScreenMain = ({ onRequestSignUp }) => {
                     onCategoryCommit={commitCategoryAmount}
                     onCategoryEnter={handleEnterCommit}
                     onClickCategory={handleClickCategoryRow}
+                />
+
+                <PaymentMethodsSection
+                    paymentGroups={paymentGroups}
+                    totalSpend={report.spendTotal}
+                    formatMaskedKoreanWon={formatMaskedKoreanWon}
+                    onClickAdd={handleClickAddMyData}
+                    onClickPayment={handleClickPaymentItem}
                 />
             </Inner>
 

@@ -26,9 +26,9 @@ body {
 body {
     background-color: rgba(170, 170, 170, 0.85);
 }
-#root {
+/* #root {
     flex: 1 1 auto;
-}
+} */
 
 .app {
     display: flex;
