@@ -1,6 +1,7 @@
 import "./index.css";
 import BaseButton from "../../Form/BaseButton";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { FiLogIn, FiLogOut, FiUserPlus } from "react-icons/fi";
 
 const AppHeader = ({
     isAuthenticated,
@@ -11,6 +12,9 @@ const AppHeader = ({
     menuItems = [],
     showBackButton = false,
     onBackClick,
+    onClickLogin,
+    onClickSignUp,
+    onClickLogout,
 }) => {
     const handleBackClick = () => {
         if (!showBackButton) return;
@@ -31,29 +35,69 @@ const AppHeader = ({
     return (
         <header className="header">
             <div className={`header__inner ${showBackButton ? "header__inner--back_only" : ""}`}>
-                {showBackButton ? (
-                    <BaseButton
-                        type="button"
-                        style="back"
-                        aria-label="이전 화면으로 돌아가기"
-                        onClick={handleBackClick}
-                    >
-                        <IoIosArrowRoundBack />
-                    </BaseButton>
-                ) : (
-                    <div className="header__brand">
-                        <button
+                <div className="header__left">
+                    {showBackButton ? (
+                        <BaseButton
                             type="button"
-                            className="header__logo_button"
-                            aria-label="서비스 로고"
-                            onClick={onLogoClick}
+                            style="back"
+                            aria-label="이전 화면으로 돌아가기"
+                            onClick={handleBackClick}
                         >
-                            <span className="header__logo">WALLET</span>
-                        </button>
-                    </div>
-                )}
+                            <IoIosArrowRoundBack />
+                        </BaseButton>
+                    ) : (
+                        <div className="header__brand">
+                            <button
+                                type="button"
+                                className="header__logo_button"
+                                aria-label="서비스 로고"
+                                onClick={onLogoClick}
+                            >
+                                <span className="header__logo">WALLET</span>
+                            </button>
+                        </div>
+                    )}
 
-                <div className="header__actions">
+                    <div className="header__auth_actions" aria-label="계정 상태">
+                        {isAuthenticated ? (
+                            <BaseButton
+                                type="button"
+                                style="ghost inline text"
+                                size="sm"
+                                onClick={onClickLogout}
+                                aria-label="로그아웃"
+                                className="header__auth_btn"
+                            >
+                                <FiLogOut /> 로그아웃
+                            </BaseButton>
+                        ) : (
+                            <>
+                                <BaseButton
+                                    type="button"
+                                    style="ghost inline text"
+                                    size="sm"
+                                    onClick={onClickLogin}
+                                    aria-label="로그인"
+                                    className="header__auth_btn"
+                                >
+                                    <FiLogIn /> 로그인
+                                </BaseButton>
+                                <BaseButton
+                                    type="button"
+                                    style="ghost inline text"
+                                    size="sm"
+                                    onClick={onClickSignUp}
+                                    aria-label="회원가입"
+                                    className="header__auth_btn"
+                                >
+                                    <FiUserPlus /> 회원가입
+                                </BaseButton>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                <div className="header__actions header__actions--right">
                     <BaseButton
                         type="button"
                         style="menu"
@@ -69,8 +113,8 @@ const AppHeader = ({
 
             <aside className={`header__drawer ${isMenuOpen ? "is_open" : ""}`} aria-hidden={!isMenuOpen}>
                 <div className="drawer_head">
-                    <span className="drawer_title">메뉴</span>
-                    <span className="drawer_status">{isAuthenticated ? "로그인됨" : "로그인 필요"}</span>
+                    <span className="drawer_title">바로가기</span>
+                    <span className="drawer_status">{isAuthenticated ? "연결 완료" : "로그인 필요"}</span>
                 </div>
                 <ul className="drawer_list">
                     {menuItems.map((item) => (

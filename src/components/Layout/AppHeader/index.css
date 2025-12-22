@@ -15,14 +15,23 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    padding: 0 1.6rem;
 }
 
 .header__inner--back_only {
     justify-content: flex-start;
 }
 
-.header__brand {
+.header__left {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    min-width: 0;
     flex: 1;
+}
+
+.header__brand {
+    flex-shrink: 0;
 }
 
 .header__logo_button {
@@ -40,6 +49,21 @@
     color: var(--color-black);
 }
 
+.header__auth_actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.header__auth_btn {
+    box-shadow: none;
+    border: none;
+    color: var(--color-black-100);
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+}
+
 .header__actions {
     display: flex;
     align-items: center;
@@ -49,6 +73,10 @@
 .header__menu_btn {
     width: 4.4rem;
     height: 4.4rem;
+}
+
+.header__actions--right {
+    flex-shrink: 0;
 }
 
 .header__drawer {
