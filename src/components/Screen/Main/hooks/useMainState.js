@@ -34,6 +34,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     const [monthKey, setMonthKey] = useState(MONTHLY_REPORTS[0]?.key);
     const [incomeEntries, setIncomeEntries] = useState(DEFAULT_INCOME_ENTRIES);
     const [spendEntries, setSpendEntries] = useState(DEFAULT_SPEND_ENTRIES);
+    const [reportStatusFilter, setReportStatusFilter] = useState("all");
     const [planBudget, setPlanBudget] = useState({
         incomeBudget: 3780000,
         spendBudget: 15950000,
@@ -101,13 +102,26 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
         return incomeEntries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
     }, [incomeEntries]);
 
+    const filteredSpendEntries = useMemo(() => {
+        if (reportStatusFilter === "planned") {
+            return spendEntries.filter((entry) => entry.status === "planned");
+        }
+        if (reportStatusFilter === "paid") {
+            return spendEntries.filter((entry) => entry.status !== "planned");
+        }
+        return spendEntries;
+    }, [reportStatusFilter, spendEntries]);
+
     const spendTotal = useMemo(() => {
-        return spendEntries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
-    }, [spendEntries]);
+        return filteredSpendEntries.reduce(
+            (accumulator, entry) => accumulator + Math.max(0, entry.amount),
+            0,
+        );
+    }, [filteredSpendEntries]);
 
     const categorySummaries = useMemo(() => {
         const map = new Map();
-        spendEntries.forEach((entry) => {
+        filteredSpendEntries.forEach((entry) => {
             const current = map.get(entry.categoryKey) ?? {
                 key: entry.categoryKey,
                 label:
@@ -139,7 +153,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
                 tone: option.defaultTone || (index === 0 ? "primary" : "soft"),
             };
         });
-    }, [spendEntries]);
+    }, [filteredSpendEntries]);
 
     const categoryTotal = useMemo(() => {
         return categorySummaries.reduce((accumulator, category) => accumulator + category.amount, 0);
@@ -170,7 +184,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     const paymentGroups = useMemo(() => {
         const groupMap = new Map();
 
-        spendEntries.forEach((entry) => {
+        filteredSpendEntries.forEach((entry) => {
             const groupKey = entry.paymentGroupKey || "other";
             const groupMeta = PAYMENT_GROUP_META[groupKey];
             const groupLabel = groupMeta?.label || entry.paymentGroupLabel || "기타 지출수단";
@@ -201,10 +215,16 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
             ...group,
             items: Array.from(group.items.values()),
         }));
-    }, [spendEntries]);
+    }, [filteredSpendEntries]);
 
-    const regularStats = useMemo(() => buildSpendStats(spendEntries, "regular"), [spendEntries]);
-    const variableStats = useMemo(() => buildSpendStats(spendEntries, "variable"), [spendEntries]);
+    const regularStats = useMemo(
+        () => buildSpendStats(filteredSpendEntries, "regular"),
+        [filteredSpendEntries],
+    );
+    const variableStats = useMemo(
+        () => buildSpendStats(filteredSpendEntries, "variable"),
+        [filteredSpendEntries],
+    );
 
     const report = useMemo(() => {
         return {
@@ -348,13 +368,13 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
 
     const handleClickPaymentItem = (itemKey, label) => {
         if (!ensureLinkedAccount()) return;
-        const items = spendEntries.filter((entry) => entry.paymentKey === itemKey);
+        const items = filteredSpendEntries.filter((entry) => entry.paymentKey === itemKey);
         openSheet({ title: `${label} 내역`, items: buildSheetItems(items) });
     };
 
     const handleClickCategoryRow = (categoryKey, label) => {
         if (!ensureLinkedAccount()) return;
-        const items = spendEntries.filter((entry) => entry.categoryKey === categoryKey);
+        const items = filteredSpendEntries.filter((entry) => entry.categoryKey === categoryKey);
         openSheet({ title: `${label} 내역`, items: buildSheetItems(items) });
     };
 
@@ -418,5 +438,8 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
         closeSheet,
         animationTime,
         yearlySummary,
+        reportStatusFilter,
+        setReportStatusFilter,
+        filteredSpendEntries,
     };
 };

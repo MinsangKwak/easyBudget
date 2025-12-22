@@ -1,12 +1,14 @@
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { SCREEN_NAMES } from "./constants/screenNames";
 import AppHeader from "./components/Layout/AppHeader";
 import { useAuth } from "./contexts/AuthContext";
+import { useMainState } from "./components/Screen/Main/hooks/useMainState";
 
 import ScreenLoading from "./components/Screen/Common/Loading";
 const ScreenIntro = lazy(() => import("./components/Screen/Intro"));
 const ScreenMain = lazy(() => import("./components/Screen/Main"));
+const ScreenSpend = lazy(() => import("./components/Screen/Spend"));
 const ScreenLogin = lazy(() => import("./components/Screen/Member/Login"));
 const ScreenJoin = lazy(() => import("./components/Screen/Member/Join"));
 const CertFlow = lazy(() => import("./components/Screen/Member/Cert/CertFlow"));
@@ -17,6 +19,31 @@ const ScreenProfile = lazy(() => import("./components/Screen/Member/Profile"));
 const App = () => {
     const { currentUser, logout, deleteAccount, loginWithCertificate } = useAuth();
     const [screen, setScreen] = useState(SCREEN_NAMES.MAIN);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+
+    const isLinkedAccount = useMemo(() => {
+        return ["test@test.com", "test@gmail.com"].includes(
+            currentUser?.email?.toLowerCase?.() || "",
+        );
+    }, [currentUser]);
+
+    const ensureLinkedAccount = () => {
+        if (!isLinkedAccount) {
+            setIsSignUpModalOpen(true);
+            return false;
+        }
+        return true;
+    };
+
+    const mainState = useMainState({ isLinkedAccount, ensureLinkedAccount });
+
+    useEffect(() => {
+        const hasOpenSheet = mainState.sheetState.isOpen || mainState.isAddSheetOpen;
+        document.documentElement.classList.toggle("is_sheet_open", hasOpenSheet);
+
+        return () => document.documentElement.classList.remove("is_sheet_open");
+    }, [mainState.isAddSheetOpen, mainState.sheetState.isOpen]);
 
     const handleGoLogin = () => setScreen(SCREEN_NAMES.INTRO);
     const handleGoLoginEmail = () => setScreen(SCREEN_NAMES.LOGIN);
@@ -29,10 +56,12 @@ const App = () => {
     const handleLoginComplete = () => setScreen(SCREEN_NAMES.MAIN);
     const handleGoHome = () => setScreen(SCREEN_NAMES.MAIN);
     const handleGoProfile = () => setScreen(SCREEN_NAMES.PROFILE);
+    const handleGoSpend = () => setScreen(SCREEN_NAMES.SPEND);
 
     const handleLogout = () => {
         logout();
         setScreen(SCREEN_NAMES.MAIN);
+        setIsMenuOpen(false);
     };
 
     const handleDeleteAccount = () => {
@@ -50,16 +79,46 @@ const App = () => {
         handleFlowComplete();
     };
 
+    const handleCloseMenu = () => setIsMenuOpen(false);
+    const handleToggleMenu = () => setIsMenuOpen((previous) => !previous);
+    const handleNavigate = (callback) => {
+        callback?.();
+        handleCloseMenu();
+    };
+
     const showBackButton = screen === SCREEN_NAMES.INTRO;
+
+    const menuItems = [
+        { key: "home", label: "홈", onClick: () => handleNavigate(handleGoHome) },
+        { key: "spend", label: "지출", onClick: () => handleNavigate(handleGoSpend) },
+        ...(currentUser
+            ? [
+                  {
+                      key: "profile",
+                      label: "마이프로필",
+                      onClick: () => handleNavigate(handleGoProfile),
+                  },
+                  {
+                      key: "logout",
+                      label: "로그아웃",
+                      onClick: () => handleNavigate(handleLogout),
+                  },
+              ]
+            : [
+                  { key: "login", label: "로그인", onClick: () => handleNavigate(handleGoLogin) },
+                  { key: "join", label: "회원가입", onClick: () => handleNavigate(handleGoJoin) },
+              ]),
+    ];
 
     return (
         <main className="app">
             <AppHeader
                 isAuthenticated={!!currentUser}
                 onLogoClick={handleGoHome}
-                onLoginClick={handleGoLogin}
-                onProfileClick={handleGoProfile}
-                onLogoutClick={handleLogout}
+                onToggleMenu={handleToggleMenu}
+                onCloseMenu={handleCloseMenu}
+                isMenuOpen={isMenuOpen}
+                menuItems={menuItems}
                 showBackButton={showBackButton}
                 onBackClick={handleGoHome}
             />
@@ -112,7 +171,23 @@ const App = () => {
                 )}
 
                 {screen === SCREEN_NAMES.MAIN && (
-                    <ScreenMain onRequestSignUp={handleGoJoin} />
+                    <ScreenMain
+                        onRequestSignUp={handleGoJoin}
+                        isLinkedAccount={isLinkedAccount}
+                        isSignUpModalOpen={isSignUpModalOpen}
+                        onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
+                        mainState={mainState}
+                    />
+                )}
+
+                {screen === SCREEN_NAMES.SPEND && (
+                    <ScreenSpend
+                        onRequestSignUp={handleGoJoin}
+                        isLinkedAccount={isLinkedAccount}
+                        isSignUpModalOpen={isSignUpModalOpen}
+                        onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
+                        mainState={mainState}
+                    />
                 )}
 
                 {screen === SCREEN_NAMES.PROFILE && (

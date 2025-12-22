@@ -15,7 +15,15 @@ const ReportSection = ({
     onToggleEditMode,
     onBudgetChange,
     onBudgetCommit,
+    reportStatusFilter,
+    onChangeReportStatusFilter,
 }) => {
+    const statusOptions = [
+        { key: "all", label: "전체" },
+        { key: "paid", label: "지출 완료" },
+        { key: "planned", label: "지출 예정" },
+    ];
+
     const handleBudgetKeyDown = (event, key) => {
         if (event.key !== "Enter") return;
         event.currentTarget.blur();
@@ -46,6 +54,22 @@ const ReportSection = ({
             </div>
 
             <div className="card_body">
+                <div className="report_filters" role="group" aria-label="리포트 필터">
+                    {statusOptions.map((option) => (
+                        <button
+                            key={option.key}
+                            type="button"
+                            className={`filter_chip ${
+                                reportStatusFilter === option.key ? "is_active" : ""
+                            }`}
+                            onClick={() => onChangeReportStatusFilter?.(option.key)}
+                            aria-pressed={reportStatusFilter === option.key}
+                        >
+                            {option.label}
+                        </button>
+                    ))}
+                </div>
+
                 <div className="card_item">
                     <div className="item_head">
                         <div className="item_title">총 수입</div>

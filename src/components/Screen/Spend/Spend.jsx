@@ -1,18 +1,15 @@
-import "./index.css";
-
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import Inner from "../../Content/Inner";
-import ReportSection from "./components/ReportSection";
-import PaymentMethodsSection from "./components/PaymentMethodsSection";
-import CategorySection from "./components/CategorySection";
-import YearlySummary from "./components/YearlySummary";
-import AddDataSheet from "./components/AddDataSheet";
-import TransactionSheet from "./components/TransactionSheet";
-import AuthRequiredModal from "./components/AuthRequiredModal";
-import { formatKoreanWon } from "./utils";
+import ReportSection from "../Main/components/ReportSection";
+import CategorySection from "../Main/components/CategorySection";
+import PaymentMethodsSection from "../Main/components/PaymentMethodsSection";
+import AddDataSheet from "../Main/components/AddDataSheet";
+import TransactionSheet from "../Main/components/TransactionSheet";
+import AuthRequiredModal from "../Main/components/AuthRequiredModal";
+import { formatKoreanWon } from "../Main/utils";
 
-const ScreenMain = ({
+const ScreenSpend = ({
     onRequestSignUp,
     isLinkedAccount,
     isSignUpModalOpen,
@@ -49,7 +46,6 @@ const ScreenMain = ({
         sheetState,
         closeSheet,
         animationTime,
-        yearlySummary,
         reportStatusFilter,
         setReportStatusFilter,
     } = mainState;
@@ -74,18 +70,8 @@ const ScreenMain = ({
 
     return (
         <Screen className="screen_main">
-            <Title>쉬운 가계부,</Title>
+            <Title>지출 관리</Title>
             <Inner>
-                <YearlySummary summary={yearlySummary} />
-
-                <section className="card style_dash hero">
-                    <div className="card_head">
-                        <div className="card_title">
-                            내 입맛에 맞게 카테고리를 재분류할 수 있어요.
-                        </div>
-                    </div>
-                </section>
-
                 <ReportSection
                     monthLabel={monthLabel}
                     report={report}
@@ -155,4 +141,4 @@ const ScreenMain = ({
     );
 };
 
-export default ScreenMain;
+export default ScreenSpend;

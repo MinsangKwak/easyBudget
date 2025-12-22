@@ -76,6 +76,27 @@
     gap: 10px;
 }
 
+.report_filters {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter_chip {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 2px solid var(--color-black-100);
+    background: color-mix(in srgb, var(--color-white) 90%, var(--color-white-100) 10%);
+    font-weight: 800;
+    color: var(--color-black-100);
+}
+
+.filter_chip.is_active {
+    background: color-mix(in srgb, var(--color-primary) 24%, var(--color-white) 76%);
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--color-black-100) 16%, transparent);
+}
+
 .card_item {
     border-radius: var(--radius-md);
     padding: 14px;
