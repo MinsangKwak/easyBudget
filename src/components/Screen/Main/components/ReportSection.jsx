@@ -6,6 +6,8 @@ const ReportSection = ({
     monthKey,
     monthOptions,
     onChangeMonth,
+    periodFilters = [],
+    onChangePeriod,
     report,
     budgetInputs,
     isEditMode,
@@ -34,6 +36,28 @@ const ReportSection = ({
         <section className="card report" aria-label="리포트">
             <div className="card_head">
                 <div className="card_title">리포트</div>
+            </div>
+
+            <div className="card_filters">
+                <div className="report_filters period_filters" role="group" aria-label="기간 필터">
+                    {periodFilters.map((option) => (
+                        <button
+                            key={option.key}
+                            type="button"
+                            className={`filter_chip filter_chip__period ${
+                                monthKey === option.key ? "is_active" : ""
+                            }`}
+                            onClick={() => onChangePeriod?.(option.key)}
+                            aria-pressed={monthKey === option.key}
+                        >
+                            <span className="filter_chip__label">{option.label}</span>
+                            <span className="filter_chip__values">
+                                <b>총 지출 {formatMaskedKoreanWon(option.spendTotal)}</b>
+                                <b>총 수입 {formatMaskedKoreanWon(option.incomeTotal)}</b>
+                            </span>
+                        </button>
+                    ))}
+                </div>
 
                 <label className="month_btn" aria-label="월 선택">
                     <span className="month_btn__label">{monthLabel}</span>

@@ -29,6 +29,9 @@ const buildSpendStats = (entries, targetType) => {
     };
 };
 
+const computeEntriesTotal = (entries) =>
+    entries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
+
 export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [monthKey, setMonthKey] = useState(MONTHLY_REPORTS[0]?.key);
@@ -99,7 +102,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     const monthLabelResolved = selectedMonth?.label || "이번 달";
 
     const incomeTotal = useMemo(() => {
-        return incomeEntries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
+        return computeEntriesTotal(incomeEntries);
     }, [incomeEntries]);
 
     const filteredSpendEntries = useMemo(() => {
@@ -118,6 +121,25 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
             0,
         );
     }, [filteredSpendEntries]);
+
+    const periodFilters = useMemo(() => {
+        return MONTHLY_REPORTS.map((period) => {
+            const isActive = period.key === monthKey;
+            const incomeTotalForPeriod = isActive
+                ? computeEntriesTotal(incomeEntries)
+                : computeEntriesTotal(period.incomeEntries);
+            const spendTotalForPeriod = isActive
+                ? computeEntriesTotal(spendEntries)
+                : computeEntriesTotal(period.spendEntries);
+
+            return {
+                key: period.key,
+                label: period.label,
+                incomeTotal: incomeTotalForPeriod,
+                spendTotal: spendTotalForPeriod,
+            };
+        });
+    }, [incomeEntries, monthKey, spendEntries]);
 
     const categorySummaries = useMemo(() => {
         const map = new Map();
@@ -380,7 +402,9 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
 
     const yearlySummary = useMemo(() => {
         const targetYear = selectedMonth?.year || MONTHLY_REPORTS[0]?.year || "올해";
-        const reportsForYear = MONTHLY_REPORTS.filter((report) => report.year === targetYear);
+        const reportsForYear = MONTHLY_REPORTS.filter(
+            (report) => report.year === targetYear && !report.isAggregate,
+        );
 
         const totalIncome = reportsForYear.reduce((acc, month) => {
             const entries = month.key === monthKey ? incomeEntries : month.incomeEntries;
@@ -441,5 +465,6 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
         reportStatusFilter,
         setReportStatusFilter,
         filteredSpendEntries,
+        periodFilters,
     };
 };
