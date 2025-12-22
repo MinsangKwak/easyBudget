@@ -3,10 +3,8 @@ import "./index.css";
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import Inner from "../../Content/Inner";
-import ReportSection from "./components/ReportSection";
 import PaymentMethodsSection from "./components/PaymentMethodsSection";
 import CategorySection from "./components/CategorySection";
-import YearlySummary from "./components/YearlySummary";
 import AddDataSheet from "./components/AddDataSheet";
 import TransactionSheet from "./components/TransactionSheet";
 import AuthRequiredModal from "./components/AuthRequiredModal";
@@ -18,17 +16,11 @@ const ScreenMain = ({
     isSignUpModalOpen,
     onCloseSignUpModal,
     mainState,
+    sectionIds = {},
 }) => {
+    const { paymentMethods, categorySpend } = sectionIds;
     const {
         isEditMode,
-        monthKey,
-        monthLabel,
-        monthOptions,
-        setMonthKey,
-        report,
-        budgetInputs,
-        setBudgetInputs,
-        commitBudgetInput,
         categorySummaries,
         categoryAmountInput,
         setCategoryAmountInput,
@@ -43,25 +35,19 @@ const ScreenMain = ({
         setNewEntryDraft,
         handleClickAddMyData,
         handleSubmitMyData,
-        handleToggleEditMode,
         handleClickPaymentItem,
+        handleToggleEditMode,
         handleClickCategoryRow,
         sheetState,
         closeSheet,
         animationTime,
-        yearlySummary,
-        reportStatusFilter,
-        setReportStatusFilter,
+        report,
     } = mainState;
 
     const maskText = "??";
     const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
     const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
     const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
-
-    const handleBudgetChange = (key, value) => {
-        setBudgetInputs((previous) => ({ ...previous, [key]: value }));
-    };
 
     const handleCategoryChange = (categoryKey, value) => {
         setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
@@ -74,37 +60,10 @@ const ScreenMain = ({
 
     return (
         <Screen className="screen_main">
-            <Title>쉬운 가계부,</Title>
+            <Title>지출 관리</Title>
             <Inner>
-                <YearlySummary summary={yearlySummary} />
-
-                <section className="card style_dash hero">
-                    <div className="card_head">
-                        <div className="card_title">
-                            내 입맛에 맞게 카테고리를 재분류할 수 있어요.
-                        </div>
-                    </div>
-                </section>
-
-                <ReportSection
-                    monthLabel={monthLabel}
-                    report={report}
-                    budgetInputs={budgetInputs}
-                    isEditMode={isEditMode}
-                    isLinkedAccount={isLinkedAccount}
-                    formatMaskedKoreanWon={formatMaskedKoreanWon}
-                    formatMaskedCount={formatMaskedCount}
-                    monthKey={monthKey}
-                    monthOptions={monthOptions}
-                    onChangeMonth={setMonthKey}
-                    onToggleEditMode={handleToggleEditMode}
-                    onBudgetChange={handleBudgetChange}
-                    onBudgetCommit={commitBudgetInput}
-                    reportStatusFilter={reportStatusFilter}
-                    onChangeReportStatusFilter={setReportStatusFilter}
-                />
-
                 <CategorySection
+                    id={categorySpend}
                     categorySummaries={categorySummaries}
                     categoryTotal={categoryTotal}
                     displayCategorySegments={displayCategorySegments}
@@ -123,6 +82,7 @@ const ScreenMain = ({
                 />
 
                 <PaymentMethodsSection
+                    id={paymentMethods}
                     paymentGroups={paymentGroups}
                     totalSpend={report.spendTotal}
                     formatMaskedKoreanWon={formatMaskedKoreanWon}

@@ -1,7 +1,6 @@
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import Inner from "../../Content/Inner";
-import ReportSection from "../Main/components/ReportSection";
 import CategorySection from "../Main/components/CategorySection";
 import PaymentMethodsSection from "../Main/components/PaymentMethodsSection";
 import AddDataSheet from "../Main/components/AddDataSheet";
@@ -15,17 +14,12 @@ const ScreenSpend = ({
     isSignUpModalOpen,
     onCloseSignUpModal,
     mainState,
+    sectionIds = {},
 }) => {
+    const { paymentMethods, categorySpend } = sectionIds;
     const {
         isEditMode,
-        monthKey,
-        monthLabel,
-        monthOptions,
-        setMonthKey,
         report,
-        budgetInputs,
-        setBudgetInputs,
-        commitBudgetInput,
         categorySummaries,
         categoryAmountInput,
         setCategoryAmountInput,
@@ -40,24 +34,18 @@ const ScreenSpend = ({
         setNewEntryDraft,
         handleClickAddMyData,
         handleSubmitMyData,
-        handleToggleEditMode,
         handleClickPaymentItem,
         handleClickCategoryRow,
         sheetState,
         closeSheet,
         animationTime,
-        reportStatusFilter,
-        setReportStatusFilter,
+        handleToggleEditMode,
     } = mainState;
 
     const maskText = "??";
     const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
     const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
     const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
-
-    const handleBudgetChange = (key, value) => {
-        setBudgetInputs((previous) => ({ ...previous, [key]: value }));
-    };
 
     const handleCategoryChange = (categoryKey, value) => {
         setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
@@ -72,25 +60,8 @@ const ScreenSpend = ({
         <Screen className="screen_main">
             <Title>지출 관리</Title>
             <Inner>
-                <ReportSection
-                    monthLabel={monthLabel}
-                    report={report}
-                    budgetInputs={budgetInputs}
-                    isEditMode={isEditMode}
-                    isLinkedAccount={isLinkedAccount}
-                    formatMaskedKoreanWon={formatMaskedKoreanWon}
-                    formatMaskedCount={formatMaskedCount}
-                    monthKey={monthKey}
-                    monthOptions={monthOptions}
-                    onChangeMonth={setMonthKey}
-                    onToggleEditMode={handleToggleEditMode}
-                    onBudgetChange={handleBudgetChange}
-                    onBudgetCommit={commitBudgetInput}
-                    reportStatusFilter={reportStatusFilter}
-                    onChangeReportStatusFilter={setReportStatusFilter}
-                />
-
                 <CategorySection
+                    id={categorySpend}
                     categorySummaries={categorySummaries}
                     categoryTotal={categoryTotal}
                     displayCategorySegments={displayCategorySegments}
@@ -109,6 +80,7 @@ const ScreenSpend = ({
                 />
 
                 <PaymentMethodsSection
+                    id={paymentMethods}
                     paymentGroups={paymentGroups}
                     totalSpend={report.spendTotal}
                     formatMaskedKoreanWon={formatMaskedKoreanWon}

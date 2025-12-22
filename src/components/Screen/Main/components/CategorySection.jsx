@@ -4,6 +4,7 @@ import { FiEdit3 } from "react-icons/fi";
 import DonutChart from "./DonutChart";
 
 const CategorySection = ({
+    id,
     categorySummaries,
     categoryTotal,
     displayCategorySegments,
@@ -21,7 +22,7 @@ const CategorySection = ({
     onClickCategory,
 }) => {
     return (
-        <section className="card cat" aria-label="카테고리별 지출">
+        <section id={id} className="card cat" aria-label="카테고리별 지출">
             <div className="card_head">
                 <div className="card_title">
                     카테고리별 지출{" "}

@@ -45,6 +45,11 @@ const App = () => {
         return () => document.documentElement.classList.remove("is_sheet_open");
     }, [mainState.isAddSheetOpen, mainState.sheetState.isOpen]);
 
+    const sectionIds = {
+        paymentMethods: "section-payment-methods",
+        categorySpend: "section-category-spend",
+    };
+
     const handleGoLogin = () => setScreen(SCREEN_NAMES.INTRO);
     const handleGoLoginEmail = () => setScreen(SCREEN_NAMES.LOGIN);
     const handleGoLoginCertificate = () => setScreen(SCREEN_NAMES.LOGIN_CERTIFICATE);
@@ -55,8 +60,6 @@ const App = () => {
     const handleWelcomeTimeout = () => setScreen(SCREEN_NAMES.MAIN);
     const handleLoginComplete = () => setScreen(SCREEN_NAMES.MAIN);
     const handleGoHome = () => setScreen(SCREEN_NAMES.MAIN);
-    const handleGoProfile = () => setScreen(SCREEN_NAMES.PROFILE);
-    const handleGoSpend = () => setScreen(SCREEN_NAMES.SPEND);
 
     const handleLogout = () => {
         logout();
@@ -86,28 +89,27 @@ const App = () => {
         handleCloseMenu();
     };
 
+    const scrollToSection = (id) => {
+        setScreen(SCREEN_NAMES.MAIN);
+        setTimeout(() => {
+            const target = document.getElementById(id);
+            target?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+    };
+
     const showBackButton = screen === SCREEN_NAMES.INTRO;
 
     const menuItems = [
-        { key: "home", label: "홈", onClick: () => handleNavigate(handleGoHome) },
-        { key: "spend", label: "지출", onClick: () => handleNavigate(handleGoSpend) },
-        ...(currentUser
-            ? [
-                  {
-                      key: "profile",
-                      label: "마이프로필",
-                      onClick: () => handleNavigate(handleGoProfile),
-                  },
-                  {
-                      key: "logout",
-                      label: "로그아웃",
-                      onClick: () => handleNavigate(handleLogout),
-                  },
-              ]
-            : [
-                  { key: "login", label: "로그인", onClick: () => handleNavigate(handleGoLogin) },
-                  { key: "join", label: "회원가입", onClick: () => handleNavigate(handleGoJoin) },
-              ]),
+        {
+            key: "payment-methods",
+            label: "지출 수단",
+            onClick: () => handleNavigate(() => scrollToSection(sectionIds.paymentMethods)),
+        },
+        {
+            key: "category-spend",
+            label: "카테고리별 지출",
+            onClick: () => handleNavigate(() => scrollToSection(sectionIds.categorySpend)),
+        },
     ];
 
     return (
@@ -121,6 +123,9 @@ const App = () => {
                 menuItems={menuItems}
                 showBackButton={showBackButton}
                 onBackClick={handleGoHome}
+                onClickLogin={handleGoLogin}
+                onClickSignUp={handleGoJoin}
+                onClickLogout={handleLogout}
             />
             <Suspense fallback={<ScreenLoading />}>
                 {screen === SCREEN_NAMES.INTRO && (
@@ -177,6 +182,7 @@ const App = () => {
                         isSignUpModalOpen={isSignUpModalOpen}
                         onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
                         mainState={mainState}
+                        sectionIds={sectionIds}
                     />
                 )}
 
@@ -187,6 +193,7 @@ const App = () => {
                         isSignUpModalOpen={isSignUpModalOpen}
                         onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
                         mainState={mainState}
+                        sectionIds={sectionIds}
                     />
                 )}
 

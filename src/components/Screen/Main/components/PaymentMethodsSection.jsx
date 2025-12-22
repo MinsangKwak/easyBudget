@@ -1,4 +1,5 @@
 const PaymentMethodsSection = ({
+    id,
     paymentGroups,
     totalSpend,
     formatMaskedKoreanWon,
@@ -6,7 +7,7 @@ const PaymentMethodsSection = ({
     onClickPayment,
 }) => {
     return (
-        <section className="card pay" aria-label="지출 수단">
+        <section id={id} className="card pay" aria-label="지출 수단">
             <div className="card_head">
                 <div className="card_title">지출수단</div>
                 <div className="card_value">{formatMaskedKoreanWon(totalSpend)}</div>
