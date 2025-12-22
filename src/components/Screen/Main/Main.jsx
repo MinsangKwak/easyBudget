@@ -8,6 +8,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import ReportSection from "./components/ReportSection";
 import PaymentMethodsSection from "./components/PaymentMethodsSection";
 import CategorySection from "./components/CategorySection";
+import YearlySummary from "./components/YearlySummary";
 import AddDataSheet from "./components/AddDataSheet";
 import TransactionSheet from "./components/TransactionSheet";
 import AuthRequiredModal from "./components/AuthRequiredModal";
@@ -23,7 +24,6 @@ const ScreenMain = ({ onRequestSignUp }) => {
     }, [currentUser]);
 
     const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
-    const monthLabel = "10월";
 
     const ensureLinkedAccount = () => {
         if (!isLinkedAccount) {
@@ -35,6 +35,10 @@ const ScreenMain = ({ onRequestSignUp }) => {
 
     const {
         isEditMode,
+        monthKey,
+        monthLabel,
+        monthOptions,
+        setMonthKey,
         report,
         budgetInputs,
         setBudgetInputs,
@@ -59,7 +63,8 @@ const ScreenMain = ({ onRequestSignUp }) => {
         sheetState,
         closeSheet,
         animationTime,
-    } = useMainState({ monthLabel, isLinkedAccount, ensureLinkedAccount });
+        yearlySummary,
+    } = useMainState({ isLinkedAccount, ensureLinkedAccount });
 
     useEffect(() => {
         const hasOpenSheet = sheetState.isOpen || isAddSheetOpen;
@@ -90,6 +95,8 @@ const ScreenMain = ({ onRequestSignUp }) => {
         <Screen className="screen_main">
             <Title>쉬운 가계부,</Title>
             <Inner>
+                <YearlySummary summary={yearlySummary} />
+
                 <section className="card style_dash hero">
                     <div className="card_head">
                         <div className="card_title">
@@ -106,6 +113,9 @@ const ScreenMain = ({ onRequestSignUp }) => {
                     isLinkedAccount={isLinkedAccount}
                     formatMaskedKoreanWon={formatMaskedKoreanWon}
                     formatMaskedCount={formatMaskedCount}
+                    monthKey={monthKey}
+                    monthOptions={monthOptions}
+                    onChangeMonth={setMonthKey}
                     onToggleEditMode={handleToggleEditMode}
                     onBudgetChange={handleBudgetChange}
                     onBudgetCommit={commitBudgetInput}

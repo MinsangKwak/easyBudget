@@ -3,6 +3,9 @@ import { FiChevronDown, FiEdit3 } from "react-icons/fi";
 
 const ReportSection = ({
     monthLabel,
+    monthKey,
+    monthOptions,
+    onChangeMonth,
     report,
     budgetInputs,
     isEditMode,
@@ -24,10 +27,22 @@ const ReportSection = ({
             <div className="card_head">
                 <div className="card_title">리포트</div>
 
-                <button type="button" className="month_btn" aria-label="월 선택">
+                <label className="month_btn" aria-label="월 선택">
                     <span className="month_btn__label">{monthLabel}</span>
                     <FiChevronDown />
-                </button>
+                    <select
+                        className="month_select"
+                        value={monthKey}
+                        onChange={(event) => onChangeMonth?.(event.target.value)}
+                        aria-label="월 선택"
+                    >
+                        {monthOptions.map((option) => (
+                            <option key={option.key} value={option.key}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
+                </label>
             </div>
 
             <div className="card_body">
