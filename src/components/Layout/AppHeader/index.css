@@ -10,7 +10,7 @@
 }
 
 .header__inner {
-    width: min(360px, 100%);
+    width: min(720px, 100%);
     height: 60px;
     margin: 0 auto;
     display: flex;
@@ -53,12 +53,15 @@
 
 .header__auth_actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     gap: 0.6rem;
     flex-wrap: wrap;
 }
-.header__auth_actions > .btn {
+.header__auth_actions > .btn_container{
+    flex-direction:row;
+}
+.header__auth_actions .btn {
     width: fit-content;
 }
 .header__actions {
@@ -79,8 +82,8 @@
 .header__drawer {
     position: fixed;
     top: 0;
-    right: -260px;
-    width: 240px;
+    right: -80vw;
+    width: 80vw;
     height: 100%;
     background: var(--color-white);
     border-left: 2px solid var(--color-black-100);
@@ -114,10 +117,6 @@
     color: var(--color-black-100);
 }
 
-.drawer_status {
-    font-size: 1.2rem;
-    color: var(--muted);
-}
 
 .drawer_list {
     display: grid;

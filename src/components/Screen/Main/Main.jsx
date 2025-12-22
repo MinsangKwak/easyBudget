@@ -63,6 +63,7 @@ const ScreenMain = ({
             </Title>
             <SubTitle>수치부터 보여주는 시원한 가계부</SubTitle>
             <Inner>
+                <YearlySummary summary={yearlySummary} />
                 <ReportSection
                     monthLabel={monthLabel}
                     monthKey={monthKey}
@@ -82,8 +83,6 @@ const ScreenMain = ({
                     reportStatusFilter={reportStatusFilter}
                     onChangeReportStatusFilter={setReportStatusFilter}
                 />
-
-                <YearlySummary summary={yearlySummary} />
             </Inner>
 
             <AddDataSheet

@@ -1,4 +1,5 @@
 import "./index.css";
+import BaseButtonContainer from "../../Form/BaseButtonContainer"
 import BaseButton from "../../Form/BaseButton";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { FiLogIn, FiLogOut, FiUserPlus } from "react-icons/fi";
@@ -81,9 +82,6 @@ const AppHeader = ({
                 <div className="header__drawer_inner">
                     <div className="drawer_head">
                         <span className="drawer_title">메뉴</span>
-                        <span className="drawer_status">
-                            {isAuthenticated ? "연결 완료" : "로그인 필요"}
-                        </span>
                     </div>
                     <ul className="drawer_list">
                         {menuItems.map((item) => (
@@ -96,24 +94,31 @@ const AppHeader = ({
                     </ul>
                 </div>
                 <div className="header__auth_actions" aria-label="계정 상태">
-                    <BaseButton
-                        type="button"
-                        style="inline__black"
-                        size="sm"
-                        onClick={onClickMyPage}
-                    >
-                        마이페이지
-                    </BaseButton>
                     {isAuthenticated ? (
-                        <BaseButton
-                            type="button"
-                            style="inline__black"
-                            size="sm"
-                            onClick={onClickLogout}
-                            aria-label="로그아웃"
-                        >
-                            <FiLogOut /> 로그아웃
-                        </BaseButton>
+                        <>
+                            <span className="drawer_status">
+                                {isAuthenticated ? "연결 완료" : "로그인 필요"}
+                            </span>
+                            <BaseButtonContainer>
+                                <BaseButton
+                                    type="button"
+                                    style="inline__black"
+                                    size="sm"
+                                    onClick={onClickMyPage}
+                                >
+                                    마이페이지
+                                </BaseButton>
+                                <BaseButton
+                                    type="button"
+                                    style="inline__black"
+                                    size="sm"
+                                    onClick={onClickLogout}
+                                    aria-label="로그아웃"
+                                >
+                                    <FiLogOut /> 로그아웃
+                                </BaseButton>
+                            </BaseButtonContainer>
+                        </>
                     ) : (
                         <>
                             <BaseButton
