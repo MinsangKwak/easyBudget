@@ -103,6 +103,98 @@ const OCTOBER_SPEND_ENTRIES = [
     },
 ];
 
+const OCTOBER_2025_INCOME_ENTRIES = [
+    { id: "income-salary-2025-10", label: "급여", amount: 4100000 },
+    { id: "income-bonus-2025-10", label: "성과급", amount: 970000 },
+];
+
+const OCTOBER_2025_SPEND_ENTRIES = [
+    {
+        id: "cat_food_nh_2025_10",
+        categoryKey: "cat_food",
+        categoryLabel: "식비·외식비",
+        amount: 3450000,
+        paymentKey: "card_nh",
+        paymentLabel: "NH농협카드",
+        paymentLogo: "N",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "paid",
+        dateLabel: "10/06",
+    },
+    {
+        id: "cat_food_kb_2025_10",
+        categoryKey: "cat_food",
+        categoryLabel: "식비·외식비",
+        amount: 1850000,
+        paymentKey: "card_kb",
+        paymentLabel: "KB국민카드",
+        paymentLogo: "K",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "planned",
+        dateLabel: "10/19",
+    },
+    {
+        id: "cat_loan_hyundai_2025_10",
+        categoryKey: "cat_loan",
+        categoryLabel: "대출",
+        amount: 4300000,
+        paymentKey: "card_hyundai",
+        paymentLabel: "현대카드",
+        paymentLogo: "H",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "regular",
+        status: "planned",
+        dateLabel: "10/25",
+    },
+    {
+        id: "cat_ins_kb_2025_10",
+        categoryKey: "cat_ins",
+        categoryLabel: "보험",
+        amount: 1650000,
+        paymentKey: "card_kb",
+        paymentLabel: "KB국민카드",
+        paymentLogo: "K",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "regular",
+        status: "paid",
+        dateLabel: "10/08",
+    },
+    {
+        id: "cat_house_cash_2025_10",
+        categoryKey: "cat_house",
+        categoryLabel: "주거·관리",
+        amount: 1150000,
+        paymentKey: "cash",
+        paymentLabel: "현금",
+        paymentLogo: "₩",
+        paymentGroupKey: "cash",
+        paymentGroupLabel: "현금지출",
+        spendType: "regular",
+        status: "paid",
+        dateLabel: "10/03",
+    },
+    {
+        id: "cat_misc_card_2025_10",
+        categoryKey: "cat_misc",
+        categoryLabel: "결제·소통",
+        amount: 350000,
+        paymentKey: "card_other",
+        paymentLabel: "우리카드",
+        paymentLogo: "W",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "paid",
+        dateLabel: "10/02",
+    },
+];
+
 const NOVEMBER_INCOME_ENTRIES = [
     { id: "income-salary-nov", label: "급여", amount: 3300000 },
     { id: "income-bonus-nov", label: "성과급", amount: 550000 },
@@ -197,20 +289,20 @@ const NOVEMBER_SPEND_ENTRIES = [
 
 export const MONTHLY_REPORTS = [
     {
-        key: "2024-10",
-        label: "10월",
-        year: "2024",
+        key: "2025-10",
+        label: "2025년 10월",
+        year: "2025",
         budget: {
-            incomeBudget: 3780000,
-            spendBudget: 15950000,
-            variableBudget: 7050000,
+            incomeBudget: 5200000,
+            spendBudget: 12750000,
+            variableBudget: 5650000,
         },
-        incomeEntries: OCTOBER_INCOME_ENTRIES,
-        spendEntries: OCTOBER_SPEND_ENTRIES,
+        incomeEntries: OCTOBER_2025_INCOME_ENTRIES,
+        spendEntries: OCTOBER_2025_SPEND_ENTRIES,
     },
     {
         key: "2024-11",
-        label: "11월",
+        label: "2024년 11월",
         year: "2024",
         budget: {
             incomeBudget: 3850000,
@@ -220,7 +312,19 @@ export const MONTHLY_REPORTS = [
         incomeEntries: NOVEMBER_INCOME_ENTRIES,
         spendEntries: NOVEMBER_SPEND_ENTRIES,
     },
+    {
+        key: "2024-10",
+        label: "2024년 10월",
+        year: "2024",
+        budget: {
+            incomeBudget: 3780000,
+            spendBudget: 15950000,
+            variableBudget: 7050000,
+        },
+        incomeEntries: OCTOBER_INCOME_ENTRIES,
+        spendEntries: OCTOBER_SPEND_ENTRIES,
+    },
 ];
 
-export const DEFAULT_INCOME_ENTRIES = OCTOBER_INCOME_ENTRIES;
-export const DEFAULT_SPEND_ENTRIES = OCTOBER_SPEND_ENTRIES;
+export const DEFAULT_INCOME_ENTRIES = OCTOBER_2025_INCOME_ENTRIES;
+export const DEFAULT_SPEND_ENTRIES = OCTOBER_2025_SPEND_ENTRIES;

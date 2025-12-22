@@ -359,14 +359,17 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     };
 
     const yearlySummary = useMemo(() => {
-        const totalIncome = MONTHLY_REPORTS.reduce((acc, month) => {
+        const targetYear = selectedMonth?.year || MONTHLY_REPORTS[0]?.year || "올해";
+        const reportsForYear = MONTHLY_REPORTS.filter((report) => report.year === targetYear);
+
+        const totalIncome = reportsForYear.reduce((acc, month) => {
             const entries = month.key === monthKey ? incomeEntries : month.incomeEntries;
             return (
                 acc +
                 entries.reduce((entrySum, entry) => entrySum + Math.max(0, entry.amount), 0)
             );
         }, 0);
-        const totalSpend = MONTHLY_REPORTS.reduce((acc, month) => {
+        const totalSpend = reportsForYear.reduce((acc, month) => {
             const entries = month.key === monthKey ? spendEntries : month.spendEntries;
             return (
                 acc +
@@ -374,7 +377,6 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
             );
         }, 0);
 
-        const targetYear = selectedMonth?.year || MONTHLY_REPORTS[0]?.year || "올해";
         return {
             yearLabel: `${targetYear}년`,
             income: totalIncome,
