@@ -2,6 +2,7 @@ import "./index.css";
 
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
+import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
 import PaymentMethodsSection from "./components/PaymentMethodsSection";
 import CategorySection from "./components/CategorySection";
@@ -77,7 +78,10 @@ const ScreenMain = ({
 
     return (
         <Screen className="screen_main">
-            <Title>지출 관리</Title>
+            <Title>
+                쉬운 가계부 <br /> Wallet입니다.
+            </Title>
+            <SubTitle>수치부터 보여주는 시원한 가계부</SubTitle>
             <Inner>
                 <ReportSection
                     monthLabel={monthLabel}

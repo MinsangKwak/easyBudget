@@ -116,11 +116,11 @@
     padding: 0.6rem 1.2rem;
 }
 
-.btn_ghost {
+/* .btn_ghost {
     background: none;
     border-color: transparent;
     box-shadow: none;
-}
+} */
 
 .btn_line__primary {
     background-color: var(--color-white);
@@ -140,8 +140,8 @@
     margin: 0 auto;
 }
 
-.btn_text {
+/* .btn_text {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-}
+} */

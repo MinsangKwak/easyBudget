@@ -57,44 +57,6 @@ const AppHeader = ({
                             </button>
                         </div>
                     )}
-
-                    <div className="header__auth_actions" aria-label="계정 상태">
-                        {isAuthenticated ? (
-                            <BaseButton
-                                type="button"
-                                style="ghost inline text"
-                                size="sm"
-                                onClick={onClickLogout}
-                                aria-label="로그아웃"
-                                className="header__auth_btn"
-                            >
-                                <FiLogOut /> 로그아웃
-                            </BaseButton>
-                        ) : (
-                            <>
-                                <BaseButton
-                                    type="button"
-                                    style="ghost inline text"
-                                    size="sm"
-                                    onClick={onClickLogin}
-                                    aria-label="로그인"
-                                    className="header__auth_btn"
-                                >
-                                    <FiLogIn /> 로그인
-                                </BaseButton>
-                                <BaseButton
-                                    type="button"
-                                    style="ghost inline text"
-                                    size="sm"
-                                    onClick={onClickSignUp}
-                                    aria-label="회원가입"
-                                    className="header__auth_btn"
-                                >
-                                    <FiUserPlus /> 회원가입
-                                </BaseButton>
-                            </>
-                        )}
-                    </div>
                 </div>
 
                 <div className="header__actions header__actions--right">
@@ -111,22 +73,69 @@ const AppHeader = ({
                 </div>
             </div>
 
-            <aside className={`header__drawer ${isMenuOpen ? "is_open" : ""}`} aria-hidden={!isMenuOpen}>
-                <div className="drawer_head">
-                    <span className="drawer_title">바로가기</span>
-                    <span className="drawer_status">{isAuthenticated ? "연결 완료" : "로그인 필요"}</span>
+            <aside
+                className={`header__drawer ${isMenuOpen ? "is_open" : ""}`}
+                aria-hidden={!isMenuOpen}
+            >
+                <div className="header__drawer_inner">
+                    <div className="drawer_head">
+                        <span className="drawer_title">메뉴</span>
+                        <span className="drawer_status">
+                            {isAuthenticated ? "연결 완료" : "로그인 필요"}
+                        </span>
+                    </div>
+                    <ul className="drawer_list">
+                        {menuItems.map((item) => (
+                            <li key={item.key} className="drawer_item">
+                                <button type="button" onClick={() => handleSelectMenu(item)}>
+                                    {item.label}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-                <ul className="drawer_list">
-                    {menuItems.map((item) => (
-                        <li key={item.key} className="drawer_item">
-                            <button type="button" onClick={() => handleSelectMenu(item)}>
-                                {item.label}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                <div className="header__auth_actions" aria-label="계정 상태">
+                    <BaseButton type="button" style="inline__black" size="sm">
+                        마이페이지
+                    </BaseButton>
+                    {isAuthenticated ? (
+                        <BaseButton
+                            type="button"
+                            style="inline__black"
+                            size="sm"
+                            onClick={onClickLogout}
+                            aria-label="로그아웃"
+                        >
+                            <FiLogOut /> 로그아웃
+                        </BaseButton>
+                    ) : (
+                        <>
+                            <BaseButton
+                                type="button"
+                                style="ghost inline text"
+                                size="sm"
+                                onClick={onClickLogin}
+                                aria-label="로그인"
+                            >
+                                <FiLogIn /> 로그인
+                            </BaseButton>
+                            <BaseButton
+                                type="button"
+                                style="ghost inline text"
+                                size="sm"
+                                onClick={onClickSignUp}
+                                aria-label="회원가입"
+                                className="header__auth_btn"
+                            >
+                                <FiUserPlus /> 회원가입
+                            </BaseButton>
+                        </>
+                    )}
+                </div>
             </aside>
-            {isMenuOpen && <button className="header__scrim" onClick={onCloseMenu} aria-label="메뉴 닫기" />}
+            {isMenuOpen && (
+                <button className="header__scrim" onClick={onCloseMenu} aria-label="메뉴 닫기" />
+            )}
         </header>
     );
 };

@@ -75,7 +75,7 @@ const ScreenSpend = ({
 
     return (
         <Screen className="screen_main">
-            <Title>지출 관리</Title>
+            <Title>Wallet</Title>
             <Inner>
                 <ReportSection
                     monthLabel={monthLabel}

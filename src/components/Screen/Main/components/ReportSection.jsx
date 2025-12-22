@@ -37,9 +37,26 @@ const ReportSection = ({
             <div className="card_head">
                 <div className="card_title">리포트</div>
             </div>
-
             <div className="card_filters">
                 <div className="report_filters period_filters" role="group" aria-label="기간 필터">
+                    
+                    <label className="month_btn" aria-label="월 선택">
+                        <span className="month_btn__label">{monthLabel}</span>
+                        <FiChevronDown />
+                        <select
+                            className="month_select"
+                            value={monthKey}
+                            onChange={(event) => onChangeMonth?.(event.target.value)}
+                            aria-label="월 선택"
+                        >
+                            {monthOptions.map((option) => (
+                                <option key={option.key} value={option.key}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
                     {periodFilters.map((option) => (
                         <button
                             key={option.key}
@@ -58,23 +75,6 @@ const ReportSection = ({
                         </button>
                     ))}
                 </div>
-
-                <label className="month_btn" aria-label="월 선택">
-                    <span className="month_btn__label">{monthLabel}</span>
-                    <FiChevronDown />
-                    <select
-                        className="month_select"
-                        value={monthKey}
-                        onChange={(event) => onChangeMonth?.(event.target.value)}
-                        aria-label="월 선택"
-                    >
-                        {monthOptions.map((option) => (
-                            <option key={option.key} value={option.key}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
-                </label>
             </div>
 
             <div className="card_body">
