@@ -4,8 +4,6 @@ import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
-import PaymentMethodsSection from "./components/PaymentMethodsSection";
-import CategorySection from "./components/CategorySection";
 import ReportSection from "./components/ReportSection";
 import YearlySummary from "./components/YearlySummary";
 import AddDataSheet from "./components/AddDataSheet";
@@ -19,41 +17,27 @@ const ScreenMain = ({
     isSignUpModalOpen,
     onCloseSignUpModal,
     mainState,
-    sectionIds = {},
 }) => {
-    const { paymentMethods, categorySpend } = sectionIds;
     const {
         isEditMode,
-        categorySummaries,
-        categoryAmountInput,
-        setCategoryAmountInput,
-        commitCategoryAmount,
-        handleEnterCommit,
         monthLabel,
         monthKey,
         monthOptions,
         setMonthKey,
         periodFilters,
-        categoryTotal,
-        displayCategorySegments,
         budgetInputs,
         setBudgetInputs,
         commitBudgetInput,
         reportStatusFilter,
         setReportStatusFilter,
-        paymentGroups,
         isAddSheetOpen,
         setIsAddSheetOpen,
         newEntryDraft,
         setNewEntryDraft,
-        handleClickAddMyData,
         handleSubmitMyData,
-        handleClickPaymentItem,
         handleToggleEditMode,
-        handleClickCategoryRow,
         sheetState,
         closeSheet,
-        animationTime,
         report,
         yearlySummary,
     } = mainState;
@@ -62,10 +46,6 @@ const ScreenMain = ({
     const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
     const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
     const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
-
-    const handleCategoryChange = (categoryKey, value) => {
-        setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
-    };
 
     const handleBudgetChange = (key, value) => {
         setBudgetInputs((previous) => ({ ...previous, [key]: value }));
@@ -104,34 +84,6 @@ const ScreenMain = ({
                 />
 
                 <YearlySummary summary={yearlySummary} />
-
-                <CategorySection
-                    id={categorySpend}
-                    categorySummaries={categorySummaries}
-                    categoryTotal={categoryTotal}
-                    displayCategorySegments={displayCategorySegments}
-                    isEditMode={isEditMode}
-                    isLinkedAccount={isLinkedAccount}
-                    animationTime={animationTime}
-                    formatMaskedKoreanWon={formatMaskedKoreanWon}
-                    formatMaskedCount={formatMaskedCount}
-                    formatMaskedPercent={formatMaskedPercent}
-                    onToggleEditMode={handleToggleEditMode}
-                    categoryAmountInput={categoryAmountInput}
-                    onCategoryChange={handleCategoryChange}
-                    onCategoryCommit={commitCategoryAmount}
-                    onCategoryEnter={handleEnterCommit}
-                    onClickCategory={handleClickCategoryRow}
-                />
-
-                <PaymentMethodsSection
-                    id={paymentMethods}
-                    paymentGroups={paymentGroups}
-                    totalSpend={report.spendTotal}
-                    formatMaskedKoreanWon={formatMaskedKoreanWon}
-                    onClickAdd={handleClickAddMyData}
-                    onClickPayment={handleClickPaymentItem}
-                />
             </Inner>
 
             <AddDataSheet

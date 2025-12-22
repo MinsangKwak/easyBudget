@@ -19,6 +19,7 @@ const ScreenProfile = lazy(() => import("./components/Screen/Member/Profile"));
 const App = () => {
     const { currentUser, logout, deleteAccount, loginWithCertificate } = useAuth();
     const [screen, setScreen] = useState(SCREEN_NAMES.MAIN);
+    const [spendView, setSpendView] = useState("category");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
@@ -66,6 +67,10 @@ const App = () => {
         setScreen(SCREEN_NAMES.MAIN);
         setIsMenuOpen(false);
     };
+    const handleGoProfile = () => {
+        setScreen(SCREEN_NAMES.PROFILE);
+        setIsMenuOpen(false);
+    };
 
     const handleDeleteAccount = () => {
         deleteAccount();
@@ -89,26 +94,26 @@ const App = () => {
         handleCloseMenu();
     };
 
-    const scrollToSection = (id) => {
-        setScreen(SCREEN_NAMES.MAIN);
-        setTimeout(() => {
-            const target = document.getElementById(id);
-            target?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 0);
-    };
-
     const showBackButton = screen === SCREEN_NAMES.INTRO;
 
     const menuItems = [
         {
             key: "payment-methods",
             label: "지출 수단",
-            onClick: () => handleNavigate(() => scrollToSection(sectionIds.paymentMethods)),
+            onClick: () =>
+                handleNavigate(() => {
+                    setSpendView("category");
+                    setScreen(SCREEN_NAMES.SPEND);
+                }),
         },
         {
             key: "category-spend",
             label: "카테고리별 지출",
-            onClick: () => handleNavigate(() => scrollToSection(sectionIds.categorySpend)),
+            onClick: () =>
+                handleNavigate(() => {
+                    setSpendView("paymentMethods");
+                    setScreen(SCREEN_NAMES.SPEND);
+                }),
         },
     ];
 
@@ -126,6 +131,7 @@ const App = () => {
                 onClickLogin={handleGoLogin}
                 onClickSignUp={handleGoJoin}
                 onClickLogout={handleLogout}
+                onClickMyPage={handleGoProfile}
             />
             <Suspense fallback={<ScreenLoading />}>
                 {screen === SCREEN_NAMES.INTRO && (
@@ -188,6 +194,7 @@ const App = () => {
 
                 {screen === SCREEN_NAMES.SPEND && (
                     <ScreenSpend
+                        viewType={spendView}
                         onRequestSignUp={handleGoJoin}
                         isLinkedAccount={isLinkedAccount}
                         isSignUpModalOpen={isSignUpModalOpen}

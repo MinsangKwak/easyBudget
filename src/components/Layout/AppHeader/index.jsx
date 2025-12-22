@@ -15,6 +15,7 @@ const AppHeader = ({
     onClickLogin,
     onClickSignUp,
     onClickLogout,
+    onClickMyPage,
 }) => {
     const handleBackClick = () => {
         if (!showBackButton) return;
@@ -95,7 +96,12 @@ const AppHeader = ({
                     </ul>
                 </div>
                 <div className="header__auth_actions" aria-label="계정 상태">
-                    <BaseButton type="button" style="inline__black" size="sm">
+                    <BaseButton
+                        type="button"
+                        style="inline__black"
+                        size="sm"
+                        onClick={onClickMyPage}
+                    >
                         마이페이지
                     </BaseButton>
                     {isAuthenticated ? (
