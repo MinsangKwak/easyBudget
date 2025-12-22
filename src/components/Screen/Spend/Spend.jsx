@@ -3,6 +3,8 @@ import Title from "../../Content/Title";
 import Inner from "../../Content/Inner";
 import CategorySection from "../Main/components/CategorySection";
 import PaymentMethodsSection from "../Main/components/PaymentMethodsSection";
+import ReportSection from "../Main/components/ReportSection";
+import YearlySummary from "../Main/components/YearlySummary";
 import AddDataSheet from "../Main/components/AddDataSheet";
 import TransactionSheet from "../Main/components/TransactionSheet";
 import AuthRequiredModal from "../Main/components/AuthRequiredModal";
@@ -25,6 +27,16 @@ const ScreenSpend = ({
         setCategoryAmountInput,
         commitCategoryAmount,
         handleEnterCommit,
+        monthLabel,
+        monthKey,
+        monthOptions,
+        setMonthKey,
+        periodFilters,
+        budgetInputs,
+        setBudgetInputs,
+        commitBudgetInput,
+        reportStatusFilter,
+        setReportStatusFilter,
         categoryTotal,
         displayCategorySegments,
         paymentGroups,
@@ -40,6 +52,7 @@ const ScreenSpend = ({
         closeSheet,
         animationTime,
         handleToggleEditMode,
+        yearlySummary,
     } = mainState;
 
     const maskText = "??";
@@ -51,6 +64,10 @@ const ScreenSpend = ({
         setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
     };
 
+    const handleBudgetChange = (key, value) => {
+        setBudgetInputs((previous) => ({ ...previous, [key]: value }));
+    };
+
     const handleClickSignUp = () => {
         onCloseSignUpModal?.();
         onRequestSignUp?.();
@@ -60,6 +77,28 @@ const ScreenSpend = ({
         <Screen className="screen_main">
             <Title>지출 관리</Title>
             <Inner>
+                <ReportSection
+                    monthLabel={monthLabel}
+                    monthKey={monthKey}
+                    monthOptions={monthOptions}
+                    onChangeMonth={setMonthKey}
+                    periodFilters={periodFilters}
+                    onChangePeriod={setMonthKey}
+                    report={report}
+                    budgetInputs={budgetInputs}
+                    isEditMode={isEditMode}
+                    isLinkedAccount={isLinkedAccount}
+                    formatMaskedKoreanWon={formatMaskedKoreanWon}
+                    formatMaskedCount={formatMaskedCount}
+                    onToggleEditMode={handleToggleEditMode}
+                    onBudgetChange={handleBudgetChange}
+                    onBudgetCommit={commitBudgetInput}
+                    reportStatusFilter={reportStatusFilter}
+                    onChangeReportStatusFilter={setReportStatusFilter}
+                />
+
+                <YearlySummary summary={yearlySummary} />
+
                 <CategorySection
                     id={categorySpend}
                     categorySummaries={categorySummaries}
