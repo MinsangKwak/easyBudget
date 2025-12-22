@@ -7,7 +7,7 @@
 html {
     font-size: 62.5%;
 }
-html::before {
+/* html::before {
     content: "";
     position: fixed;
     inset: 0;
@@ -16,7 +16,7 @@ html::before {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: -1;
-}
+} */
 
 html,
 body {
