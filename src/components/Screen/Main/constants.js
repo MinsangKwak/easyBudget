@@ -11,17 +11,17 @@ export const PAYMENT_GROUP_META = {
     cash: { key: "cash", label: "현금지출" },
 };
 
-export const DEFAULT_INCOME_ENTRIES = [
+const OCTOBER_INCOME_ENTRIES = [
     { id: "income-salary", label: "급여", amount: 3200000 },
     { id: "income-side", label: "기타 수입", amount: 580000 },
 ];
 
-export const DEFAULT_SPEND_ENTRIES = [
+const OCTOBER_SPEND_ENTRIES = [
     {
         id: "cat_food_shinhan",
         categoryKey: "cat_food",
         categoryLabel: "식비·외식비",
-        amount: 360000,
+        amount: 3600000,
         paymentKey: "card_shinhan",
         paymentLabel: "신한카드",
         paymentLogo: "S",
@@ -35,7 +35,7 @@ export const DEFAULT_SPEND_ENTRIES = [
         id: "cat_food_hyundai",
         categoryKey: "cat_food",
         categoryLabel: "식비·외식비",
-        amount: 300000,
+        amount: 3000000,
         paymentKey: "card_hyundai",
         paymentLabel: "현대카드",
         paymentLogo: "H",
@@ -49,7 +49,7 @@ export const DEFAULT_SPEND_ENTRIES = [
         id: "cat_loan_hyundai",
         categoryKey: "cat_loan",
         categoryLabel: "대출",
-        amount: 550000,
+        amount: 5500000,
         paymentKey: "card_hyundai",
         paymentLabel: "현대카드",
         paymentLogo: "H",
@@ -63,7 +63,7 @@ export const DEFAULT_SPEND_ENTRIES = [
         id: "cat_ins_kb",
         categoryKey: "cat_ins",
         categoryLabel: "보험",
-        amount: 200000,
+        amount: 2000000,
         paymentKey: "card_kb",
         paymentLabel: "KB국민카드",
         paymentLogo: "K",
@@ -77,7 +77,7 @@ export const DEFAULT_SPEND_ENTRIES = [
         id: "cat_house_cash",
         categoryKey: "cat_house",
         categoryLabel: "주거·관리",
-        amount: 140000,
+        amount: 1400000,
         paymentKey: "cash",
         paymentLabel: "현금",
         paymentLogo: "₩",
@@ -91,7 +91,7 @@ export const DEFAULT_SPEND_ENTRIES = [
         id: "cat_misc_card",
         categoryKey: "cat_misc",
         categoryLabel: "결제·소통",
-        amount: 45000,
+        amount: 450000,
         paymentKey: "card_other",
         paymentLabel: "우리카드",
         paymentLogo: "W",
@@ -102,3 +102,125 @@ export const DEFAULT_SPEND_ENTRIES = [
         dateLabel: "10/02",
     },
 ];
+
+const NOVEMBER_INCOME_ENTRIES = [
+    { id: "income-salary-nov", label: "급여", amount: 3300000 },
+    { id: "income-bonus-nov", label: "성과급", amount: 550000 },
+];
+
+const NOVEMBER_SPEND_ENTRIES = [
+    {
+        id: "cat_food_shinhan_nov",
+        categoryKey: "cat_food",
+        categoryLabel: "식비·외식비",
+        amount: 3150000,
+        paymentKey: "card_shinhan",
+        paymentLabel: "신한카드",
+        paymentLogo: "S",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "paid",
+        dateLabel: "11/11",
+    },
+    {
+        id: "cat_food_hyundai_nov",
+        categoryKey: "cat_food",
+        categoryLabel: "식비·외식비",
+        amount: 2700000,
+        paymentKey: "card_hyundai",
+        paymentLabel: "현대카드",
+        paymentLogo: "H",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "planned",
+        dateLabel: "11/24",
+    },
+    {
+        id: "cat_loan_hyundai_nov",
+        categoryKey: "cat_loan",
+        categoryLabel: "대출",
+        amount: 5500000,
+        paymentKey: "card_hyundai",
+        paymentLabel: "현대카드",
+        paymentLogo: "H",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "regular",
+        status: "planned",
+        dateLabel: "11/25",
+    },
+    {
+        id: "cat_ins_kb_nov",
+        categoryKey: "cat_ins",
+        categoryLabel: "보험",
+        amount: 2000000,
+        paymentKey: "card_kb",
+        paymentLabel: "KB국민카드",
+        paymentLogo: "K",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "regular",
+        status: "paid",
+        dateLabel: "11/07",
+    },
+    {
+        id: "cat_house_cash_nov",
+        categoryKey: "cat_house",
+        categoryLabel: "주거·관리",
+        amount: 1280000,
+        paymentKey: "cash",
+        paymentLabel: "현금",
+        paymentLogo: "₩",
+        paymentGroupKey: "cash",
+        paymentGroupLabel: "현금지출",
+        spendType: "regular",
+        status: "paid",
+        dateLabel: "11/04",
+    },
+    {
+        id: "cat_misc_card_nov",
+        categoryKey: "cat_misc",
+        categoryLabel: "결제·소통",
+        amount: 380000,
+        paymentKey: "card_other",
+        paymentLabel: "우리카드",
+        paymentLogo: "W",
+        paymentGroupKey: "card",
+        paymentGroupLabel: "카드지출",
+        spendType: "variable",
+        status: "paid",
+        dateLabel: "11/02",
+    },
+];
+
+export const MONTHLY_REPORTS = [
+    {
+        key: "2024-10",
+        label: "10월",
+        year: "2024",
+        budget: {
+            incomeBudget: 3780000,
+            spendBudget: 15950000,
+            variableBudget: 7050000,
+        },
+        incomeEntries: OCTOBER_INCOME_ENTRIES,
+        spendEntries: OCTOBER_SPEND_ENTRIES,
+    },
+    {
+        key: "2024-11",
+        label: "11월",
+        year: "2024",
+        budget: {
+            incomeBudget: 3850000,
+            spendBudget: 15010000,
+            variableBudget: 6230000,
+        },
+        incomeEntries: NOVEMBER_INCOME_ENTRIES,
+        spendEntries: NOVEMBER_SPEND_ENTRIES,
+    },
+];
+
+export const DEFAULT_INCOME_ENTRIES = OCTOBER_INCOME_ENTRIES;
+export const DEFAULT_SPEND_ENTRIES = OCTOBER_SPEND_ENTRIES;

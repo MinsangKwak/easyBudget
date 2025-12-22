@@ -3,6 +3,7 @@ import {
     CATEGORY_OPTIONS,
     DEFAULT_INCOME_ENTRIES,
     DEFAULT_SPEND_ENTRIES,
+    MONTHLY_REPORTS,
     PAYMENT_GROUP_META,
 } from "../constants";
 import { clampValue, parseNumberSafely, slugifyKey } from "../utils";
@@ -28,14 +29,15 @@ const buildSpendStats = (entries, targetType) => {
     };
 };
 
-export const useMainState = ({ monthLabel, isLinkedAccount, ensureLinkedAccount }) => {
+export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     const [isEditMode, setIsEditMode] = useState(false);
+    const [monthKey, setMonthKey] = useState(MONTHLY_REPORTS[0]?.key);
     const [incomeEntries, setIncomeEntries] = useState(DEFAULT_INCOME_ENTRIES);
     const [spendEntries, setSpendEntries] = useState(DEFAULT_SPEND_ENTRIES);
     const [planBudget, setPlanBudget] = useState({
         incomeBudget: 3780000,
-        spendBudget: 3500000,
-        variableBudget: 1270000,
+        spendBudget: 15950000,
+        variableBudget: 7050000,
     });
     const [budgetInputs, setBudgetInputs] = useState({
         incomeBudget: "3780000",
@@ -76,6 +78,24 @@ export const useMainState = ({ monthLabel, isLinkedAccount, ensureLinkedAccount 
             variableBudget: String(planBudget.variableBudget),
         });
     }, [planBudget]);
+
+    const monthOptions = useMemo(
+        () => MONTHLY_REPORTS.map(({ key, label }) => ({ key, label })),
+        [],
+    );
+
+    const selectedMonth = useMemo(() => {
+        return MONTHLY_REPORTS.find((month) => month.key === monthKey) || MONTHLY_REPORTS[0];
+    }, [monthKey]);
+
+    useEffect(() => {
+        if (!selectedMonth) return;
+        setIncomeEntries(selectedMonth.incomeEntries.map((entry) => ({ ...entry })));
+        setSpendEntries(selectedMonth.spendEntries.map((entry) => ({ ...entry })));
+        setPlanBudget({ ...selectedMonth.budget });
+    }, [selectedMonth]);
+
+    const monthLabelResolved = selectedMonth?.label || "이번 달";
 
     const incomeTotal = useMemo(() => {
         return incomeEntries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
@@ -210,7 +230,7 @@ export const useMainState = ({ monthLabel, isLinkedAccount, ensureLinkedAccount 
             id: entry.id,
             title: entry.paymentLabel || resolveCategoryLabel(entry.categoryKey),
             amount: entry.amount,
-            date: entry.dateLabel || monthLabel,
+            date: entry.dateLabel || monthLabelResolved,
             sub: `${resolveCategoryLabel(entry.categoryKey)} · ${
                 entry.spendType === "regular" ? "정기" : "변동"
             }${entry.status === "planned" ? " 예정" : ""}`,
@@ -309,7 +329,7 @@ export const useMainState = ({ monthLabel, isLinkedAccount, ensureLinkedAccount 
                     PAYMENT_GROUP_META[newEntryDraft.paymentGroupKey]?.label || "지출수단",
                 spendType: newEntryDraft.spendType,
                 status: newEntryDraft.status,
-                dateLabel: newEntryDraft.dateLabel || monthLabel,
+                dateLabel: newEntryDraft.dateLabel || monthLabelResolved,
             };
 
             setSpendEntries((previous) => [...previous, nextEntry]);
@@ -338,8 +358,36 @@ export const useMainState = ({ monthLabel, isLinkedAccount, ensureLinkedAccount 
         openSheet({ title: `${label} 내역`, items: buildSheetItems(items) });
     };
 
+    const yearlySummary = useMemo(() => {
+        const totalIncome = MONTHLY_REPORTS.reduce((acc, month) => {
+            const entries = month.key === monthKey ? incomeEntries : month.incomeEntries;
+            return (
+                acc +
+                entries.reduce((entrySum, entry) => entrySum + Math.max(0, entry.amount), 0)
+            );
+        }, 0);
+        const totalSpend = MONTHLY_REPORTS.reduce((acc, month) => {
+            const entries = month.key === monthKey ? spendEntries : month.spendEntries;
+            return (
+                acc +
+                entries.reduce((entrySum, entry) => entrySum + Math.max(0, entry.amount), 0)
+            );
+        }, 0);
+
+        const targetYear = selectedMonth?.year || MONTHLY_REPORTS[0]?.year || "올해";
+        return {
+            yearLabel: `${targetYear}년`,
+            income: totalIncome,
+            spend: totalSpend,
+        };
+    }, [incomeEntries, monthKey, selectedMonth, spendEntries]);
+
     return {
         isEditMode,
+        monthKey,
+        monthLabel: monthLabelResolved,
+        monthOptions,
+        setMonthKey,
         incomeTotal,
         spendTotal,
         report,
@@ -367,5 +415,6 @@ export const useMainState = ({ monthLabel, isLinkedAccount, ensureLinkedAccount 
         openSheet,
         closeSheet,
         animationTime,
+        yearlySummary,
     };
 };
