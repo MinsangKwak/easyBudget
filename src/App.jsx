@@ -15,7 +15,7 @@ const ScreenWelcome = lazy(() => import("./components/Screen/Common/Welcome"));
 const ScreenProfile = lazy(() => import("./components/Screen/Member/Profile"));
 
 const App = () => {
-    const { currentUser, logout, loginWithCertificate } = useAuth();
+    const { currentUser, logout, deleteAccount, loginWithCertificate } = useAuth();
     const [screen, setScreen] = useState(SCREEN_NAMES.MAIN);
 
     const handleGoLogin = () => setScreen(SCREEN_NAMES.INTRO);
@@ -32,6 +32,11 @@ const App = () => {
 
     const handleLogout = () => {
         logout();
+        setScreen(SCREEN_NAMES.MAIN);
+    };
+
+    const handleDeleteAccount = () => {
+        deleteAccount();
         setScreen(SCREEN_NAMES.MAIN);
     };
 
@@ -110,7 +115,9 @@ const App = () => {
                     <ScreenMain onRequestSignUp={handleGoJoin} />
                 )}
 
-                {screen === SCREEN_NAMES.PROFILE && <ScreenProfile onGoHome={handleGoHome} />}
+                {screen === SCREEN_NAMES.PROFILE && (
+                    <ScreenProfile onGoHome={handleGoHome} onDeleteAccount={handleDeleteAccount} />
+                )}
             </Suspense>
         </main>
     );

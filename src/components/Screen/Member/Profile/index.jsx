@@ -17,7 +17,7 @@ const ProfileField = ({ label, value }) => {
     );
 };
 
-const ProfileScreen = ({ onGoHome }) => {
+const ProfileScreen = ({ onGoHome, onDeleteAccount }) => {
     const { currentUser } = useAuth();
 
     return (
@@ -50,6 +50,17 @@ const ProfileScreen = ({ onGoHome }) => {
                 >
                     메인으로 돌아가기
                 </BaseButton>
+                {currentUser && (
+                    <BaseButton
+                        type="button"
+                        size="md"
+                        style="outline__grey"
+                        className="btn_profile_delete"
+                        onClick={onDeleteAccount}
+                    >
+                        회원 탈퇴 (세션 제거)
+                    </BaseButton>
+                )}
             </Inner>
         </Screen>
     );

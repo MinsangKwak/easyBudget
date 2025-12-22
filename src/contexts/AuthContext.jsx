@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 const AUTH_STORAGE_KEY = "demo-auth-state";
 const DEFAULT_USERS_ENDPOINT = "/api/auth/default-users";
@@ -450,6 +450,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [state, setState] = useState(loadAuthState);
+    const shouldPersistRef = useRef(true);
 
     useEffect(() => {
         let isCancelled = false;
@@ -476,6 +477,11 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
+        if (!shouldPersistRef.current) {
+            shouldPersistRef.current = true;
+            return;
+        }
+
         const nextState = { ...state, lastSyncedAt: new Date().toISOString() };
         if (typeof sessionStorage !== "undefined") {
             sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextState));
@@ -694,6 +700,15 @@ export const AuthProvider = ({ children }) => {
         setState((previous) => ({ ...previous, currentUserId: null }));
     };
 
+    const deleteAccount = () => {
+        if (typeof sessionStorage !== "undefined") {
+            sessionStorage.removeItem(AUTH_STORAGE_KEY);
+        }
+
+        shouldPersistRef.current = false;
+        setState(buildDefaultState());
+    };
+
     const value = {
         users: state.users,
         currentUser,
@@ -701,6 +716,7 @@ export const AuthProvider = ({ children }) => {
         registerEmailUser,
         loginWithCertificate,
         logout,
+        deleteAccount,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
