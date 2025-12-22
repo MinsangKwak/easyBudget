@@ -57,7 +57,7 @@ const ReportSection = ({
                         </select>
                     </label>
 
-                    {periodFilters.map((option) => (
+                    {/* {periodFilters.map((option) => (
                         <button
                             key={option.key}
                             type="button"
@@ -73,7 +73,7 @@ const ReportSection = ({
                                 <b>총 수입 {formatMaskedKoreanWon(option.incomeTotal)}</b>
                             </span>
                         </button>
-                    ))}
+                    ))} */}
                 </div>
             </div>
 
