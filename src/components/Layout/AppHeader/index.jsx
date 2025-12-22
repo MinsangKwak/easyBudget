@@ -5,9 +5,10 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 const AppHeader = ({
     isAuthenticated,
     onLogoClick,
-    onLoginClick,
-    onProfileClick,
-    onLogoutClick,
+    onToggleMenu,
+    onCloseMenu,
+    isMenuOpen = false,
+    menuItems = [],
     showBackButton = false,
     onBackClick,
 }) => {
@@ -20,6 +21,11 @@ const AppHeader = ({
         }
 
         onLogoClick?.();
+    };
+
+    const handleSelectMenu = (item) => {
+        item?.onClick?.();
+        onCloseMenu?.();
     };
 
     return (
@@ -35,53 +41,48 @@ const AppHeader = ({
                         <IoIosArrowRoundBack />
                     </BaseButton>
                 ) : (
-                    <button
-                        type="button"
-                        className="header__logo_button"
-                        aria-label="서비스 로고"
-                        onClick={onLogoClick}
-                    >
-                        <span className="header__logo">WALLET</span>
-                    </button>
-                )}
-
-                {!showBackButton && (
-                    <div className="header__actions">
-                        {isAuthenticated ? (
-                            <>
-                                <BaseButton
-                                    type="button"
-                                    size="sm"
-                                    style="line__black"
-                                    className="btn_inline"
-                                    onClick={onProfileClick}
-                                >
-                                    마이프로필
-                                </BaseButton>
-                                <BaseButton
-                                    type="button"
-                                    size="sm"
-                                    style="outline__grey"
-                                    className="btn_inline"
-                                    onClick={onLogoutClick}
-                                >
-                                    로그아웃
-                                </BaseButton>
-                            </>
-                        ) : (
-                            <BaseButton
-                                type="button"
-                                size="sm"
-                                style="solid__primary"
-                                className="btn_inline"
-                                onClick={onLoginClick}
-                            >
-                                로그인
-                            </BaseButton>
-                        )}
+                    <div className="header__brand">
+                        <button
+                            type="button"
+                            className="header__logo_button"
+                            aria-label="서비스 로고"
+                            onClick={onLogoClick}
+                        >
+                            <span className="header__logo">WALLET</span>
+                        </button>
                     </div>
                 )}
+
+                <div className="header__actions">
+                    <BaseButton
+                        type="button"
+                        style="menu"
+                        aria-expanded={isMenuOpen}
+                        aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+                        onClick={onToggleMenu}
+                        className="header__menu_btn"
+                    >
+                        ☰
+                    </BaseButton>
+                </div>
             </div>
+
+            <aside className={`header__drawer ${isMenuOpen ? "is_open" : ""}`} aria-hidden={!isMenuOpen}>
+                <div className="drawer_head">
+                    <span className="drawer_title">메뉴</span>
+                    <span className="drawer_status">{isAuthenticated ? "로그인됨" : "로그인 필요"}</span>
+                </div>
+                <ul className="drawer_list">
+                    {menuItems.map((item) => (
+                        <li key={item.key} className="drawer_item">
+                            <button type="button" onClick={() => handleSelectMenu(item)}>
+                                {item.label}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </aside>
+            {isMenuOpen && <button className="header__scrim" onClick={onCloseMenu} aria-label="메뉴 닫기" />}
         </header>
     );
 };
