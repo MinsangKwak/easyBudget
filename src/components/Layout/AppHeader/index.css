@@ -63,7 +63,8 @@
     transition: right 0.25s ease;
     z-index: 900;
     padding: 2rem 1.6rem;
-    display: grid;
+    display:flex;
+    flex-direction:column;
     gap: 1.2rem;
 }
 
@@ -89,7 +90,6 @@
 }
 
 .drawer_list {
-    list-style: none;
     display: grid;
     gap: 0.8rem;
     padding: 0;
