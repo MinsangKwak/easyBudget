@@ -11,12 +11,12 @@ export const PAYMENT_GROUP_META = {
     cash: { key: "cash", label: "현금지출" },
 };
 
-const OCTOBER_INCOME_ENTRIES = [
+const DECEMBER_INCOME_ENTRIES = [
     { id: "income-salary", label: "급여", amount: 3200000 },
     { id: "income-side", label: "기타 수입", amount: 580000 },
 ];
 
-const OCTOBER_SPEND_ENTRIES = [
+const DECEMBER_SPEND_ENTRIES = [
     {
         id: "cat_food_shinhan",
         categoryKey: "cat_food",
@@ -103,14 +103,14 @@ const OCTOBER_SPEND_ENTRIES = [
     },
 ];
 
-const OCTOBER_2025_INCOME_ENTRIES = [
+const DECEMBER_2025_INCOME_ENTRIES = [
     { id: "income-salary-2025-10", label: "급여", amount: 4100000 },
     { id: "income-bonus-2025-10", label: "성과급", amount: 970000 },
 ];
 
-const OCTOBER_2025_SPEND_ENTRIES = [
+const DECEMBER_2025_SPEND_ENTRIES = [
     {
-        id: "cat_food_nh_2025_10",
+        id: "cat_food_nh_2025_12",
         categoryKey: "cat_food",
         categoryLabel: "식비·외식비",
         amount: 3450000,
@@ -124,7 +124,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
         dateLabel: "10/06",
     },
     {
-        id: "cat_food_kb_2025_10",
+        id: "cat_food_kb_2025_12",
         categoryKey: "cat_food",
         categoryLabel: "식비·외식비",
         amount: 1850000,
@@ -138,7 +138,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
         dateLabel: "10/19",
     },
     {
-        id: "cat_loan_hyundai_2025_10",
+        id: "cat_loan_hyundai_2025_12",
         categoryKey: "cat_loan",
         categoryLabel: "대출",
         amount: 4300000,
@@ -152,7 +152,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
         dateLabel: "10/25",
     },
     {
-        id: "cat_ins_kb_2025_10",
+        id: "cat_ins_kb_2025_12",
         categoryKey: "cat_ins",
         categoryLabel: "보험",
         amount: 1650000,
@@ -166,7 +166,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
         dateLabel: "10/08",
     },
     {
-        id: "cat_house_cash_2025_10",
+        id: "cat_house_cash_2025_12",
         categoryKey: "cat_house",
         categoryLabel: "주거·관리",
         amount: 1150000,
@@ -180,7 +180,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
         dateLabel: "10/03",
     },
     {
-        id: "cat_misc_card_2025_10",
+        id: "cat_misc_card_2025_12",
         categoryKey: "cat_misc",
         categoryLabel: "결제·소통",
         amount: 350000,
@@ -290,15 +290,15 @@ const NOVEMBER_SPEND_ENTRIES = [
 export const MONTHLY_REPORTS = [
     {
         key: "2025-10",
-        label: "2025년 10월",
+        label: "2025년 12월",
         year: "2025",
         budget: {
             incomeBudget: 5200000,
             spendBudget: 12750000,
             variableBudget: 5650000,
         },
-        incomeEntries: OCTOBER_2025_INCOME_ENTRIES,
-        spendEntries: OCTOBER_2025_SPEND_ENTRIES,
+        incomeEntries: DECEMBER_2025_INCOME_ENTRIES,
+        spendEntries: DECEMBER_2025_SPEND_ENTRIES,
     },
     {
         key: "2024-11",
@@ -321,10 +321,10 @@ export const MONTHLY_REPORTS = [
             spendBudget: 15950000,
             variableBudget: 7050000,
         },
-        incomeEntries: OCTOBER_INCOME_ENTRIES,
-        spendEntries: OCTOBER_SPEND_ENTRIES,
+        incomeEntries: DECEMBER_INCOME_ENTRIES,
+        spendEntries: DECEMBER_SPEND_ENTRIES,
     },
 ];
 
-export const DEFAULT_INCOME_ENTRIES = OCTOBER_2025_INCOME_ENTRIES;
-export const DEFAULT_SPEND_ENTRIES = OCTOBER_2025_SPEND_ENTRIES;
+export const DEFAULT_INCOME_ENTRIES = DECEMBER_2025_INCOME_ENTRIES;
+export const DEFAULT_SPEND_ENTRIES = DECEMBER_2025_SPEND_ENTRIES;
