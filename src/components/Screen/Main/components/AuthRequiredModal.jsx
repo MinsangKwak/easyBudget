@@ -2,7 +2,7 @@ import Modal from "../../../Common/Modal/Modal";
 
 const AuthRequiredModal = ({ isOpen, onClose, onConfirm }) => {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="회원가입시 사용 가능합니다">
+        <Modal isOpen={isOpen} onClose={onClose} title="회원가입 후 시도해주세요">
             <p className="modal_desc">
                 로그인 또는 회원가입 후 마이데이터를 연동하면 지출/수입 정보를 확인하고 수정할 수
                 있어요.

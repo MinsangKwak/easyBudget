@@ -96,24 +96,26 @@ const App = () => {
 
     const showBackButton = screen === SCREEN_NAMES.INTRO;
 
+    const handleProtectedSpendNavigation = (nextView) => {
+        if (!ensureLinkedAccount()) {
+            setScreen(SCREEN_NAMES.MAIN);
+            return;
+        }
+
+        setSpendView(nextView);
+        setScreen(SCREEN_NAMES.SPEND);
+    };
+
     const menuItems = [
         {
             key: "payment-methods",
             label: "지출 수단",
-            onClick: () =>
-                handleNavigate(() => {
-                    setSpendView("category");
-                    setScreen(SCREEN_NAMES.SPEND);
-                }),
+            onClick: () => handleNavigate(() => handleProtectedSpendNavigation("category")),
         },
         {
             key: "category-spend",
             label: "카테고리별 지출",
-            onClick: () =>
-                handleNavigate(() => {
-                    setSpendView("paymentMethods");
-                    setScreen(SCREEN_NAMES.SPEND);
-                }),
+            onClick: () => handleNavigate(() => handleProtectedSpendNavigation("paymentMethods")),
         },
     ];
 
