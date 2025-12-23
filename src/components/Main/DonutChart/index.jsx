@@ -6,7 +6,7 @@ const DonutChart = ({
     segments = [],
     centerTopLabel,
     centerValue,
-    centerBottomLabel,
+    centerBottomLabel = "이번 달",
     animationTime,
     isPaused,
     isMasked,
