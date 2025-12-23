@@ -45,7 +45,7 @@
 
 .header__logo {
     font-weight: 800;
-    font-size: 1.8rem;
+    font-size: var(--font-size-3xl);
     letter-spacing: -0.08em;
     text-shadow: 4px 4px 0 color-mix(in srgb, var(--color-black-100) 18%, transparent);
     color: var(--color-black);
@@ -113,7 +113,7 @@
 
 .drawer_title {
     font-weight: 800;
-    font-size: 1.6rem;
+    font-size: var(--font-size-2xl);
     color: var(--color-black-100);
 }
 

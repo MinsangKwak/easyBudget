@@ -8,6 +8,7 @@ import AddDataSheet from "../../Main/components/AddDataSheet";
 import TransactionSheet from "../../Main/components/TransactionSheet";
 import AuthRequiredModal from "../../Main/components/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
+import { FiChevronDown } from "react-icons/fi";
 
 const ScreenCategory = ({
     onRequestSignUp,
@@ -19,6 +20,10 @@ const ScreenCategory = ({
 }) => {
     const { categorySpend } = sectionIds;
     const {
+        monthLabel,
+        monthKey,
+        monthOptions,
+        setMonthKey,
         isEditMode,
         categorySummaries,
         categoryAmountInput,
@@ -59,6 +64,27 @@ const ScreenCategory = ({
             <Title>카테고리별 지출</Title>
             <SubTitle>카테고리별 지출 현황과 예산을 관리해요</SubTitle>
             <Inner>
+                <div className="card_filters">
+                    <div className="report_filters period_filters" role="group" aria-label="기간 필터">
+                        <label className="month_btn" aria-label="월 선택">
+                            <span className="month_btn__label">{monthLabel}</span>
+                            <FiChevronDown />
+                            <select
+                                className="month_select"
+                                value={monthKey}
+                                onChange={(event) => setMonthKey?.(event.target.value)}
+                                aria-label="월 선택"
+                            >
+                                {monthOptions.map((option) => (
+                                    <option key={option.key} value={option.key}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
                 <CategorySection
                     id={categorySpend}
                     categorySummaries={categorySummaries}

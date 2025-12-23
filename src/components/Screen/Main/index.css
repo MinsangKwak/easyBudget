@@ -4,7 +4,7 @@
 
 .screen_main .description {
     margin-top: 1.2rem;
-    font-size: 1.4rem;
+    font-size: var(--font-size-lg);
     line-height: 1.5;
     color: var(--muted);
 }
@@ -28,7 +28,7 @@
 }
 
 .card_value {
-    font-size: 14px;
+    font-size: var(--font-size-lg);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -42,7 +42,7 @@
 }
 
 .card_title {
-    font-size: 14px;
+    font-size: var(--font-size-lg);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -63,13 +63,13 @@
 .month_btn__label{
     display:inline-flex;
     width:100%;
-    font-size:1.2rem;
+    font-size: var(--font-size-sm);
     line-height:1.37;
     font-weight:700;
 }
 
 .month_btn svg {
-    font-size: 16px;
+    font-size: var(--font-size-2xl);
 }
 .month_select {
     position: absolute;
@@ -125,14 +125,14 @@
 }
 
 .filter_chip__label {
-    font-size: 13px;
+    font-size: var(--font-size-md);
 }
 
 .filter_chip__values {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    font-size: 12px;
+    font-size: var(--font-size-sm);
 }
 
 .card_item {
@@ -146,7 +146,7 @@
 }
 
 .card_item .item_title {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -166,7 +166,7 @@
     background-clip: padding-box;
     padding: 0.6rem 0.9rem;
     font-weight: 800;
-    font-size: 1.4rem;
+    font-size: var(--font-size-lg);
     color: var(--color-black-100);
     text-align: right;
     line-height: 1.4;
@@ -183,7 +183,7 @@
 }
 
 .inline_field .form_label {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     color: var(--color-black-200);
 }
 
@@ -196,7 +196,7 @@
     background-clip: padding-box;
     padding: 0.6rem 0.9rem;
     font-weight: 800;
-    font-size: 1.4rem;
+    font-size: var(--font-size-lg);
     color: var(--color-black-100);
     text-align: right;
     line-height: 1.4;
@@ -212,7 +212,7 @@
 }
 
 .card_item .item_value {
-    font-size: 18px;
+    font-size: var(--font-size-3xl);
     font-weight: 900;
     letter-spacing: -0.02em;
     color: var(--color-black-100);
@@ -223,12 +223,12 @@
 .card_item .item_hint__title {
     display: inline-flex;
     width:100%;
-    font-size: 1.2rem;
+    font-size: var(--font-size-sm);
 }
 .card_item .item_subtitle{
     display: inline-flex;
     width:100%;
-    font-size: 1.4rem;
+    font-size: var(--font-size-lg);
 }
 
 .kpi_spend {
@@ -257,7 +257,7 @@
 }
 
 .block_title {
-    font-size: 13px;
+    font-size: var(--font-size-md);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -270,7 +270,7 @@
 }
 
 .badge {
-    font-size: 11px;
+    font-size: var(--font-size-xs);
     font-weight: 900;
     padding: 4px 8px;
     border-radius: 999px;
@@ -293,11 +293,11 @@
 }
 
 .row_label {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
 }
 
 .row_value {
-    font-size: 13px;
+    font-size: var(--font-size-md);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -341,7 +341,7 @@ gap: 10px;
 
 .list_label,
 .cat_label {
-    font-size: 13px;
+    font-size: var(--font-size-md);
     font-weight: 900;
     color: var(--color-black-100);
     white-space: nowrap;
@@ -352,7 +352,7 @@ gap: 10px;
 
 .list_value,
 .cat_value {
-    font-size: 13px;
+    font-size: var(--font-size-md);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -363,7 +363,7 @@ gap: 10px;
     border-radius: 999px;
     border: 2px solid var(--color-black-100);
     background: rgba(255, 255, 255, 0.95);
-    font-size: 18px;
+    font-size: var(--font-size-3xl);
     font-weight: 900;
     line-height: 1;
     display: grid;
@@ -383,13 +383,13 @@ gap: 10px;
 }
 
 .pay_group__title {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     font-weight: 900;
     color: var(--color-black-100);
 }
 
 .pay_group__total {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -494,12 +494,12 @@ gap: 10px;
     gap: 6px;
 }
 .add_field .form_label {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     font-weight: 800;
     color: var(--color-black-100);
 }
 .add_field__label {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     font-weight: 800;
     color: var(--color-black-100);
 }
@@ -512,7 +512,7 @@ gap: 10px;
     background-clip: padding-box;
     padding: 0.9rem 1.2rem;
     font-weight: 900;
-    font-size: 1.4rem;
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     color: var(--color-black-100);
     -webkit-appearance: none;
@@ -526,7 +526,7 @@ gap: 10px;
     background-clip: padding-box;
     padding: 0.9rem 1.2rem;
     font-weight: 900;
-    font-size: 1.4rem;
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     color: var(--color-black-100);
 }
@@ -568,19 +568,19 @@ gap: 10px;
 }
 
 .dot_dark {
-    background: color-mix(in srgb, var(--color-primary) 78%, rgb(72, 0, 106) 74%);
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-dark) 74%);
 }
 
 .dot_green {
-    background: color-mix(in srgb, var(--color-primary) 78%, rgb(0, 31, 78)4%);
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-green) 4%);
 }
 
 .dot_orange {
-    background: color-mix(in srgb, var(--color-primary) 78%, rgb(162, 0, 105) 50%);
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-orange) 50%);
 }
 
 .dot_soft {
-    background: color-mix(in srgb, var(--color-primary) 78%, rgb(155, 0, 150) 74%);
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-soft) 74%);
 }
 
 .cat_text {
@@ -589,7 +589,7 @@ gap: 10px;
 }
 
 .cat_meta {
-    font-size: 11px;
+    font-size: var(--font-size-xs);
     font-weight: 800;
 }
 
@@ -610,7 +610,7 @@ gap: 10px;
     background-clip: padding-box;
     padding: 0.6rem 1rem;
     font-weight: 900;
-    font-size: 1.4rem;
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     text-align: right;
     color: var(--color-black-100);
@@ -649,19 +649,19 @@ gap: 10px;
 }
 
 .donut_seg.tone_dark {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(72, 0, 106) 74%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-dark) 74%);
 }
 
 .donut_seg.tone_green {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(0, 31, 78)4%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-green) 4%);
 }
 
 .donut_seg.tone_orange {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(162, 0, 105) 50%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-orange) 50%);
 }
 
 .donut_seg.tone_soft {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, rgb(155, 0, 150) 74%);
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-soft) 74%);
 }
 
 .donut_center {
@@ -675,12 +675,12 @@ gap: 10px;
 
 .donut_top {
     margin-top: 10px;
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     font-weight: 800;
 }
 
 .donut_value {
-    font-size: 26px;
+    font-size: var(--font-size-5xl);
     font-weight: 900;
     letter-spacing: -0.02em;
     color: var(--color-black-100);
@@ -689,7 +689,7 @@ gap: 10px;
 
 .donut_bottom {
     margin-bottom: 10px;
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     font-weight: 800;
 }
 

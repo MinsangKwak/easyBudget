@@ -37,14 +37,14 @@ html.is_sheet_open body {
 }
 
 .modal_title {
-    font-size: 16px;
+    font-size: var(--font-size-2xl);
     font-weight: 900;
     color: var(--color-black-100);
 }
 
 .modal_desc {
     margin-top: 10px;
-    font-size: 13px;
+    font-size: var(--font-size-md);
     line-height: 1.6;
     color: var(--color-black-100);
 }
@@ -121,7 +121,7 @@ html.is_sheet_open body {
 }
 
 .sheet_title {
-    font-size: 14px;
+    font-size: var(--font-size-lg);
     font-weight: 900;
     color: var(--color-black-100);
 }
@@ -134,7 +134,7 @@ html.is_sheet_open body {
     background: rgba(255, 255, 255, 0.95);
     display: grid;
     place-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-3xl);
 }
 
 .sheet_body {
@@ -154,7 +154,7 @@ html.is_sheet_open body {
 
 .sheet_empty {
     padding: 8px 0 12px;
-    font-size: 13px;
+    font-size: var(--font-size-md);
 }
 
 .tx_list {
@@ -178,19 +178,19 @@ html.is_sheet_open body {
 }
 
 .tx_title {
-    font-size: 13px;
+    font-size: var(--font-size-md);
     font-weight: 900;
     color: var(--color-black-100);
 }
 
 .tx_meta {
     margin-top: 2px;
-    font-size: 11px;
+    font-size: var(--font-size-xs);
     font-weight: 800;
 }
 
 .tx_amount {
-    font-size: 13px;
+    font-size: var(--font-size-md);
     font-weight: 900;
     color: var(--color-black-100);
 }

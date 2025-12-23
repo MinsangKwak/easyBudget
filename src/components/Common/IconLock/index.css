@@ -36,13 +36,13 @@
 
 .icon_lock__icon {
     justify-self: center;
-    font-size: 40px;
+    font-size: var(--font-size-8xl);
     color: var(--color-primary);
     animation: lockFloat 2.2s ease-in-out infinite;
 }
 
 .icon_lock__side {
-    font-size: 20px;
+    font-size: var(--font-size-4xl);
     color: rgba(124, 58, 237, .45);
     opacity: .7;
     animation: sideFloat 3.2s ease-in-out infinite;

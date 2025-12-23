@@ -11,6 +11,6 @@
 
 .loading_message {
   font-weight: 500;
-  font-size:1.6rem;
+  font-size: var(--font-size-2xl);
   color: var(--color-black-100);
 }
