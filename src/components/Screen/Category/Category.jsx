@@ -1,4 +1,8 @@
 import "../../Main/index.css";
+
+import { useRef } from "react";
+import { FiChevronDown } from "react-icons/fi";
+
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import SubTitle from "../../Content/SubTitle";
@@ -8,7 +12,6 @@ import AddDataSheet from "../../Main/AddDataSheet";
 import TransactionSheet from "../../Main/TransactionSheet";
 import AuthRequiredModal from "../../Main/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
-import { FiChevronDown } from "react-icons/fi";
 
 const ScreenCategory = ({
     onRequestSignUp,
@@ -19,6 +22,7 @@ const ScreenCategory = ({
     sectionIds = {},
 }) => {
     const { categorySpend } = sectionIds;
+    const swipeStartX = useRef(null);
     const {
         monthLabel,
         monthKey,
@@ -49,6 +53,7 @@ const ScreenCategory = ({
     const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
     const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
     const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
+    const activeMonthIndex = monthOptions.findIndex((option) => option.key === monthKey);
 
     const handleCategoryChange = (categoryKey, value) => {
         setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
@@ -58,6 +63,31 @@ const ScreenCategory = ({
         onCloseSignUpModal?.();
         onRequestSignUp?.();
     };
+
+    const handleSwipeStart = (event) => {
+        const touch = event.touches?.[0];
+        swipeStartX.current = touch?.clientX ?? event.clientX ?? null;
+    };
+
+    const handleSwipeEnd = (event) => {
+        if (swipeStartX.current === null) return;
+
+        const touch = event.changedTouches?.[0];
+        const deltaX = (touch?.clientX ?? event.clientX ?? 0) - swipeStartX.current;
+        const threshold = 30;
+
+        const safeIndex = activeMonthIndex >= 0 ? activeMonthIndex : 0;
+
+        if (deltaX > threshold && safeIndex > 0) {
+            setMonthKey(monthOptions[safeIndex - 1]?.key);
+        } else if (deltaX < -threshold && safeIndex < monthOptions.length - 1) {
+            setMonthKey(monthOptions[safeIndex + 1]?.key);
+        }
+
+        swipeStartX.current = null;
+    };
+
+    const slideOffset = Math.max(activeMonthIndex, 0) * -100;
 
     return (
         <Screen className="screen_main">
@@ -85,24 +115,42 @@ const ScreenCategory = ({
                     </div>
                 </div>
 
-                <CategorySection
+                <div
                     id={categorySpend}
-                    categorySummaries={categorySummaries}
-                    categoryTotal={categoryTotal}
-                    displayCategorySegments={displayCategorySegments}
-                    isEditMode={isEditMode}
-                    isLinkedAccount={isLinkedAccount}
-                    animationTime={animationTime}
-                    formatMaskedKoreanWon={formatMaskedKoreanWon}
-                    formatMaskedCount={formatMaskedCount}
-                    formatMaskedPercent={formatMaskedPercent}
-                    onToggleEditMode={handleToggleEditMode}
-                    categoryAmountInput={categoryAmountInput}
-                    onCategoryChange={handleCategoryChange}
-                    onCategoryCommit={commitCategoryAmount}
-                    onCategoryEnter={handleEnterCommit}
-                    onClickCategory={handleClickCategoryRow}
-                />
+                    className="category_swiper"
+                    onTouchStart={handleSwipeStart}
+                    onTouchEnd={handleSwipeEnd}
+                    onMouseDown={handleSwipeStart}
+                    onMouseUp={handleSwipeEnd}
+                >
+                    <div
+                        className="category_swiper__track"
+                        style={{ transform: `translateX(${slideOffset}%)` }}
+                    >
+                        {monthOptions.map((option) => (
+                            <div key={option.key} className="category_swiper__slide">
+                                <CategorySection
+                                    periodLabel={monthLabel}
+                                    categorySummaries={categorySummaries}
+                                    categoryTotal={categoryTotal}
+                                    displayCategorySegments={displayCategorySegments}
+                                    isEditMode={isEditMode}
+                                    isLinkedAccount={isLinkedAccount}
+                                    animationTime={animationTime}
+                                    formatMaskedKoreanWon={formatMaskedKoreanWon}
+                                    formatMaskedCount={formatMaskedCount}
+                                    formatMaskedPercent={formatMaskedPercent}
+                                    onToggleEditMode={handleToggleEditMode}
+                                    categoryAmountInput={categoryAmountInput}
+                                    onCategoryChange={handleCategoryChange}
+                                    onCategoryCommit={commitCategoryAmount}
+                                    onCategoryEnter={handleEnterCommit}
+                                    onClickCategory={handleClickCategoryRow}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </Inner>
 
             <AddDataSheet

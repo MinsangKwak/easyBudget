@@ -137,6 +137,30 @@
     font-size: var(--font-size-sm);
 }
 
+.category_swiper {
+    overflow: hidden;
+    padding-bottom: 4px;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+}
+
+.category_swiper__track {
+    display: flex;
+    gap: 0;
+    transition: transform 0.28s ease;
+    will-change: transform;
+}
+
+.category_swiper__slide {
+    flex: 0 0 100%;
+    display: flex;
+}
+
+.category_swiper__slide > * {
+    width: 100%;
+}
+
 .list {
     list-style: none;
     padding: 0;

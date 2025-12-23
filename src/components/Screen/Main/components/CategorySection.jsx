@@ -15,6 +15,7 @@ const CategorySection = ({
     formatMaskedCount,
     formatMaskedPercent,
     onToggleEditMode,
+    periodLabel = "이번 달",
     categoryAmountInput,
     onCategoryChange,
     onCategoryCommit,
@@ -48,7 +49,7 @@ const CategorySection = ({
                     segments={displayCategorySegments}
                     centerTopLabel="지출 합계"
                     centerValue={categoryTotal}
-                    centerBottomLabel="이번 달"
+                    centerBottomLabel={periodLabel}
                     animationTime={animationTime}
                     isPaused={isEditMode}
                     isMasked={!isLinkedAccount}
