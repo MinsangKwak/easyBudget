@@ -2,8 +2,8 @@
   margin: 0 auto;
   padding: 48px 20px;
   max-width: 600px;
-  color: #333;
-  font-size: 14px;
+  color: var(--color-text-strong);
+  font-size: var(--font-size-lg);
   line-height: 24px;
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -13,7 +13,7 @@
   vertical-align: top;
   margin: 0 0 4px;
   font-weight: 700;
-  font-size: 32px;
+  font-size: var(--font-size-7xl);
   line-height: 1;
 }
 
@@ -39,18 +39,18 @@
   vertical-align: top;
   margin-right: 10px;
   border-radius: 1em;
-  background: #e7fdd8;
+  background: var(--color-surface-success);
   padding: 4px 12px;
-  color: #357a14;
+  color: var(--color-success-text);
   font-weight: 700;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   line-height: 12px;
 }
 
 .storybook-page .tip-wrapper {
   margin-top: 40px;
   margin-bottom: 40px;
-  font-size: 13px;
+  font-size: var(--font-size-md);
   line-height: 20px;
 }
 
@@ -64,5 +64,5 @@
 }
 
 .storybook-page .tip-wrapper svg path {
-  fill: #1ea7fd;
+  fill: var(--color-link);
 }

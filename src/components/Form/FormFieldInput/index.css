@@ -18,7 +18,7 @@
 .form_label {
   font-weight: 700;
   color: var(--color-black-100);
-  font-size: 1.5rem;
+  font-size: var(--font-size-xl);
 }
 
 .form_field__input {
@@ -32,20 +32,20 @@
   border: 1px solid var(--color-primary);
   background: var(--color-white);
   background-clip: padding-box;
-  font-size: 1.6rem;
+  font-size: var(--font-size-2xl);
   color: var(--color-primary);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .form_field__input:focus {
-  border-color: #6f27de;
+  border-color: var(--color-primary-600);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(132, 56, 245, 0.15);
+  box-shadow: var(--shadow-primary-focus);
   background: var(--color-white);
 }
 
 .form_field__input::placeholder {
-  color: #b39de9;
+  color: var(--color-primary-200);
 }
 
 .form_field__clear {
@@ -56,7 +56,7 @@
   height: auto;
   align-self: center;
   color: var(--color-primary);
-  font-size: 2rem;
+  font-size: var(--font-size-4xl);
   cursor: pointer;
   visibility: visible;
   padding: 0;
