@@ -8,6 +8,7 @@ const FormFieldInput = ({
   value,
   onChange,
   onFocus,
+  onBlur,
   type = "text",
   minLength,
   maxLength,
@@ -15,6 +16,7 @@ const FormFieldInput = ({
   placeholder,
   wrapperClassName = "form_field input_wrapper",
   disabled = false,
+  ...rest
 }) => {
   const showClear = !!value && value.length > 0 && !disabled;
 
@@ -46,7 +48,9 @@ const FormFieldInput = ({
           value={value}
           onChange={onChange}
           onFocus={onFocus}
+          onBlur={onBlur}
           disabled={disabled}
+          {...rest}
         />
         <BaseButton
           type="button"

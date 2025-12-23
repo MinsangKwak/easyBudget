@@ -1,15 +1,15 @@
+import "../Main/index.css";
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
+import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
-import CategorySection from "../Main/components/CategorySection";
-import PaymentMethodsSection from "../Main/components/PaymentMethodsSection";
-import AddDataSheet from "../Main/components/AddDataSheet";
-import TransactionSheet from "../Main/components/TransactionSheet";
-import AuthRequiredModal from "../Main/components/AuthRequiredModal";
-import { formatKoreanWon } from "../Main/utils";
+import PaymentMethodsSection from "../../Main/components/PaymentMethodsSection";
+import AddDataSheet from "../../Main/components/AddDataSheet";
+import TransactionSheet from "../../Main/components/TransactionSheet";
+import AuthRequiredModal from "../../Main/components/AuthRequiredModal";
+import { formatKoreanWon } from "../../Main/utils";
 
 const ScreenSpend = ({
-    viewType = "category",
     onRequestSignUp,
     isLinkedAccount,
     isSignUpModalOpen,
@@ -17,19 +17,9 @@ const ScreenSpend = ({
     mainState,
     sectionIds = {},
 }) => {
-    const { paymentMethods, categorySpend } = sectionIds;
-    const isCategoryView = viewType === "category";
-    const isPaymentView = viewType === "paymentMethods";
+    const { paymentMethods } = sectionIds;
     const {
-        isEditMode,
         report,
-        categorySummaries,
-        categoryAmountInput,
-        setCategoryAmountInput,
-        commitCategoryAmount,
-        handleEnterCommit,
-        categoryTotal,
-        displayCategorySegments,
         paymentGroups,
         isAddSheetOpen,
         setIsAddSheetOpen,
@@ -38,21 +28,12 @@ const ScreenSpend = ({
         handleClickAddMyData,
         handleSubmitMyData,
         handleClickPaymentItem,
-        handleClickCategoryRow,
         sheetState,
         closeSheet,
-        animationTime,
-        handleToggleEditMode,
     } = mainState;
 
     const maskText = "??";
     const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
-    const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
-    const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
-
-    const handleCategoryChange = (categoryKey, value) => {
-        setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
-    };
 
     const handleClickSignUp = () => {
         onCloseSignUpModal?.();
@@ -62,38 +43,16 @@ const ScreenSpend = ({
     return (
         <Screen className="screen_main">
             <Title>Wallet</Title>
+            <SubTitle>연동된 지출 수단을 한눈에 확인해요</SubTitle>
             <Inner>
-                {isCategoryView && (
-                    <CategorySection
-                        id={categorySpend}
-                        categorySummaries={categorySummaries}
-                        categoryTotal={categoryTotal}
-                        displayCategorySegments={displayCategorySegments}
-                        isEditMode={isEditMode}
-                        isLinkedAccount={isLinkedAccount}
-                        animationTime={animationTime}
-                        formatMaskedKoreanWon={formatMaskedKoreanWon}
-                        formatMaskedCount={formatMaskedCount}
-                        formatMaskedPercent={formatMaskedPercent}
-                        onToggleEditMode={handleToggleEditMode}
-                        categoryAmountInput={categoryAmountInput}
-                        onCategoryChange={handleCategoryChange}
-                        onCategoryCommit={commitCategoryAmount}
-                        onCategoryEnter={handleEnterCommit}
-                        onClickCategory={handleClickCategoryRow}
-                    />
-                )}
-
-                {isPaymentView && (
-                    <PaymentMethodsSection
-                        id={paymentMethods}
-                        paymentGroups={paymentGroups}
-                        totalSpend={report.spendTotal}
-                        formatMaskedKoreanWon={formatMaskedKoreanWon}
-                        onClickAdd={handleClickAddMyData}
-                        onClickPayment={handleClickPaymentItem}
-                    />
-                )}
+                <PaymentMethodsSection
+                    id={paymentMethods}
+                    paymentGroups={paymentGroups}
+                    totalSpend={report.spendTotal}
+                    formatMaskedKoreanWon={formatMaskedKoreanWon}
+                    onClickAdd={handleClickAddMyData}
+                    onClickPayment={handleClickPaymentItem}
+                />
             </Inner>
 
             <AddDataSheet

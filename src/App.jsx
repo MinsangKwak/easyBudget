@@ -3,12 +3,13 @@ import "./App.css";
 import { SCREEN_NAMES } from "./constants/screenNames";
 import AppHeader from "./components/Layout/AppHeader";
 import { useAuth } from "./contexts/AuthContext";
-import { useMainState } from "./components/Screen/Main/hooks/useMainState";
+import { useMainState } from "./components/Main/hooks/useMainState";
 
 import ScreenLoading from "./components/Screen/Common/Loading";
 const ScreenIntro = lazy(() => import("./components/Screen/Intro"));
 const ScreenMain = lazy(() => import("./components/Screen/Main"));
 const ScreenSpend = lazy(() => import("./components/Screen/Spend"));
+const ScreenCategory = lazy(() => import("./components/Screen/Category"));
 const ScreenLogin = lazy(() => import("./components/Screen/Member/Login"));
 const ScreenJoin = lazy(() => import("./components/Screen/Member/Join"));
 const CertFlow = lazy(() => import("./components/Screen/Member/Cert/CertFlow"));
@@ -19,7 +20,6 @@ const ScreenProfile = lazy(() => import("./components/Screen/Member/Profile"));
 const App = () => {
     const { currentUser, logout, deleteAccount, loginWithCertificate } = useAuth();
     const [screen, setScreen] = useState(SCREEN_NAMES.MAIN);
-    const [spendView, setSpendView] = useState("category");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
@@ -96,26 +96,25 @@ const App = () => {
 
     const showBackButton = screen === SCREEN_NAMES.INTRO;
 
-    const handleProtectedSpendNavigation = (nextView) => {
+    const handleProtectedNavigation = (nextScreen) => {
         if (!ensureLinkedAccount()) {
             setScreen(SCREEN_NAMES.MAIN);
             return;
         }
 
-        setSpendView(nextView);
-        setScreen(SCREEN_NAMES.SPEND);
+        setScreen(nextScreen);
     };
 
     const menuItems = [
         {
             key: "payment-methods",
             label: "지출 수단",
-            onClick: () => handleNavigate(() => handleProtectedSpendNavigation("category")),
+            onClick: () => handleNavigate(() => handleProtectedNavigation(SCREEN_NAMES.SPEND)),
         },
         {
             key: "category-spend",
             label: "카테고리별 지출",
-            onClick: () => handleNavigate(() => handleProtectedSpendNavigation("paymentMethods")),
+            onClick: () => handleNavigate(() => handleProtectedNavigation(SCREEN_NAMES.CATEGORY)),
         },
     ];
 
@@ -196,7 +195,17 @@ const App = () => {
 
                 {screen === SCREEN_NAMES.SPEND && (
                     <ScreenSpend
-                        viewType={spendView}
+                        onRequestSignUp={handleGoJoin}
+                        isLinkedAccount={isLinkedAccount}
+                        isSignUpModalOpen={isSignUpModalOpen}
+                        onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
+                        mainState={mainState}
+                        sectionIds={sectionIds}
+                    />
+                )}
+
+                {screen === SCREEN_NAMES.CATEGORY && (
+                    <ScreenCategory
                         onRequestSignUp={handleGoJoin}
                         isLinkedAccount={isLinkedAccount}
                         isSignUpModalOpen={isSignUpModalOpen}

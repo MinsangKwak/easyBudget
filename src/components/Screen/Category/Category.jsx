@@ -1,45 +1,43 @@
-import "./index.css";
-
+import "../Main/index.css";
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
-import ReportSection from "../../Main/components/ReportSection";
-import YearlySummary from "../../Main/components/YearlySummary";
+import CategorySection from "../../Main/components/CategorySection";
 import AddDataSheet from "../../Main/components/AddDataSheet";
 import TransactionSheet from "../../Main/components/TransactionSheet";
 import AuthRequiredModal from "../../Main/components/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
 
-const ScreenMain = ({
+const ScreenCategory = ({
     onRequestSignUp,
     isLinkedAccount,
     isSignUpModalOpen,
     onCloseSignUpModal,
     mainState,
+    sectionIds = {},
 }) => {
+    const { categorySpend } = sectionIds;
     const {
         isEditMode,
-        monthLabel,
-        monthKey,
-        monthOptions,
-        setMonthKey,
-        periodFilters,
-        budgetInputs,
-        setBudgetInputs,
-        commitBudgetInput,
-        reportStatusFilter,
-        setReportStatusFilter,
+        categorySummaries,
+        categoryAmountInput,
+        setCategoryAmountInput,
+        commitCategoryAmount,
+        handleEnterCommit,
+        categoryTotal,
+        displayCategorySegments,
         isAddSheetOpen,
         setIsAddSheetOpen,
         newEntryDraft,
         setNewEntryDraft,
+        handleClickAddMyData,
         handleSubmitMyData,
-        handleToggleEditMode,
+        handleClickCategoryRow,
         sheetState,
         closeSheet,
-        report,
-        yearlySummary,
+        animationTime,
+        handleToggleEditMode,
     } = mainState;
 
     const maskText = "??";
@@ -47,8 +45,8 @@ const ScreenMain = ({
     const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
     const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
 
-    const handleBudgetChange = (key, value) => {
-        setBudgetInputs((previous) => ({ ...previous, [key]: value }));
+    const handleCategoryChange = (categoryKey, value) => {
+        setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
     };
 
     const handleClickSignUp = () => {
@@ -58,30 +56,26 @@ const ScreenMain = ({
 
     return (
         <Screen className="screen_main">
-            <Title>
-                쉬운 가계부 <br /> Wallet입니다.
-            </Title>
-            <SubTitle>수치부터 보여주는 시원한 가계부</SubTitle>
+            <Title>카테고리별 지출</Title>
+            <SubTitle>카테고리별 지출 현황과 예산을 관리해요</SubTitle>
             <Inner>
-                <YearlySummary summary={yearlySummary} />
-                <ReportSection
-                    monthLabel={monthLabel}
-                    monthKey={monthKey}
-                    monthOptions={monthOptions}
-                    onChangeMonth={setMonthKey}
-                    periodFilters={periodFilters}
-                    onChangePeriod={setMonthKey}
-                    report={report}
-                    budgetInputs={budgetInputs}
+                <CategorySection
+                    id={categorySpend}
+                    categorySummaries={categorySummaries}
+                    categoryTotal={categoryTotal}
+                    displayCategorySegments={displayCategorySegments}
                     isEditMode={isEditMode}
                     isLinkedAccount={isLinkedAccount}
+                    animationTime={animationTime}
                     formatMaskedKoreanWon={formatMaskedKoreanWon}
                     formatMaskedCount={formatMaskedCount}
+                    formatMaskedPercent={formatMaskedPercent}
                     onToggleEditMode={handleToggleEditMode}
-                    onBudgetChange={handleBudgetChange}
-                    onBudgetCommit={commitBudgetInput}
-                    reportStatusFilter={reportStatusFilter}
-                    onChangeReportStatusFilter={setReportStatusFilter}
+                    categoryAmountInput={categoryAmountInput}
+                    onCategoryChange={handleCategoryChange}
+                    onCategoryCommit={commitCategoryAmount}
+                    onCategoryEnter={handleEnterCommit}
+                    onClickCategory={handleClickCategoryRow}
                 />
             </Inner>
 
@@ -109,4 +103,4 @@ const ScreenMain = ({
     );
 };
 
-export default ScreenMain;
+export default ScreenCategory;
