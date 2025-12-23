@@ -1,3 +1,4 @@
+import React from "react";
 import "../src/index.css";
 import "../src/App.css";
 import { AuthProvider } from "../src/contexts/AuthContext.jsx";
@@ -19,11 +20,7 @@ const preview = {
         },
     },
     decorators: [
-        (Story) => (
-            <AuthProvider>
-                <Story />
-            </AuthProvider>
-        ),
+        (Story) => React.createElement(AuthProvider, null, React.createElement(Story)),
     ],
 };
 
