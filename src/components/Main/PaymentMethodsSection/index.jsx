@@ -58,7 +58,8 @@ const PaymentMethodsSection = ({
             </div>
 
             <div className="pay_add">
-                <BaseButton type="button" style="btn_solid__primary" onClick={onClickAdd}>
+                <BaseButton type="button"
+                    size="md" style="btn_solid__primary" onClick={onClickAdd}>
                     마이데이터 추가
                 </BaseButton>
             </div>
