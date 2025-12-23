@@ -57,7 +57,7 @@ const CategorySection = ({
 
             <ul className="cat_list" aria-label="카테고리 리스트">
                 {categorySummaries.map((category) => {
-                    const dotTone = category.tone || "soft";
+                    const dotTone = category.tone || "lilac";
 
                     return (
                         <li key={category.key} className="cat_row">

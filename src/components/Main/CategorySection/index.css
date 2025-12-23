@@ -61,24 +61,24 @@
     display: inline-block;
 }
 
-.dot_primary {
-    background: color-mix(in srgb, var(--color-primary) 78%, transparent);
+.dot_iris {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-iris) 22%);
 }
 
-.dot_dark {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-dark) 74%);
+.dot_lilac {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-lilac) 22%);
 }
 
-.dot_green {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-green) 4%);
+.dot_amethyst {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-amethyst) 22%);
 }
 
-.dot_orange {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-orange) 50%);
+.dot_plum {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-plum) 22%);
 }
 
-.dot_soft {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-soft) 74%);
+.dot_blush {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-blush) 22%);
 }
 
 .cat_text {
