@@ -30,7 +30,7 @@
     display: grid;
     place-items: center;
     font-weight: var(--font-weight-black);
-    background: color-mix(in srgb, var(--color-primary) 14%, var(--color-white) 86%);
+    background: color-mix(in srgb, var(--color-secondary-amber) 20%, var(--color-white) 80%);
     color: var(--color-black-100);
 }
 
@@ -46,7 +46,7 @@
     border-radius: 14px;
     padding: 12px 14px;
     border: 2px dashed var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 86%, var(--color-white-100) 14%);
+    background: color-mix(in srgb, var(--color-secondary-vivid) 14%, var(--color-white) 86%);
     font-weight: var(--font-weight-black);
     color: var(--color-black-100);
 }

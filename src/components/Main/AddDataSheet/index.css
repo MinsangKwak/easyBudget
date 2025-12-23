@@ -3,8 +3,12 @@
     padding: 12px;
     border-radius: 12px;
     border: 2px solid var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 90%, var(--color-white-100) 10%);
-    box-shadow: 4px 4px 0 color-mix(in srgb, var(--color-primary) 12%, transparent);
+    background: color-mix(
+        in srgb,
+        var(--color-secondary-amber) 12%,
+        color-mix(in srgb, var(--color-white) 80%, var(--color-secondary-vivid) 20%) 88%
+    );
+    box-shadow: 4px 4px 0 color-mix(in srgb, var(--color-secondary-midnight) 14%, transparent);
     display: grid;
     gap: 10px;
 }

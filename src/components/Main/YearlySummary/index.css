@@ -25,7 +25,7 @@
     height: 16px;
     border-radius: var(--radius-md);
     border: 2px solid var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 88%, var(--color-primary) 12%);
+    background: color-mix(in srgb, var(--color-secondary-amber) 14%, var(--color-white) 86%);
     overflow: hidden;
 }
 
@@ -34,8 +34,8 @@
     border-radius: calc(var(--radius-md) - 2px);
     background: linear-gradient(
         90deg,
-        color-mix(in srgb, var(--color-primary) 26%, var(--color-white) 74%),
-        color-mix(in srgb, var(--color-primary) 8%, var(--color-white) 92%)
+        color-mix(in srgb, var(--color-primary) 72%, var(--color-secondary-vivid) 28%),
+        color-mix(in srgb, var(--color-secondary-midnight) 12%, var(--color-white) 88%)
     );
     transition: width 0.35s ease;
 }
