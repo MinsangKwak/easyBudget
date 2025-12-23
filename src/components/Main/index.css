@@ -137,7 +137,8 @@
     font-size: var(--font-size-sm);
 }
 
-.category_swiper {
+.category_swiper,
+.payment_swiper {
     overflow: hidden;
     padding-bottom: 4px;
     cursor: grab;
@@ -145,19 +146,22 @@
     touch-action: pan-y;
 }
 
-.category_swiper__track {
+.category_swiper__track,
+.payment_swiper__track {
     display: flex;
     gap: 0;
     transition: transform 0.28s ease;
     will-change: transform;
 }
 
-.category_swiper__slide {
+.category_swiper__slide,
+.payment_swiper__slide {
     flex: 0 0 100%;
     display: flex;
 }
 
-.category_swiper__slide > * {
+.category_swiper__slide > *,
+.payment_swiper__slide > * {
     width: 100%;
 }
 
