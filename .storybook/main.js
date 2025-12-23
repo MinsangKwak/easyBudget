@@ -2,7 +2,6 @@
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import react from "@vitejs/plugin-react-swc";
 
 const dirname =
     typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
@@ -24,13 +23,8 @@ const config = {
     "options": {}
   },
   async viteFinal(baseConfig) {
-    const filteredPlugins = (baseConfig.plugins || []).filter(
-        (plugin) => plugin?.name !== "vite:react" && plugin?.name !== "vite:react-swc",
-    );
-
     return {
         ...baseConfig,
-        plugins: [react(), ...filteredPlugins],
         resolve: {
             ...baseConfig.resolve,
             alias: {
