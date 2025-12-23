@@ -17,24 +17,24 @@
         stroke-dashoffset 0.35s ease;
 }
 
-.donut_seg.tone_primary {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, transparent);
+.donut_seg.tone_iris {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-iris) 22%);
 }
 
-.donut_seg.tone_dark {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-dark) 74%);
+.donut_seg.tone_lilac {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-lilac) 22%);
 }
 
-.donut_seg.tone_green {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-green) 4%);
+.donut_seg.tone_amethyst {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-amethyst) 22%);
 }
 
-.donut_seg.tone_orange {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-orange) 50%);
+.donut_seg.tone_plum {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-plum) 22%);
 }
 
-.donut_seg.tone_soft {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-soft) 74%);
+.donut_seg.tone_blush {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-blush) 22%);
 }
 
 .donut_center {

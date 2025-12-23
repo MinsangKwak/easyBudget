@@ -23,10 +23,11 @@
     --color-surface-success: #e7fdd8;
     --muted: var(--color-black-200);
 
-    --color-tone-dark: rgb(72, 0, 106);
-    --color-tone-green: rgb(0, 31, 78);
-    --color-tone-orange: rgb(162, 0, 105);
-    --color-tone-soft: rgb(155, 0, 150);
+    --color-tone-iris: #7a5af8;
+    --color-tone-lilac: #bca7ff;
+    --color-tone-amethyst: #8b5cf6;
+    --color-tone-plum: #9d4edd;
+    --color-tone-blush: #e879f9;
 
     --color-indigo-500: #555ab9;
     --color-indigo-300: #91baf8;

@@ -9,6 +9,8 @@ const DonutChart = ({
     isPaused,
     isMasked,
 }) => {
+    const safeSegments = (Array.isArray(segments) ? segments : []).filter(Boolean);
+
     const size = 210;
     const strokeWidth = 18;
     const radius = (size - strokeWidth) / 2;
@@ -16,7 +18,10 @@ const DonutChart = ({
 
     const totalValue = Math.max(
         1,
-        segments.reduce((accumulator, segment) => accumulator + Math.max(0, segment.value), 0),
+        safeSegments.reduce(
+            (accumulator, segment) => accumulator + Math.max(0, Number(segment?.value) || 0),
+            0,
+        ),
     );
 
     const startAt = -90;
@@ -43,8 +48,8 @@ const DonutChart = ({
                     style={{ opacity: ringOpacity }}
                 />
 
-                {segments.map((segment) => {
-                    const safeValue = Math.max(0, segment.value);
+                {safeSegments.map((segment, index) => {
+                    const safeValue = Math.max(0, Number(segment?.value) || 0);
                     const ratio = safeValue / totalValue;
 
                     const segmentLength = ratio * circumference;
@@ -52,14 +57,16 @@ const DonutChart = ({
                     const dashOffset = circumference * (1 - cumulative);
 
                     cumulative += ratio;
+                    const tone = segment?.tone || "iris";
+                    const key = segment?.key ?? `segment-${index}`;
 
                     return (
                         <circle
-                            key={segment.key}
+                            key={key}
                             cx={size / 2}
                             cy={size / 2}
                             r={radius}
-                            className={`donut_seg tone_${segment.tone || "soft"}`}
+                            className={`donut_seg tone_${tone}`}
                             strokeWidth={strokeWidth}
                             strokeDasharray={dashArray}
                             strokeDashoffset={dashOffset}

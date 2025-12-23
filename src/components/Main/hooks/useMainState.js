@@ -172,7 +172,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
             return {
                 ...summary,
                 percent,
-                tone: option.defaultTone || (index === 0 ? "primary" : "soft"),
+                tone: option.defaultTone || (index === 0 ? "iris" : "lilac"),
             };
         });
     }, [filteredSpendEntries]);

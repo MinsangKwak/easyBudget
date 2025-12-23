@@ -1,9 +1,9 @@
 export const CATEGORY_OPTIONS = [
-    { key: "cat_food", label: "식비·외식비", defaultTone: "primary" },
-    { key: "cat_loan", label: "대출", defaultTone: "dark" },
-    { key: "cat_ins", label: "보험", defaultTone: "soft" },
-    { key: "cat_house", label: "주거·관리", defaultTone: "green" },
-    { key: "cat_misc", label: "결제·소통", defaultTone: "orange" },
+    { key: "cat_food", label: "식비·외식비", defaultTone: "iris" },
+    { key: "cat_loan", label: "대출", defaultTone: "amethyst" },
+    { key: "cat_ins", label: "보험", defaultTone: "blush" },
+    { key: "cat_house", label: "주거·관리", defaultTone: "lilac" },
+    { key: "cat_misc", label: "결제·소통", defaultTone: "plum" },
 ];
 
 export const PAYMENT_GROUP_META = {
