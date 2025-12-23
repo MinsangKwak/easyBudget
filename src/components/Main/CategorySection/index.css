@@ -85,6 +85,10 @@
     background: var(--color-tone-blush);
 }
 
+.dot_emerald {
+    background: var(--color-tone-emerald);
+}
+
 .cat_text {
     display: grid;
     gap: 2px;

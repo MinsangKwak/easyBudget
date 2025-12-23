@@ -33,6 +33,7 @@
     --color-tone-amethyst: var(--color-secondary-vivid);
     --color-tone-plum: var(--color-secondary-midnight);
     --color-tone-blush: var(--color-secondary-amber);
+    --color-tone-emerald: #1fa66c;
 
     --color-indigo-500: #4b4fa6;
     --color-indigo-300: #88a5f2;
