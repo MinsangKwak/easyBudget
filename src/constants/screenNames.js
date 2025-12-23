@@ -11,4 +11,5 @@ export const SCREEN_NAMES = {
   MAIN: "MAIN",
   PROFILE: "PROFILE",
   SPEND: "SPEND",
+  CATEGORY: "CATEGORY",
 };
