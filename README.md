@@ -5,11 +5,11 @@
 가계부 기능도 있지만 **실제 금융·플랫폼 서비스에서 복잡한 인증 UX와 사용자 상태 관리**를 프론트엔드 관점에서 어떻게 구조화하는지를 보여주는 데 목적이 있습니다.
 
 🔗 **Live Demo**  
-https://minsangkwak.github.io/auth/
+https://minsangkwak.github.io/easyBudget/
 
 ---
 🔗 **Repository**  
-https://github.com/MinsangKwak/auth
+https://github.com/MinsangKwak/easyBudget
 
 ---
 
