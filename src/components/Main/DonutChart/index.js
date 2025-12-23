@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { formatKoreanWonShort } from "../utils";
 
 const DonutChart = ({

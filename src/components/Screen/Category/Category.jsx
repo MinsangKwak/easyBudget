@@ -1,12 +1,12 @@
-import "../Main/index.css";
+import "../../Main/index.css";
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
-import CategorySection from "../../Main/components/CategorySection";
-import AddDataSheet from "../../Main/components/AddDataSheet";
-import TransactionSheet from "../../Main/components/TransactionSheet";
-import AuthRequiredModal from "../../Main/components/AuthRequiredModal";
+import CategorySection from "../../Main/CategorySection";
+import AddDataSheet from "../../Main/AddDataSheet";
+import TransactionSheet from "../../Main/TransactionSheet";
+import AuthRequiredModal from "../../Main/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
 import { FiChevronDown } from "react-icons/fi";
 

@@ -1,3 +1,5 @@
+import "./index.css";
+
 import BaseButton from "../../Form/BaseButton";
 import BaseButtonContainer from "../../Form/BaseButtonContainer";
 import FormFieldInput from "../../Form/FormFieldInput";
