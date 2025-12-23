@@ -38,6 +38,10 @@
     stroke: var(--color-tone-blush);
 }
 
+.donut_seg.tone_emerald {
+    stroke: var(--color-tone-emerald);
+}
+
 .donut_center {
     position: absolute;
     inset: 0;
