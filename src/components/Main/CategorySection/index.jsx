@@ -4,7 +4,7 @@ import BaseButton from "../../Form/BaseButton";
 import BaseButtonContainer from "../../Form/BaseButtonContainer";
 import FormFieldInput from "../../Form/FormFieldInput";
 import { FiEdit3 } from "react-icons/fi";
-import DonutChart from "./DonutChart";
+import DonutChart from "../DonutChart";
 
 const CategorySection = ({
     id,
