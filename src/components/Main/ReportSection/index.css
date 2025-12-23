@@ -2,8 +2,12 @@
     border-radius: var(--radius-md);
     padding: 14px;
     border: 2px solid var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 84%, var(--color-white-100) 16%);
-    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-primary) 12%, transparent);
+    background: color-mix(
+        in srgb,
+        var(--color-secondary-amber) 10%,
+        color-mix(in srgb, var(--color-white) 78%, var(--color-secondary-royal) 22%) 90%
+    );
+    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-secondary-midnight) 14%, transparent);
     display: grid;
     gap: 6px;
 }
@@ -96,7 +100,7 @@
 }
 
 .kpi_spend {
-    background: color-mix(in srgb, var(--color-primary) 14%, var(--color-white) 86%);
+    background: color-mix(in srgb, var(--color-secondary-vivid) 18%, var(--color-white) 82%);
 }
 
 .report_blocks {
@@ -109,8 +113,12 @@
     border-radius: 16px;
     padding: 14px;
     border: 2px dashed var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 86%, var(--color-white-100) 14%);
-    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-primary) 10%, transparent);
+    background: color-mix(
+        in srgb,
+        var(--color-secondary-amber) 8%,
+        color-mix(in srgb, var(--color-white) 80%, var(--color-secondary-vivid) 20%) 92%
+    );
+    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-secondary-midnight) 12%, transparent);
 }
 
 .block_head {

@@ -6,35 +6,36 @@
 
 .donut_bg {
     fill: none;
-    stroke: color-mix(in srgb, var(--color-black-100) 14%, transparent);
+    stroke: color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
 }
 
 .donut_seg {
     fill: none;
     stroke-linecap: round;
+    stroke-width: 18px;
     transition:
         stroke-dasharray 0.35s ease,
         stroke-dashoffset 0.35s ease;
 }
 
 .donut_seg.tone_iris {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-iris) 22%);
+    stroke: var(--color-tone-iris);
 }
 
 .donut_seg.tone_lilac {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-lilac) 22%);
+    stroke: var(--color-tone-lilac);
 }
 
 .donut_seg.tone_amethyst {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-amethyst) 22%);
+    stroke: var(--color-tone-amethyst);
 }
 
 .donut_seg.tone_plum {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-plum) 22%);
+    stroke: var(--color-tone-plum);
 }
 
 .donut_seg.tone_blush {
-    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-blush) 22%);
+    stroke: var(--color-tone-blush);
 }
 
 .donut_center {

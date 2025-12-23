@@ -20,8 +20,12 @@
     padding: 12px;
     border-radius: 14px;
     border: 2px solid var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 84%, var(--color-white-100) 16%);
-    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-primary) 10%, transparent);
+    background: color-mix(
+        in srgb,
+        var(--color-secondary-amber) 10%,
+        color-mix(in srgb, var(--color-white) 78%, var(--color-secondary-vivid) 22%) 90%
+    );
+    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
 }
 
 .cat_left {
@@ -62,23 +66,23 @@
 }
 
 .dot_iris {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-iris) 22%);
+    background: var(--color-tone-iris);
 }
 
 .dot_lilac {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-lilac) 22%);
+    background: var(--color-tone-lilac);
 }
 
 .dot_amethyst {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-amethyst) 22%);
+    background: var(--color-tone-amethyst);
 }
 
 .dot_plum {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-plum) 22%);
+    background: var(--color-tone-plum);
 }
 
 .dot_blush {
-    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-blush) 22%);
+    background: var(--color-tone-blush);
 }
 
 .cat_text {
