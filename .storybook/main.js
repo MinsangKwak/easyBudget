@@ -1,31 +1,49 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import react from "@vitejs/plugin-react-swc";
 
 const dirname =
-    typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+    typeof __dirname !== "undefined"
+        ? __dirname
+        : path.dirname(fileURLToPath(import.meta.url));
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
-    stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+    stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+
     addons: [
         "@chromatic-com/storybook",
         "@storybook/addon-vitest",
         "@storybook/addon-a11y",
         "@storybook/addon-docs",
     ],
+
     framework: {
         name: "@storybook/react-vite",
         options: {},
     },
-    async viteFinal(baseConfig) {
-        const filteredPlugins = (baseConfig.plugins || []).filter(
-            (plugin) => plugin?.name !== "vite:react" && plugin?.name !== "vite:react-swc",
-        );
 
+    async viteFinal(baseConfig) {
         return {
             ...baseConfig,
-            plugins: [react(), ...filteredPlugins],
+
+            base: "/",
+
+            server: {
+                ...(baseConfig.server ?? {}),
+
+                // 🔴 핵심 1: Codespaces 서브도메인 명시 허용
+                allowedHosts: [
+                    ".app.github.dev",
+                    "localhost",
+                ],
+
+                // 🔴 핵심 2: iframe + HMR 안정화
+                host: true,
+
+                // 🔴 핵심 3: preview iframe이 정확한 origin을 알도록
+                origin: "http://localhost:6006",
+            },
+
             resolve: {
                 ...baseConfig.resolve,
                 alias: {
@@ -36,4 +54,5 @@ const config = {
         };
     },
 };
+
 export default config;

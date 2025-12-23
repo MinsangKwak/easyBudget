@@ -1,16 +1,11 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
-import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
-import { playwright } from "@vitest/browser-playwright";
 
 const dirname =
     typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
-
-const isGithubPages = process.env.GITHUB_ACTIONS === "true";
-const basePath = isGithubPages ? "./" : "/";
 
 const copyIndexTo404 = () => ({
     name: "copy-index-to-404",
@@ -25,29 +20,23 @@ const copyIndexTo404 = () => ({
     },
 });
 
-export default defineConfig({
-    base: "/easyBudget/",
-    plugins: [react(), copyIndexTo404()],
-    test: {
-        projects: [
-            {
-                extends: true,
-                plugins: [
-                    storybookTest({
-                        configDir: path.join(dirname, ".storybook"),
-                    }),
-                ],
-                test: {
-                    name: "storybook",
-                    browser: {
-                        enabled: true,
-                        headless: true,
-                        provider: playwright({}),
-                        instances: [{ browser: "chromium" }],
-                    },
-                    setupFiles: [".storybook/vitest.setup.js"],
-                },
-            },
-        ],
-    },
+export default defineConfig(() => {
+    const isStorybook = process.env.STORYBOOK === "true";
+    const isGithubPages = process.env.GITHUB_ACTIONS === "true";
+
+    // ✅ 앱 배포(GH Pages)에서는 /easyBudget/
+    // ✅ Storybook에서는 항상 / (루트)로 고정해야 preview 로딩 404가 안 남
+    const base = isStorybook ? "/" : isGithubPages ? "/easyBudget/" : "/";
+
+    return {
+        base,
+        plugins: [react(), copyIndexTo404()],
+
+        // ✅ Codespaces 포함 원격 환경에서 dev server 안정화
+        server: {
+            host: true,
+            strictPort: false,
+            allowedHosts: "all",
+        },
+    };
 });

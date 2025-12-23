@@ -415,9 +415,7 @@ const findExistingUserIndex = (userList = [], userPayload) => {
         if (payloadEmails.some((email) => userEmails.includes(email))) return true;
 
         const userPhoneBirth = buildPhoneBirthKey(user);
-        return Boolean(
-            payloadPhoneBirth && userPhoneBirth && payloadPhoneBirth === userPhoneBirth,
-        );
+        return Boolean(payloadPhoneBirth && userPhoneBirth && payloadPhoneBirth === userPhoneBirth);
     });
 };
 
@@ -430,7 +428,10 @@ const mergeUserIntoList = (users = [], userPayload) => {
         resolvedUser = mergeUserRecords(nextUsers[existingIndex], userPayload);
         nextUsers[existingIndex] = resolvedUser;
     } else {
-        resolvedUser = mergeUserRecords(userPayload.id ? {} : { id: generateUserId() }, userPayload);
+        resolvedUser = mergeUserRecords(
+            userPayload.id ? {} : { id: generateUserId() },
+            userPayload,
+        );
         nextUsers.push(resolvedUser);
     }
 
@@ -446,7 +447,7 @@ const mergeUsersIntoList = (users = [], incomingUsers = []) => {
     return nextUsers;
 };
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [state, setState] = useState(loadAuthState);

@@ -1,7 +1,22 @@
 import React from "react";
 import "../src/index.css";
 import "../src/App.css";
-import { AuthProvider } from "../src/contexts/AuthContext.jsx";
+import { AuthContext } from "../src/contexts/AuthContext.jsx";
+
+/** Storybook 전용 Mock Auth 값 */
+const mockAuthValue = {
+    users: [],
+    currentUser: null,
+    loginWithEmail: () => {},
+    registerEmailUser: () => {},
+    loginWithCertificate: () => {},
+    logout: () => {},
+    deleteAccount: () => {},
+};
+
+/** Storybook 전용 Provider */
+const MockAuthProvider = ({ children }) =>
+    React.createElement(AuthContext.Provider, { value: mockAuthValue }, children);
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
@@ -12,15 +27,10 @@ const preview = {
                 date: /Date$/i,
             },
         },
-        a11y: {
-            // 'todo' - show a11y violations in the test UI only
-            // 'error' - fail CI on a11y violations
-            // 'off' - skip a11y checks entirely
-            test: "todo",
-        },
+        a11y: { test: "todo" },
     },
     decorators: [
-        (Story) => React.createElement(AuthProvider, null, React.createElement(Story)),
+        (Story) => React.createElement(MockAuthProvider, null, React.createElement(Story)),
     ],
 };
 

@@ -26,7 +26,7 @@ https://github.com/MinsangKwak/easyBudget
 ## 🛠 기술 스택 (Tech Stack)
 
 ### Frontend
-- **React 19**
+- **React 18**
 - **Vite**
 - JavaScript (ES6+)
 
