@@ -15,7 +15,7 @@ const BaseSelectBox = ({
 }) => {
     return (
         <label className={`base_select ${className}`} htmlFor={id}>
-            {label && <span className={`base_select__label ${labelClassName}`}>{label}</span>}
+            {/* {label && <span className={`base_select__label ${labelClassName}`}>{label}</span>} */}
             <span className="base_select__control">
                 <select
                     id={id}
