@@ -1,0 +1,67 @@
+.donut {
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.donut_bg {
+    fill: none;
+    stroke: color-mix(in srgb, var(--color-black-100) 14%, transparent);
+}
+
+.donut_seg {
+    fill: none;
+    stroke-linecap: round;
+    transition:
+        stroke-dasharray 0.35s ease,
+        stroke-dashoffset 0.35s ease;
+}
+
+.donut_seg.tone_primary {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, transparent);
+}
+
+.donut_seg.tone_dark {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-dark) 74%);
+}
+
+.donut_seg.tone_green {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-green) 4%);
+}
+
+.donut_seg.tone_orange {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-orange) 50%);
+}
+
+.donut_seg.tone_soft {
+    stroke: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-soft) 74%);
+}
+
+.donut_center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    pointer-events: none;
+}
+
+.donut_top {
+    margin-top: 10px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-extrabold);
+}
+
+.donut_value {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-black);
+    letter-spacing: -0.02em;
+    color: var(--color-black-100);
+    line-height: 1;
+}
+
+.donut_bottom {
+    margin-bottom: 10px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-extrabold);
+}

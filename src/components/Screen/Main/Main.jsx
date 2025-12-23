@@ -1,14 +1,14 @@
-import "./index.css";
+import "../../Main/index.css";
 
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
 import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
-import ReportSection from "../../Main/components/ReportSection";
-import YearlySummary from "../../Main/components/YearlySummary";
-import AddDataSheet from "../../Main/components/AddDataSheet";
-import TransactionSheet from "../../Main/components/TransactionSheet";
-import AuthRequiredModal from "../../Main/components/AuthRequiredModal";
+import ReportSection from "../../Main/ReportSection";
+import YearlySummary from "../../Main/YearlySummary";
+import AddDataSheet from "../../Main/AddDataSheet";
+import TransactionSheet from "../../Main/TransactionSheet";
+import AuthRequiredModal from "../../Main/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
 
 const ScreenMain = ({

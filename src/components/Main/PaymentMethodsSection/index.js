@@ -1,3 +1,5 @@
+import "./index.css";
+
 import BaseButton from "../../Form/BaseButton";
 
 const PaymentMethodsSection = ({

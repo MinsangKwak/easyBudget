@@ -21,6 +21,7 @@
     --color-surface-ghost: #f7f7f7c1;
     --color-surface-info: #eef3f8;
     --color-surface-success: #e7fdd8;
+    --muted: var(--color-black-200);
 
     --color-tone-dark: rgb(72, 0, 106);
     --color-tone-green: rgb(0, 31, 78);
@@ -59,6 +60,12 @@
     --radius-sm: 10px;
     --radius-xs: 5px;
 
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+
     font-family:
         "Pretendard",
         "Noto Sans KR",
@@ -74,7 +81,7 @@
         "Helvetica Neue",
         sans-serif;
     line-height: 1.6;
-    font-weight: 400;
+    font-weight: var(--font-weight-regular);
     color: var(--color-black-100);
     background-color: var(--color-white);
     text-rendering: optimizeLegibility;

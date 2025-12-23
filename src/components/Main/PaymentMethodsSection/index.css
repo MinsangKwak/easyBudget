@@ -1,0 +1,62 @@
+.pay_groups {
+    display: grid;
+    gap: 12px;
+}
+
+.pay_group__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4px 0 10px;
+}
+
+.pay_group__title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-black);
+    color: var(--color-black-100);
+}
+
+.pay_group__total {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-black);
+    color: var(--color-black-100);
+}
+
+.avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 2px solid var(--color-black-100);
+    display: grid;
+    place-items: center;
+    font-weight: var(--font-weight-black);
+    background: color-mix(in srgb, var(--color-primary) 14%, var(--color-white) 86%);
+    color: var(--color-black-100);
+}
+
+.pay_add {
+    margin-top: 12px;
+}
+
+.add_btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 14px;
+    padding: 12px 14px;
+    border: 2px dashed var(--color-black-100);
+    background: color-mix(in srgb, var(--color-white) 86%, var(--color-white-100) 14%);
+    font-weight: var(--font-weight-black);
+    color: var(--color-black-100);
+}
+
+.add_plus {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 2px solid var(--color-black-100);
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.95);
+}

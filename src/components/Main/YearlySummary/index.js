@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { formatKoreanWon } from "../utils";
 
 const YearlySummary = ({ summary }) => {

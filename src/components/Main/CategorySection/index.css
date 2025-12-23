@@ -1,0 +1,124 @@
+.cat_donut {
+    display: grid;
+    place-items: center;
+    margin: 0 0 2rem;
+}
+
+.cat_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.cat_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 2px solid var(--color-black-100);
+    background: color-mix(in srgb, var(--color-white) 84%, var(--color-white-100) 16%);
+    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.cat_left {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.cat_right {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cat_label {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-black);
+    color: var(--color-black-100);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 18rem;
+}
+
+.cat_value {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-black);
+    color: var(--color-black-100);
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: 2px solid var(--color-black-100);
+    display: inline-block;
+}
+
+.dot_primary {
+    background: color-mix(in srgb, var(--color-primary) 78%, transparent);
+}
+
+.dot_dark {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-dark) 74%);
+}
+
+.dot_green {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-green) 4%);
+}
+
+.dot_orange {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-orange) 50%);
+}
+
+.dot_soft {
+    background: color-mix(in srgb, var(--color-primary) 78%, var(--color-tone-soft) 74%);
+}
+
+.cat_text {
+    display: grid;
+    gap: 2px;
+}
+
+.cat_meta {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-extrabold);
+}
+
+.cat_input_wrapper {
+    width: 110px;
+}
+
+.cat_input_wrapper .form_label {
+    display: none;
+}
+
+.cat_input_wrapper .form_field__input {
+    width: 100%;
+    min-height: 3.4rem;
+    border-radius: 12px;
+    border: 2px solid var(--color-black-100);
+    background-color: rgba(255, 255, 255, 0.95);
+    background-clip: padding-box;
+    padding: 0.6rem 1rem;
+    font-weight: var(--font-weight-black);
+    font-size: var(--font-size-lg);
+    line-height: 1.4;
+    text-align: right;
+    color: var(--color-black-100);
+}
+
+.cat_input_wrapper .form_field__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.cat_input_wrapper .form_field__clear {
+    top: 0.7rem;
+}
