@@ -7,6 +7,7 @@ import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
 import PaymentMethodsSection from "../../Main/PaymentMethodsSection";
 import AddDataSheet from "../../Main/AddDataSheet";
+import SeedDataSheet from "../../Main/SeedDataSheet";
 import TransactionSheet from "../../Main/TransactionSheet";
 import AuthRequiredModal from "../../Main/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
@@ -34,6 +35,12 @@ const ScreenSpend = ({
     setNewEntryDraft,
     handleClickAddMyData,
     handleSubmitMyData,
+    isSeedSheetOpen,
+    setIsSeedSheetOpen,
+    seedInputs,
+    setSeedInputs,
+    seedPeriodLabel,
+    handleSeedSubmit,
     handleClickPaymentItem,
     sheetState,
     closeSheet,
@@ -124,6 +131,15 @@ const ScreenSpend = ({
         onClose={() => setIsAddSheetOpen(false)}
         onSubmit={handleSubmitMyData}
         onDraftChange={setNewEntryDraft}
+      />
+
+      <SeedDataSheet
+        isOpen={isSeedSheetOpen}
+        periodLabel={seedPeriodLabel}
+        seedInputs={seedInputs}
+        onClose={() => setIsSeedSheetOpen(false)}
+        onSubmit={handleSeedSubmit}
+        onSeedChange={setSeedInputs}
       />
 
       <AuthRequiredModal

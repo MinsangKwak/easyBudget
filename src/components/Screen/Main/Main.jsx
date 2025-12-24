@@ -7,6 +7,7 @@ import Inner from "../../Content/Inner";
 import ReportSection from "../../Main/ReportSection";
 import YearlySummary from "../../Main/YearlySummary";
 import AddDataSheet from "../../Main/AddDataSheet";
+import SeedDataSheet from "../../Main/SeedDataSheet";
 import TransactionSheet from "../../Main/TransactionSheet";
 import AuthRequiredModal from "../../Main/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
@@ -35,6 +36,12 @@ const ScreenMain = ({
     newEntryDraft,
     setNewEntryDraft,
     handleSubmitMyData,
+    isSeedSheetOpen,
+    setIsSeedSheetOpen,
+    seedInputs,
+    setSeedInputs,
+    seedPeriodLabel,
+    handleSeedSubmit,
     handleToggleEditMode,
     sheetState,
     closeSheet,
@@ -91,6 +98,15 @@ const ScreenMain = ({
         onClose={() => setIsAddSheetOpen(false)}
         onSubmit={handleSubmitMyData}
         onDraftChange={setNewEntryDraft}
+      />
+
+      <SeedDataSheet
+        isOpen={isSeedSheetOpen}
+        periodLabel={seedPeriodLabel}
+        seedInputs={seedInputs}
+        onClose={() => setIsSeedSheetOpen(false)}
+        onSubmit={handleSeedSubmit}
+        onSeedChange={setSeedInputs}
       />
 
       <AuthRequiredModal

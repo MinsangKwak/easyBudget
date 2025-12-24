@@ -9,6 +9,8 @@ import {
 import { clampValue, parseNumberSafely, slugifyKey } from "../utils";
 import { useAnimationFrameLoop } from "./useAnimationFrameLoop";
 
+const LEDGER_STORAGE_KEY = "demo-ledger-data";
+
 const buildSpendStats = (entries, targetType) => {
   const targetEntries = entries.filter((entry) => entry.spendType === targetType);
   const plannedEntries = targetEntries.filter((entry) => entry.status === "planned");
@@ -32,9 +34,82 @@ const buildSpendStats = (entries, targetType) => {
 const computeEntriesTotal = (entries) =>
   entries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
 
-export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
+const readLedgerMap = () => {
+  if (typeof sessionStorage === "undefined") return {};
+  try {
+    return JSON.parse(sessionStorage.getItem(LEDGER_STORAGE_KEY) || "{}");
+  } catch (error) {
+    console.error("Failed to parse ledger storage", error);
+    return {};
+  }
+};
+
+const writeLedgerMap = (nextMap) => {
+  if (typeof sessionStorage === "undefined") return;
+  sessionStorage.setItem(LEDGER_STORAGE_KEY, JSON.stringify(nextMap));
+};
+
+const resolveCurrentMonthInfo = () => {
+  const now = new Date();
+  const year = String(now.getFullYear());
+  const monthNumber = now.getMonth() + 1;
+  const monthValue = String(monthNumber).padStart(2, "0");
+
+  return {
+    year,
+    month: monthValue,
+    key: `${year}-${monthValue}`,
+    label: `${year}년 ${monthNumber}월`,
+    sheetLabel: `${year}-${monthValue}월`,
+  };
+};
+
+const resolveInitialMonthKey = (reports) => {
+  const current = resolveCurrentMonthInfo();
+  const hasCurrent = reports.some((report) => report.key === current.key);
+  if (hasCurrent) return current.key;
+
+  const firstNonAggregate = reports.find((report) => !report.isAggregate);
+  return firstNonAggregate?.key || reports[0]?.key;
+};
+
+const buildCustomReports = ({ monthKey, monthLabel, incomeEntries, spendEntries, budget }) => {
+  const [year] = monthKey.split("-");
+  const monthReport = {
+    key: monthKey,
+    label: monthLabel,
+    year,
+    budget,
+    incomeEntries,
+    spendEntries,
+  };
+
+  return [
+    {
+      key: `${year}-all`,
+      label: `${year}년 전체`,
+      year,
+      isAggregate: true,
+      budget,
+      incomeEntries: incomeEntries.map((entry) => ({
+        ...entry,
+        id: `${entry.id}-${monthKey}`,
+        dateLabel: entry.dateLabel || monthLabel,
+      })),
+      spendEntries: spendEntries.map((entry) => ({
+        ...entry,
+        id: `${entry.id}-${monthKey}`,
+        dateLabel: entry.dateLabel || monthLabel,
+      })),
+    },
+    monthReport,
+  ];
+};
+
+export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser }) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [monthKey, setMonthKey] = useState(MONTHLY_REPORTS[0]?.key);
+  const [monthlyReports, setMonthlyReports] = useState(MONTHLY_REPORTS);
+  const [monthKey, setMonthKey] = useState(() => resolveInitialMonthKey(MONTHLY_REPORTS));
   const [incomeEntries, setIncomeEntries] = useState(DEFAULT_INCOME_ENTRIES);
   const [spendEntries, setSpendEntries] = useState(DEFAULT_SPEND_ENTRIES);
   const [reportStatusFilter, setReportStatusFilter] = useState("all");
@@ -69,6 +144,9 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     title: "",
     items: [],
   });
+  const [isSeedSheetOpen, setIsSeedSheetOpen] = useState(false);
+  const [seedInputs, setSeedInputs] = useState({ incomeTotal: "", spendTotal: "" });
+  const [isSeededData, setIsSeededData] = useState(false);
 
   const [animationTime, setAnimationTime] = useState(0);
   useAnimationFrameLoop(!isEditMode, (deltaTimeInSeconds) => {
@@ -83,11 +161,14 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     });
   }, [planBudget]);
 
-  const monthOptions = useMemo(() => MONTHLY_REPORTS.map(({ key, label }) => ({ key, label })), []);
+  const monthOptions = useMemo(
+    () => monthlyReports.map(({ key, label }) => ({ key, label })),
+    [monthlyReports],
+  );
 
   const selectedMonth = useMemo(() => {
-    return MONTHLY_REPORTS.find((month) => month.key === monthKey) || MONTHLY_REPORTS[0];
-  }, [monthKey]);
+    return monthlyReports.find((month) => month.key === monthKey) || monthlyReports[0];
+  }, [monthKey, monthlyReports]);
 
   useEffect(() => {
     if (!selectedMonth) return;
@@ -120,7 +201,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
   }, [filteredSpendEntries]);
 
   const periodFilters = useMemo(() => {
-    return MONTHLY_REPORTS.map((period) => {
+    return monthlyReports.map((period) => {
       const isActive = period.key === monthKey;
       const incomeTotalForPeriod = isActive
         ? computeEntriesTotal(incomeEntries)
@@ -136,7 +217,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
         spendTotal: spendTotalForPeriod,
       };
     });
-  }, [incomeEntries, monthKey, spendEntries]);
+  }, [incomeEntries, monthKey, monthlyReports, spendEntries]);
 
   const categorySummaries = useMemo(() => {
     const map = new Map();
@@ -397,8 +478,8 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
   };
 
   const yearlySummary = useMemo(() => {
-    const targetYear = selectedMonth?.year || MONTHLY_REPORTS[0]?.year || "올해";
-    const reportsForYear = MONTHLY_REPORTS.filter(
+    const targetYear = selectedMonth?.year || monthlyReports[0]?.year || "올해";
+    const reportsForYear = monthlyReports.filter(
       (report) => report.year === targetYear && !report.isAggregate,
     );
 
@@ -416,7 +497,169 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
       income: totalIncome,
       spend: totalSpend,
     };
-  }, [incomeEntries, monthKey, selectedMonth, spendEntries]);
+  }, [incomeEntries, monthKey, monthlyReports, selectedMonth, spendEntries]);
+
+  const currentPeriod = useMemo(() => resolveCurrentMonthInfo(), []);
+  const normalizedEmail = currentUser?.email?.toLowerCase?.() || "";
+  const shouldSkipSeed = normalizedEmail === "test@test.com";
+
+  useEffect(() => {
+    if (!currentUser) {
+      setMonthlyReports(MONTHLY_REPORTS);
+      setMonthKey(resolveInitialMonthKey(MONTHLY_REPORTS));
+      setIsSeedSheetOpen(false);
+      setIsSeededData(false);
+      setSeedInputs({ incomeTotal: "", spendTotal: "" });
+      return;
+    }
+
+    if (shouldSkipSeed) {
+      setMonthlyReports(MONTHLY_REPORTS);
+      setMonthKey(resolveInitialMonthKey(MONTHLY_REPORTS));
+      setIsSeedSheetOpen(false);
+      setIsSeededData(false);
+      setSeedInputs({ incomeTotal: "", spendTotal: "" });
+      return;
+    }
+
+    const ledgerMap = readLedgerMap();
+    const storedLedger = ledgerMap[currentUser.id];
+    const hasEntries =
+      (storedLedger?.incomeEntries?.length || 0) > 0 ||
+      (storedLedger?.spendEntries?.length || 0) > 0;
+
+    if (storedLedger && hasEntries) {
+      const storedMonthKey = storedLedger.monthKey || currentPeriod.key;
+      const storedMonthLabel = storedLedger.monthLabel || currentPeriod.label;
+      setMonthlyReports(
+        buildCustomReports({
+          monthKey: storedMonthKey,
+          monthLabel: storedMonthLabel,
+          incomeEntries: storedLedger.incomeEntries || [],
+          spendEntries: storedLedger.spendEntries || [],
+          budget: storedLedger.planBudget || {
+            incomeBudget: 0,
+            spendBudget: 0,
+            variableBudget: 0,
+          },
+        }),
+      );
+      setMonthKey(storedMonthKey);
+      setIsSeedSheetOpen(false);
+      setIsSeededData(true);
+      setSeedInputs({
+        incomeTotal: storedLedger.planBudget?.incomeBudget
+          ? String(storedLedger.planBudget.incomeBudget)
+          : "",
+        spendTotal: storedLedger.planBudget?.spendBudget
+          ? String(storedLedger.planBudget.spendBudget)
+          : "",
+      });
+      return;
+    }
+
+    setMonthlyReports(
+      buildCustomReports({
+        monthKey: currentPeriod.key,
+        monthLabel: currentPeriod.label,
+        incomeEntries: [],
+        spendEntries: [],
+        budget: {
+          incomeBudget: 0,
+          spendBudget: 0,
+          variableBudget: 0,
+        },
+      }),
+    );
+    setMonthKey(currentPeriod.key);
+    setIsSeedSheetOpen(true);
+    setIsSeededData(false);
+    setSeedInputs({ incomeTotal: "", spendTotal: "" });
+  }, [currentPeriod.key, currentPeriod.label, currentUser, shouldSkipSeed]);
+
+  useEffect(() => {
+    if (!currentUser || shouldSkipSeed || !isSeededData) return;
+    const ledgerMap = readLedgerMap();
+    ledgerMap[currentUser.id] = {
+      monthKey,
+      monthLabel: selectedMonth?.label || currentPeriod.label,
+      incomeEntries,
+      spendEntries,
+      planBudget,
+      updatedAt: new Date().toISOString(),
+    };
+    writeLedgerMap(ledgerMap);
+  }, [
+    currentPeriod.label,
+    currentUser,
+    incomeEntries,
+    isSeededData,
+    monthKey,
+    planBudget,
+    selectedMonth?.label,
+    shouldSkipSeed,
+    spendEntries,
+  ]);
+
+  const handleSeedSubmit = (event) => {
+    event?.preventDefault?.();
+    if (!currentUser || shouldSkipSeed) return;
+
+    const parsedIncome = clampValue(parseNumberSafely(seedInputs.incomeTotal), 0, 20000000);
+    const parsedSpend = clampValue(parseNumberSafely(seedInputs.spendTotal), 0, 20000000);
+
+    if (!parsedIncome && !parsedSpend) return;
+
+    const incomeSeedEntries =
+      parsedIncome > 0
+        ? [
+            {
+              id: `income-seed-${Date.now()}`,
+              label: "초기 수입",
+              amount: parsedIncome,
+              dateLabel: currentPeriod.label,
+            },
+          ]
+        : [];
+    const spendSeedEntries =
+      parsedSpend > 0
+        ? [
+            {
+              id: `spend-seed-${Date.now()}`,
+              categoryKey: "cat_misc",
+              categoryLabel: "결제·소통",
+              amount: parsedSpend,
+              paymentKey: "card_seed",
+              paymentLabel: "초기 지출",
+              paymentLogo: "W",
+              paymentGroupKey: "card",
+              paymentGroupLabel: "카드지출",
+              spendType: "variable",
+              status: "paid",
+              dateLabel: currentPeriod.label,
+            },
+          ]
+        : [];
+
+    const nextBudget = {
+      incomeBudget: parsedIncome,
+      spendBudget: parsedSpend,
+      variableBudget: parsedSpend,
+    };
+
+    setMonthlyReports(
+      buildCustomReports({
+        monthKey: currentPeriod.key,
+        monthLabel: currentPeriod.label,
+        incomeEntries: incomeSeedEntries,
+        spendEntries: spendSeedEntries,
+        budget: nextBudget,
+      }),
+    );
+    setMonthKey(currentPeriod.key);
+    setIsSeedSheetOpen(false);
+    setIsSeededData(true);
+  };
 
   return {
     isEditMode,
@@ -456,5 +699,11 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount }) => {
     setReportStatusFilter,
     filteredSpendEntries,
     periodFilters,
+    isSeedSheetOpen,
+    setIsSeedSheetOpen,
+    seedInputs,
+    setSeedInputs,
+    seedPeriodLabel: currentPeriod.sheetLabel,
+    handleSeedSubmit,
   };
 };

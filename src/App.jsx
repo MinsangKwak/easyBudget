@@ -48,14 +48,15 @@ const App = () => {
     return true;
   };
 
-  const mainState = useMainState({ isLinkedAccount, ensureLinkedAccount });
+  const mainState = useMainState({ isLinkedAccount, ensureLinkedAccount, currentUser });
 
   useEffect(() => {
-    const hasOpenSheet = mainState.sheetState.isOpen || mainState.isAddSheetOpen;
+    const hasOpenSheet =
+      mainState.sheetState.isOpen || mainState.isAddSheetOpen || mainState.isSeedSheetOpen;
     document.documentElement.classList.toggle("is_sheet_open", hasOpenSheet);
 
     return () => document.documentElement.classList.remove("is_sheet_open");
-  }, [mainState.isAddSheetOpen, mainState.sheetState.isOpen]);
+  }, [mainState.isAddSheetOpen, mainState.isSeedSheetOpen, mainState.sheetState.isOpen]);
 
   const sectionIds = {
     paymentMethods: "section-payment-methods",
