@@ -73,6 +73,7 @@ const App = () => {
   const handleWelcomeTimeout = () => setScreen(SCREEN_NAMES.MAIN);
   const handleLoginComplete = () => setScreen(SCREEN_NAMES.MAIN);
   const handleGoHome = () => setScreen(SCREEN_NAMES.MAIN);
+  const handleGoCategoryFromMain = () => handleProtectedNavigation(SCREEN_NAMES.CATEGORY);
 
   const handleLogout = () => {
     logout();
@@ -195,6 +196,7 @@ const App = () => {
             isLinkedAccount={isLinkedAccount}
             isSignUpModalOpen={isSignUpModalOpen}
             onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
+            onGoCategorySpend={handleGoCategoryFromMain}
             mainState={mainState}
             sectionIds={sectionIds}
           />

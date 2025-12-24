@@ -10,13 +10,17 @@ import AddDataSheet from "../../Main/AddDataSheet";
 import SeedDataSheet from "../../Main/SeedDataSheet";
 import TransactionSheet from "../../Main/TransactionSheet";
 import AuthRequiredModal from "../../Main/AuthRequiredModal";
+import { useState } from "react";
+
 import { formatKoreanWon } from "../../Main/utils";
+import Modal from "../../Common/Modal/Modal";
 
 const ScreenMain = ({
   onRequestSignUp,
   isLinkedAccount,
   isSignUpModalOpen,
   onCloseSignUpModal,
+  onGoCategorySpend,
   mainState,
 }) => {
   const {
@@ -31,8 +35,6 @@ const ScreenMain = ({
     commitBudgetInput,
     reportStatusFilter,
     setReportStatusFilter,
-    regularStatusFilter,
-    setRegularStatusFilter,
     isAddSheetOpen,
     setIsAddSheetOpen,
     newEntryDraft,
@@ -51,6 +53,8 @@ const ScreenMain = ({
     yearlySummary,
   } = mainState;
 
+  const [isSpendEditModalOpen, setIsSpendEditModalOpen] = useState(false);
+
   const maskText = "??";
   const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
   const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
@@ -63,6 +67,19 @@ const ScreenMain = ({
   const handleClickSignUp = () => {
     onCloseSignUpModal?.();
     onRequestSignUp?.();
+  };
+
+  const handleOpenSpendEditModal = () => {
+    setIsSpendEditModalOpen(true);
+  };
+
+  const handleCloseSpendEditModal = () => {
+    setIsSpendEditModalOpen(false);
+  };
+
+  const handleGoCategorySpend = () => {
+    setIsSpendEditModalOpen(false);
+    onGoCategorySpend?.();
   };
 
   return (
@@ -91,8 +108,7 @@ const ScreenMain = ({
           onBudgetCommit={commitBudgetInput}
           reportStatusFilter={reportStatusFilter}
           onChangeReportStatusFilter={setReportStatusFilter}
-          regularStatusFilter={regularStatusFilter}
-          onChangeRegularStatusFilter={setRegularStatusFilter}
+          onOpenSpendEditGuide={handleOpenSpendEditModal}
         />
       </Inner>
 
@@ -118,6 +134,24 @@ const ScreenMain = ({
         onClose={onCloseSignUpModal}
         onConfirm={handleClickSignUp}
       />
+
+      <Modal
+        isOpen={isSpendEditModalOpen}
+        onClose={handleCloseSpendEditModal}
+        title="총 지출 수정 안내"
+      >
+        <p className="modal_desc">
+          총 지출 금액은 카테고리별 지출 화면에서 수정할 수 있어요. 아래 버튼을 눌러 이동해주세요.
+        </p>
+        <div className="modal_actions">
+          <button type="button" className="modal_btn" onClick={handleCloseSpendEditModal}>
+            닫기
+          </button>
+          <button type="button" className="modal_btn modal_btn__primary" onClick={handleGoCategorySpend}>
+            카테고리별 지출로 이동
+          </button>
+        </div>
+      </Modal>
 
       <TransactionSheet
         isOpen={sheetState.isOpen}

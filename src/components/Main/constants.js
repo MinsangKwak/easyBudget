@@ -44,7 +44,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "card",
     paymentGroupLabel: "카드지출",
     spendType: "variable",
-    status: "planned",
+    status: "paid",
     dateLabel: "10/22",
   },
   {
@@ -58,7 +58,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "card",
     paymentGroupLabel: "카드지출",
     spendType: "regular",
-    status: "planned",
+    status: "paid",
     dateLabel: "10/25",
   },
   {
@@ -114,7 +114,7 @@ const OCTOBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "cash",
     paymentGroupLabel: "현금지출",
     spendType: "regular",
-    status: "planned",
+    status: "paid",
     dateLabel: "10/28",
   },
 ];
@@ -150,7 +150,7 @@ const DECEMBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "card",
     paymentGroupLabel: "카드지출",
     spendType: "variable",
-    status: "planned",
+    status: "paid",
     dateLabel: "12/19",
   },
   {
@@ -164,7 +164,7 @@ const DECEMBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "card",
     paymentGroupLabel: "카드지출",
     spendType: "regular",
-    status: "planned",
+    status: "paid",
     dateLabel: "12/25",
   },
   {
@@ -220,7 +220,7 @@ const DECEMBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "cash",
     paymentGroupLabel: "현금지출",
     spendType: "regular",
-    status: "planned",
+    status: "paid",
     dateLabel: "12/28",
   },
 ];
@@ -256,7 +256,7 @@ const NOVEMBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "card",
     paymentGroupLabel: "카드지출",
     spendType: "variable",
-    status: "planned",
+    status: "paid",
     dateLabel: "11/24",
   },
   {
@@ -270,7 +270,7 @@ const NOVEMBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "card",
     paymentGroupLabel: "카드지출",
     spendType: "regular",
-    status: "planned",
+    status: "paid",
     dateLabel: "11/25",
   },
   {
@@ -326,7 +326,7 @@ const NOVEMBER_2025_SPEND_ENTRIES = [
     paymentGroupKey: "cash",
     paymentGroupLabel: "현금지출",
     spendType: "regular",
-    status: "planned",
+    status: "paid",
     dateLabel: "11/27",
   },
 ];
