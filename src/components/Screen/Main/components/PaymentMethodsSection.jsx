@@ -22,30 +22,32 @@ const PaymentMethodsSection = ({
               <div className="pay_group__total">{formatMaskedKoreanWon(group.total)}</div>
             </div>
 
-            <ul className="list">
-              {group.items.map((item) => (
-                <li key={item.key} className="list_row">
-                  <div className="list_left">
-                    <span className="avatar" aria-hidden="true">
-                      {item.logoText}
-                    </span>
-                    <span className="list_label">{item.label}</span>
-                  </div>
+            {group.key !== "card" && (
+              <ul className="list">
+                {group.items.map((item) => (
+                  <li key={item.key} className="list_row">
+                    <div className="list_left">
+                      <span className="avatar" aria-hidden="true">
+                        {item.logoText}
+                      </span>
+                      <span className="list_label">{item.label}</span>
+                    </div>
 
-                  <div className="list_right">
-                    <b className="list_value">{formatMaskedKoreanWon(item.amount)}</b>
-                    <button
-                      type="button"
-                      className="arrow_btn"
-                      aria-label={`${item.label} 내역 보기`}
-                      onClick={() => onClickPayment(item.key, item.label)}
-                    >
-                      <MdOutlineNavigateNext />
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                    <div className="list_right">
+                      <b className="list_value">{formatMaskedKoreanWon(item.amount)}</b>
+                      <button
+                        type="button"
+                        className="arrow_btn"
+                        aria-label={`${item.label} 내역 보기`}
+                        onClick={() => onClickPayment(item.key, item.label)}
+                      >
+                        <MdOutlineNavigateNext />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         ))}
       </div>
