@@ -63,14 +63,37 @@ const CategorySection = ({
       <ul className="category_list" aria-label="카테고리 리스트">
         {categorySummaries.map((category) => {
           const dotTone = category.tone || "lilac";
+          const spendType = category.spendType || "unknown";
+          const spendTypeLabel = {
+            regular: "정기",
+            variable: "변동",
+            mixed: "혼합",
+            unknown: "미분류",
+          }[spendType];
+          const spendTypeClass = {
+            regular: "category_row--regular",
+            variable: "category_row--variable",
+            mixed: "category_row--mixed",
+            unknown: "category_row--unknown",
+          }[spendType];
 
           return (
-            <li key={category.key} className="category_row">
+            <li
+              key={category.key}
+              className={`category_row ${isEditMode ? "category_row--edit" : ""} ${
+                isEditMode ? spendTypeClass : ""
+              }`}
+            >
               <div className="category_left">
                 <span className={`dot dot_${dotTone}`} aria-hidden="true" />
                 <div className="category_text">
                   <div className="category_label">{category.label}</div>
                   <div className="category_meta muted">{formatMaskedPercent(category.percent)}</div>
+                  {isEditMode && (
+                    <span className={`category_type category_type--${spendType}`}>
+                      {spendTypeLabel}
+                    </span>
+                  )}
                 </div>
               </div>
 

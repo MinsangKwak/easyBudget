@@ -209,6 +209,19 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     });
   }, [incomeEntries, monthKey, monthlyReports, spendEntries]);
 
+  const resolveCategorySpendType = (entries) => {
+    const types = new Set(
+      (entries || []).map((entry) => entry.spendType).filter((type) => type),
+    );
+    if (types.size === 1) {
+      return Array.from(types)[0];
+    }
+    if (types.size > 1) {
+      return "mixed";
+    }
+    return "unknown";
+  };
+
   const categorySummaries = useMemo(() => {
     const map = new Map();
     filteredSpendEntries.forEach((entry) => {
@@ -241,6 +254,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
         ...summary,
         percent,
         tone: option.defaultTone || (index === 0 ? "iris" : "lilac"),
+        spendType: resolveCategorySpendType(summary.entries),
       };
     });
   }, [filteredSpendEntries]);

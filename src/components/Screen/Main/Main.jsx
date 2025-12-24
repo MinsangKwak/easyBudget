@@ -141,14 +141,18 @@ const ScreenMain = ({
         title="총 지출 수정 안내"
       >
         <p className="modal_desc">
-          총 지출 금액은 카테고리별 지출 화면에서 수정할 수 있어요. 아래 버튼을 눌러 이동해주세요.
+          총 지출 금액은 지출 관리 화면에서 수정할 수 있어요. 아래 버튼을 눌러 이동해주세요.
         </p>
         <div className="modal_actions">
           <button type="button" className="modal_btn" onClick={handleCloseSpendEditModal}>
             닫기
           </button>
-          <button type="button" className="modal_btn modal_btn__primary" onClick={handleGoCategorySpend}>
-            카테고리별 지출로 이동
+          <button
+            type="button"
+            className="modal_btn modal_btn__primary"
+            onClick={handleGoCategorySpend}
+          >
+            지출 관리로 이동
           </button>
         </div>
       </Modal>

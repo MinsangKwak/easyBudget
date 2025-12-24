@@ -12,10 +12,7 @@ export default {
 
 const HeaderExample = ({ isAuthenticated = false, showBackButton = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuItems = [
-    { key: "payment-methods", label: "지출 수단", onClick: () => {} },
-    { key: "category-spend", label: "카테고리 지출", onClick: () => {} },
-  ];
+  const menuItems = [{ key: "spend-management", label: "지출 관리", onClick: () => {} }];
 
   return (
     <AppHeader
