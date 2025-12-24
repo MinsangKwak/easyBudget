@@ -1,4 +1,3 @@
-import BaseButton from "../../../Form/BaseButton";
 import { MdOutlineNavigateNext } from "react-icons/md";
 
 const PaymentMethodsSection = ({
@@ -6,7 +5,6 @@ const PaymentMethodsSection = ({
   paymentGroups,
   totalSpend,
   formatMaskedKoreanWon,
-  onClickAdd,
   onClickPayment,
 }) => {
   return (
@@ -52,17 +50,6 @@ const PaymentMethodsSection = ({
         ))}
       </div>
 
-      <div className="pay_add">
-        <BaseButton
-          type="button"
-          size="md"
-          style="solid__primary"
-          className="add_btn"
-          onClick={onClickAdd}
-        >
-          마이데이터 추가 <span className="add_plus">+</span>
-        </BaseButton>
-      </div>
     </section>
   );
 };
