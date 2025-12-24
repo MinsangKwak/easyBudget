@@ -24,7 +24,20 @@ const App = () => {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
   const isLinkedAccount = useMemo(() => {
-    return ["test@test.com", "test@gmail.com"].includes(currentUser?.email?.toLowerCase?.() || "");
+    if (!currentUser) return false;
+
+    const defaultLinkedEmails = ["test@test.com", "test@gmail.com"];
+    const normalizedEmail = currentUser?.email?.toLowerCase?.() || "";
+    if (defaultLinkedEmails.includes(normalizedEmail)) {
+      return true;
+    }
+
+    if (typeof sessionStorage === "undefined") {
+      return false;
+    }
+
+    const storedSignupId = sessionStorage.getItem("demo-signup-complete");
+    return storedSignupId === currentUser.id;
   }, [currentUser]);
 
   const ensureLinkedAccount = () => {
