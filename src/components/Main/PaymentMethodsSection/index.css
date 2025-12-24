@@ -51,7 +51,7 @@
   margin-top: 1.2rem;
 }
 
-.add_btn {
+/* .add_btn {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -62,7 +62,7 @@
   background: color-mix(in srgb, var(--color-secondary-vivid) 14%, var(--color-white) 86%);
   font-weight: var(--font-weight-black);
   color: var(--color-black-100);
-}
+} */
 
 .add_plus {
   width: 2.8rem;

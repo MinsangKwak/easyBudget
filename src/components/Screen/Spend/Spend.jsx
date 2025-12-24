@@ -162,10 +162,9 @@ const ScreenSpend = ({
                     type="button"
                     size="md"
                     style="btn_solid__primary"
-                    className="add_btn"
                     onClick={handleClickAddMyData}
                   >
-                    마이데이터 추가/수정 <span className="add_plus">+</span>
+                    마이데이터 추가
                   </BaseButton>
                 </div>
               </div>
