@@ -6,6 +6,7 @@ import Title from "../../Content/Title";
 import SubTitle from "../../Content/SubTitle";
 import Inner from "../../Content/Inner";
 import PaymentMethodsSection from "../../Main/PaymentMethodsSection";
+import CategorySection from "../../Main/CategorySection";
 import AddDataSheet from "../../Main/AddDataSheet";
 import SeedDataSheet from "../../Main/SeedDataSheet";
 import TransactionSheet from "../../Main/TransactionSheet";
@@ -22,13 +23,22 @@ const ScreenSpend = ({
   sectionIds = {},
 }) => {
   const swipeStartX = useRef(null);
-  const { paymentMethods } = sectionIds;
+  const { paymentMethods, categorySpend } = sectionIds;
   const {
+    monthLabel,
     monthKey,
     monthOptions,
     setMonthKey,
     report,
     paymentGroups,
+    isEditMode,
+    categorySummaries,
+    categoryAmountInput,
+    setCategoryAmountInput,
+    commitCategoryAmount,
+    handleEnterCommit,
+    categoryTotal,
+    displayCategorySegments,
     isAddSheetOpen,
     setIsAddSheetOpen,
     newEntryDraft,
@@ -42,17 +52,26 @@ const ScreenSpend = ({
     seedPeriodLabel,
     handleSeedSubmit,
     handleClickPaymentItem,
+    handleClickCategoryRow,
     sheetState,
     closeSheet,
+    animationTime,
+    handleToggleEditMode,
   } = mainState;
   const activeMonthIndex = monthOptions.findIndex((option) => option.key === monthKey);
 
   const maskText = "??";
   const formatMaskedKoreanWon = (value) => (isLinkedAccount ? formatKoreanWon(value) : maskText);
+  const formatMaskedCount = (value) => (isLinkedAccount ? value : maskText);
+  const formatMaskedPercent = (value) => (isLinkedAccount ? `${value}%` : maskText);
 
   const handleClickSignUp = () => {
     onCloseSignUpModal?.();
     onRequestSignUp?.();
+  };
+
+  const handleCategoryChange = (categoryKey, value) => {
+    setCategoryAmountInput((previous) => ({ ...previous, [categoryKey]: value }));
   };
 
   const handleSwipeStart = (event) => {
@@ -82,8 +101,8 @@ const ScreenSpend = ({
 
   return (
     <Screen className="screen_main">
-      <Title>Wallet</Title>
-      <SubTitle>연동된 지출 수단을 한눈에 확인해요</SubTitle>
+      <Title>지출 관리</Title>
+      <SubTitle>지출 수단과 카테고리별 지출을 한 화면에서 관리해요</SubTitle>
       <Inner>
         <div className="card_filters">
           <div className="report_filters period_filters" role="group" aria-label="기간 필터">
@@ -118,6 +137,25 @@ const ScreenSpend = ({
                   formatMaskedKoreanWon={formatMaskedKoreanWon}
                   onClickAdd={handleClickAddMyData}
                   onClickPayment={handleClickPaymentItem}
+                />
+                <CategorySection
+                  id={categorySpend}
+                  periodLabel={monthLabel}
+                  categorySummaries={categorySummaries}
+                  categoryTotal={categoryTotal}
+                  displayCategorySegments={displayCategorySegments}
+                  isEditMode={isEditMode}
+                  isLinkedAccount={isLinkedAccount}
+                  animationTime={animationTime}
+                  formatMaskedKoreanWon={formatMaskedKoreanWon}
+                  formatMaskedCount={formatMaskedCount}
+                  formatMaskedPercent={formatMaskedPercent}
+                  onToggleEditMode={handleToggleEditMode}
+                  categoryAmountInput={categoryAmountInput}
+                  onCategoryChange={handleCategoryChange}
+                  onCategoryCommit={commitCategoryAmount}
+                  onCategoryEnter={handleEnterCommit}
+                  onClickCategory={handleClickCategoryRow}
                 />
               </div>
             ))}

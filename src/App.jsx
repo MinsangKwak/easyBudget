@@ -9,7 +9,6 @@ import ScreenLoading from "./components/Screen/Common/Loading";
 const ScreenIntro = lazy(() => import("./components/Screen/Intro"));
 const ScreenMain = lazy(() => import("./components/Screen/Main"));
 const ScreenSpend = lazy(() => import("./components/Screen/Spend"));
-const ScreenCategory = lazy(() => import("./components/Screen/Category"));
 const ScreenLogin = lazy(() => import("./components/Screen/Member/Login"));
 const ScreenJoin = lazy(() => import("./components/Screen/Member/Join"));
 const CertFlow = lazy(() => import("./components/Screen/Member/Cert/CertFlow"));
@@ -73,7 +72,7 @@ const App = () => {
   const handleWelcomeTimeout = () => setScreen(SCREEN_NAMES.MAIN);
   const handleLoginComplete = () => setScreen(SCREEN_NAMES.MAIN);
   const handleGoHome = () => setScreen(SCREEN_NAMES.MAIN);
-  const handleGoCategoryFromMain = () => handleProtectedNavigation(SCREEN_NAMES.CATEGORY);
+  const handleGoSpendManagement = () => handleProtectedNavigation(SCREEN_NAMES.SPEND);
 
   const handleLogout = () => {
     logout();
@@ -120,14 +119,9 @@ const App = () => {
 
   const menuItems = [
     {
-      key: "payment-methods",
-      label: "지출 수단",
+      key: "spend-management",
+      label: "지출 관리",
       onClick: () => handleNavigate(() => handleProtectedNavigation(SCREEN_NAMES.SPEND)),
-    },
-    {
-      key: "category-spend",
-      label: "카테고리별 지출",
-      onClick: () => handleNavigate(() => handleProtectedNavigation(SCREEN_NAMES.CATEGORY)),
     },
   ];
 
@@ -196,7 +190,7 @@ const App = () => {
             isLinkedAccount={isLinkedAccount}
             isSignUpModalOpen={isSignUpModalOpen}
             onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
-            onGoCategorySpend={handleGoCategoryFromMain}
+            onGoCategorySpend={handleGoSpendManagement}
             mainState={mainState}
             sectionIds={sectionIds}
           />
@@ -204,17 +198,6 @@ const App = () => {
 
         {screen === SCREEN_NAMES.SPEND && (
           <ScreenSpend
-            onRequestSignUp={handleGoJoin}
-            isLinkedAccount={isLinkedAccount}
-            isSignUpModalOpen={isSignUpModalOpen}
-            onCloseSignUpModal={() => setIsSignUpModalOpen(false)}
-            mainState={mainState}
-            sectionIds={sectionIds}
-          />
-        )}
-
-        {screen === SCREEN_NAMES.CATEGORY && (
-          <ScreenCategory
             onRequestSignUp={handleGoJoin}
             isLinkedAccount={isLinkedAccount}
             isSignUpModalOpen={isSignUpModalOpen}
