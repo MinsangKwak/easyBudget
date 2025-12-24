@@ -22,6 +22,8 @@
     color: var(--color-black-100);
 }
 
+
+
 .avatar {
     width: 28px;
     height: 28px;
@@ -30,8 +32,23 @@
     display: grid;
     place-items: center;
     font-weight: var(--font-weight-black);
-    background: color-mix(in srgb, var(--color-secondary-amber) 20%, var(--color-white) 80%);
+      background: linear-gradient(
+    120deg,
+    #ff004c,
+    #ff8a00,
+    #ffe600,
+    #2dff00,
+    #00e5ff,
+    #ff004c
+  );
+  background-size: 400% 400%;
+  animation: rainbowShift 12s ease-in-out infinite;
     color: var(--color-black-100);
+}
+@keyframes rainbowShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .pay_add {

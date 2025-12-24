@@ -71,6 +71,45 @@ html.is_sheet_open body {
     color: var(--color-white);
 }
 
+
+.tx_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.tx_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 2px solid var(--color-black-100);
+    background: color-mix(in srgb, var(--color-white) 86%, var(--color-white-100) 14%);
+    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.tx_title {
+    font-size: var(--font-size-md);
+    font-weight: 900;
+    color: var(--color-black-100);
+}
+
+.tx_meta {
+    margin-top: 2px;
+    font-size: var(--font-size-xs);
+    font-weight: 800;
+}
+
+.tx_amount {
+    font-size: var(--font-size-md);
+    font-weight: 900;
+    color: var(--color-black-100);
+}
+
 .sheet {
     position: fixed;
     inset: 0;
@@ -116,7 +155,7 @@ html.is_sheet_open body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 14px 10px;
+    padding: 1.4rem 1.4rem 1rem;
     border-bottom: 1px solid color-mix(in srgb, var(--color-black-100) 16%, transparent);
 }
 
@@ -138,7 +177,7 @@ html.is_sheet_open body {
 }
 
 .sheet_body {
-    padding: 10px 14px 18px;
+    padding: 2rem 1.4rem 2rem;
     overflow: auto;
     flex: 1 1 auto;
 }
@@ -155,42 +194,4 @@ html.is_sheet_open body {
 .sheet_empty {
     padding: 8px 0 12px;
     font-size: var(--font-size-md);
-}
-
-.tx_list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 10px;
-}
-
-.tx_row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 14px;
-    border: 2px solid var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 86%, var(--color-white-100) 14%);
-    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-primary) 8%, transparent);
-}
-
-.tx_title {
-    font-size: var(--font-size-md);
-    font-weight: 900;
-    color: var(--color-black-100);
-}
-
-.tx_meta {
-    margin-top: 2px;
-    font-size: var(--font-size-xs);
-    font-weight: 800;
-}
-
-.tx_amount {
-    font-size: var(--font-size-md);
-    font-weight: 900;
-    color: var(--color-black-100);
 }

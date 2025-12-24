@@ -14,9 +14,9 @@
     border-radius: var(--radius-md);
     background: linear-gradient(
         155deg,
-        color-mix(in srgb, var(--color-secondary-vivid) 12%, var(--color-white) 88%) 0%,
-        color-mix(in srgb, var(--color-secondary-amber) 10%, var(--color-white) 90%) 48%,
-        color-mix(in srgb, var(--color-secondary-midnight) 8%, var(--color-white) 92%) 100%
+        color-mix(in srgb, var(--color-secondary-vivid) 12%, var(--color-white) 50%) 0%,
+        color-mix(in srgb, var(--color-secondary-amber) 10%, var(--color-white) 70%) 48%,
+        color-mix(in srgb, var(--color-secondary-midnight) 8%, var(--color-white) 80%) 100%
     );
     border: 2px solid var(--color-black-100);
     box-shadow:
@@ -53,7 +53,8 @@
     width: 100%;
     align-items: center;
     gap: 6px;
-    padding: 8px 10px;
+    padding: 1.4rem 1rem;
+    height:4.4rem;
     border-radius: var(--radius-md);
     border: 2px dashed var(--color-black-100);
     background: color-mix(in srgb, var(--color-white) 80%, var(--color-white-100) 20%);
@@ -181,11 +182,12 @@
     padding: 12px;
     border-radius: 14px;
     border: 2px solid var(--color-black-100);
-    background: color-mix(
+    /* background: color-mix(
         in srgb,
         var(--color-secondary-amber) 8%,
         color-mix(in srgb, var(--color-white) 78%, var(--color-secondary-royal) 22%) 92%
-    );
+    ); */
+    background-color:var(--color-white);
     box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-secondary-midnight) 14%, transparent);
 }
 

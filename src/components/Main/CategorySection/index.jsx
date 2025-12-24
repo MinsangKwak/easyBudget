@@ -4,6 +4,7 @@ import BaseButton from "../../Form/BaseButton";
 import BaseButtonContainer from "../../Form/BaseButtonContainer";
 import FormFieldInput from "../../Form/FormFieldInput";
 import { FiEdit3 } from "react-icons/fi";
+import { MdOutlineNavigateNext } from "react-icons/md";
 import DonutChart from "../DonutChart";
 
 const CategorySection = ({
@@ -47,7 +48,7 @@ const CategorySection = ({
                 </BaseButtonContainer>
             </div>
 
-            <div className="cat_donut">
+            <div className="category_donut">
                 <DonutChart
                     segments={displayCategorySegments}
                     centerTopLabel="지출 합계"
@@ -59,25 +60,25 @@ const CategorySection = ({
                 />
             </div>
 
-            <ul className="cat_list" aria-label="카테고리 리스트">
+            <ul className="category_list" aria-label="카테고리 리스트">
                 {categorySummaries.map((category) => {
                     const dotTone = category.tone || "lilac";
 
                     return (
-                        <li key={category.key} className="cat_row">
-                            <div className="cat_left">
+                        <li key={category.key} className="category_row">
+                            <div className="category_left">
                                 <span className={`dot dot_${dotTone}`} aria-hidden="true" />
-                                <div className="cat_text">
-                                    <div className="cat_label">{category.label}</div>
-                                    <div className="cat_meta muted">
+                                <div className="category_text">
+                                    <div className="category_label">{category.label}</div>
+                                    <div className="category_meta muted">
                                         {formatMaskedPercent(category.percent)}
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="cat_right">
+                            <div className="category_right">
                                 {!isEditMode && (
-                                    <b className="cat_value">
+                                    <b className="category_value">
                                         {formatMaskedKoreanWon(category.amount)}
                                     </b>
                                 )}
@@ -85,7 +86,7 @@ const CategorySection = ({
                                     <FormFieldInput
                                         id={`cat-${category.key}`}
                                         label={`${category.label} 금액`}
-                                        wrapperClassName="form_field cat_input_wrapper"
+                                        wrapperClassName="form_field category_input_wrapper"
                                         inputMode="numeric"
                                         value={categoryAmountInput[category.key] ?? ""}
                                         onChange={(event) =>
@@ -102,7 +103,7 @@ const CategorySection = ({
                                     aria-label={`${category.label} 내역 보기`}
                                     onClick={() => onClickCategory(category.key, category.label)}
                                 >
-                                    ›
+                                    <MdOutlineNavigateNext />
                                 </button>
                             </div>
                         </li>

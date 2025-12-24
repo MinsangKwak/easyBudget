@@ -1,6 +1,7 @@
 import "./index.css";
 
 import BaseButton from "../../Form/BaseButton";
+import { MdOutlineNavigateNext } from "react-icons/md";
 
 const PaymentMethodsSection = ({
     id,
@@ -47,7 +48,7 @@ const PaymentMethodsSection = ({
                                             aria-label={`${item.label} 내역 보기`}
                                             onClick={() => onClickPayment(item.key, item.label)}
                                         >
-                                            ›
+                                            <MdOutlineNavigateNext />
                                         </button>
                                     </div>
                                 </li>

@@ -7,16 +7,6 @@
 html {
     font-size: 62.5%;
 }
-/* html::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: -1;
-} */
 
 html,
 body {

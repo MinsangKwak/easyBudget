@@ -21,6 +21,7 @@
   padding: 12px 36px 12px 12px;
   background: var(--color-white);
   appearance: none;
+  font-size:1.4rem;
 }
 
 .base_select__field:disabled {
