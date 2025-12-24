@@ -10,33 +10,33 @@ import prettierConfig from "eslint-config-prettier";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-    globalIgnores(["dist"]),
+  globalIgnores(["dist"]),
 
-    {
-        files: ["**/*.{js,jsx}"],
-        extends: [
-            js.configs.recommended,
-            reactHooks.configs.flat.recommended,
-            reactRefresh.configs.vite,
+  {
+    files: ["**/*.{js,jsx}"],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
 
-            // ✅ ESLint ↔ Prettier 충돌 제거
-            prettierConfig,
-        ],
-        plugins: {
-            prettier: prettierPlugin,
-        },
-        languageOptions: {
-            ecmaVersion: 2020,
-            globals: globals.browser,
-            parserOptions: {
-                ecmaVersion: "latest",
-                ecmaFeatures: { jsx: true },
-                sourceType: "module",
-            },
-        },
-        rules: {
-            "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
-            "prettier/prettier": "error",
-        },
+      // ✅ ESLint ↔ Prettier 충돌 제거
+      prettierConfig,
+    ],
+    plugins: {
+      prettier: prettierPlugin,
     },
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        ecmaFeatures: { jsx: true },
+        sourceType: "module",
+      },
+    },
+    rules: {
+      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+      "prettier/prettier": "error",
+    },
+  },
 ]);

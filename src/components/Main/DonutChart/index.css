@@ -1,72 +1,72 @@
 .donut {
-    position: relative;
-    display: grid;
-    place-items: center;
+  position: relative;
+  display: grid;
+  place-items: center;
 }
 
 .donut_bg {
-    fill: none;
-    stroke: color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
 }
 
 .donut_seg {
-    fill: none;
-    stroke-linecap: round;
-    stroke-width: 1.8rem;
-    transition:
-        stroke-dasharray 0.35s ease,
-        stroke-dashoffset 0.35s ease;
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 1.8rem;
+  transition:
+    stroke-dasharray 0.35s ease,
+    stroke-dashoffset 0.35s ease;
 }
 
 .donut_seg.tone_iris {
-    stroke: var(--color-tone-iris);
+  stroke: var(--color-tone-iris);
 }
 
 .donut_seg.tone_lilac {
-    stroke: var(--color-tone-lilac);
+  stroke: var(--color-tone-lilac);
 }
 
 .donut_seg.tone_amethyst {
-    stroke: var(--color-tone-amethyst);
+  stroke: var(--color-tone-amethyst);
 }
 
 .donut_seg.tone_plum {
-    stroke: var(--color-tone-plum);
+  stroke: var(--color-tone-plum);
 }
 
 .donut_seg.tone_blush {
-    stroke: var(--color-tone-blush);
+  stroke: var(--color-tone-blush);
 }
 
 .donut_seg.tone_emerald {
-    stroke: var(--color-tone-emerald);
+  stroke: var(--color-tone-emerald);
 }
 
 .donut_center {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    pointer-events: none;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  pointer-events: none;
 }
 
 .donut_top {
-    margin-top: 1rem;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-extrabold);
+  margin-top: 1rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-extrabold);
 }
 
 .donut_value {
-    font-size: var(--font-size-5xl);
-    font-weight: var(--font-weight-black);
-    letter-spacing: -0.02em;
-    color: var(--color-black-100);
-    line-height: 1;
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: -0.02em;
+  color: var(--color-black-100);
+  line-height: 1;
 }
 
 .donut_bottom {
-    margin-bottom: 1rem;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-extrabold);
+  margin-bottom: 1rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-extrabold);
 }

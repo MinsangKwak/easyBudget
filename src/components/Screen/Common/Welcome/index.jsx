@@ -26,14 +26,10 @@ const ScreenWelcome = ({ onTimeout }) => {
   return (
     <Screen className="screen_welcome">
       <Title>가입을 환영합니다.</Title>
-      <Subtitle>
-        잠시만 기다려 주세요.
-      </Subtitle>
+      <Subtitle>잠시만 기다려 주세요.</Subtitle>
       <Inner>
         <IconLock />
-        <p className="welcome_message">
-          {seconds}초 후 메인 페이지로 이동합니다.
-        </p>
+        <p className="welcome_message">{seconds}초 후 메인 페이지로 이동합니다.</p>
       </Inner>
     </Screen>
   );

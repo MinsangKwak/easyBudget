@@ -5,13 +5,7 @@ import { HiMiniSpeakerWave } from "react-icons/hi2";
 
 import FormFieldInput from "../FormFieldInput";
 
-const FormCaptcha = ({
-  code,
-  value,
-  onChange,
-  onRefresh,
-  onAudioClick,
-}) => {
+const FormCaptcha = ({ code, value, onChange, onRefresh, onAudioClick }) => {
   const handleChange = (event) => {
     onChange?.(event.target.value);
   };
@@ -38,7 +32,7 @@ const FormCaptcha = ({
           data-captcha-refresh
           onClick={handleRefresh}
         >
-        <IoRefreshCircleOutline />
+          <IoRefreshCircleOutline />
           새로고침
         </BaseButton>
 
@@ -49,8 +43,7 @@ const FormCaptcha = ({
           data-captcha-audio
           onClick={handleAudio}
         >
-            <HiMiniSpeakerWave />
-
+          <HiMiniSpeakerWave />
           음성듣기
         </BaseButton>
       </div>

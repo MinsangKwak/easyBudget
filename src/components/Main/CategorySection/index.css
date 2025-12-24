@@ -1,127 +1,127 @@
 .category_donut {
-    display: grid;
-    place-items: center;
-    margin: 0 0 2rem;
+  display: grid;
+  place-items: center;
+  margin: 0 0 2rem;
 }
 
 .category_list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.8rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.8rem;
 }
 
 .category_row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.2rem;
-    border-radius: 1.4rem;
-    border:0.2rem solid var(--color-black-100);
-    box-shadow: 0.6rem 0.6rem 0 color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem;
+  border-radius: 1.4rem;
+  border: 0.2rem solid var(--color-black-100);
+  box-shadow: 0.6rem 0.6rem 0 color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
 }
 
 .category_left {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-    min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
 }
 
 .category_right {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .category_label {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-black);
-    color: var(--color-black-100);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 18rem;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-black);
+  color: var(--color-black-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 18rem;
 }
 
 .category_value {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-black);
-    color: var(--color-black-100);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-black);
+  color: var(--color-black-100);
 }
 
 .dot {
-    width: 1.2rem;
-    height: 1.2rem;
-    border-radius: 99.9rem;
-    border: 0.2rem solid var(--color-black-100);
-    display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 99.9rem;
+  border: 0.2rem solid var(--color-black-100);
+  display: inline-block;
 }
 
 .dot_iris {
-    background: var(--color-tone-iris);
+  background: var(--color-tone-iris);
 }
 
 .dot_lilac {
-    background: var(--color-tone-lilac);
+  background: var(--color-tone-lilac);
 }
 
 .dot_amethyst {
-    background: var(--color-tone-amethyst);
+  background: var(--color-tone-amethyst);
 }
 
 .dot_plum {
-    background: var(--color-tone-plum);
+  background: var(--color-tone-plum);
 }
 
 .dot_blush {
-    background: var(--color-tone-blush);
+  background: var(--color-tone-blush);
 }
 
 .dot_emerald {
-    background: var(--color-tone-emerald);
+  background: var(--color-tone-emerald);
 }
 
 .category_text {
-    display: grid;
-    gap: 0.2rem;
+  display: grid;
+  gap: 0.2rem;
 }
 
 .category_meta {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-extrabold);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-extrabold);
 }
 
 .category_input_wrapper {
-    width: 11rem;
+  width: 11rem;
 }
 
 .category_input_wrapper .form_label {
-    display: none;
+  display: none;
 }
 
 .category_input_wrapper .form_field__input {
-    width: 100%;
-    min-height: 3.4rem;
-    border-radius: 1.2rem;
-    border: 0.2rem solid var(--color-black-100);
-    background-color: rgba(255, 255, 255, 0.95);
-    background-clip: padding-box;
-    padding: 0.6rem 1rem;
-    font-weight: var(--font-weight-black);
-    font-size: var(--font-size-lg);
-    line-height: 1.4;
-    text-align: right;
-    color: var(--color-black-100);
+  width: 100%;
+  min-height: 3.4rem;
+  border-radius: 1.2rem;
+  border: 0.2rem solid var(--color-black-100);
+  background-color: rgba(255, 255, 255, 0.95);
+  background-clip: padding-box;
+  padding: 0.6rem 1rem;
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-lg);
+  line-height: 1.4;
+  text-align: right;
+  color: var(--color-black-100);
 }
 
 .category_input_wrapper .form_field__input:focus {
-    outline: none;
-    border-color: var(--color-primary);
+  outline: none;
+  border-color: var(--color-primary);
 }
 
 .category_input_wrapper .form_field__clear {
-    top: 0.7rem;
+  top: 0.7rem;
 }

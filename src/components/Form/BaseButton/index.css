@@ -1,123 +1,123 @@
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    gap: 0.25rem;
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        color 0.2s ease;
-    text-decoration: none;
-    box-shadow: 0 1rem 2.2rem rgba(66, 83, 99, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.25rem;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease;
+  text-decoration: none;
+  box-shadow: 0 1rem 2.2rem rgba(66, 83, 99, 0.08);
 }
 
 .btn_xs {
-    width: 2.4rem;
-    height: 2.4rem;
-    padding: 0;
-    font-size: var(--font-size-2xs);
-    border-radius: 0.6rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  font-size: var(--font-size-2xs);
+  border-radius: 0.6rem;
 }
 
 .btn_sm {
-    height: 2.4rem;
-    padding: 0 0.8rem;
-    font-size: var(--font-size-2xs);
-    border-radius: 0.6rem;
+  height: 2.4rem;
+  padding: 0 0.8rem;
+  font-size: var(--font-size-2xs);
+  border-radius: 0.6rem;
 }
 
 .btn_md {
-    font-size: var(--font-size-xl);
-    font-weight: 600;
-    height: 4rem;
-    padding: 0 2.4rem;
-    border-radius: 0.8rem;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  height: 4rem;
+  padding: 0 2.4rem;
+  border-radius: 0.8rem;
 }
 .btn:active {
-    opacity: 0.8;
-    transform: translateY(0.1rem);
+  opacity: 0.8;
+  transform: translateY(0.1rem);
 }
 .btn_solid__primary {
-    border: 0.1rem solid var(--color-primary);
-    background: var(--color-primary);
-    color: var(--color-white);
+  border: 0.1rem solid var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .btn_outline__black {
-    border: 0.1rem solid var(--color-grey-100);
-    background: var(--color-white);
-    color: var(--color-black);
+  border: 0.1rem solid var(--color-grey-100);
+  background: var(--color-white);
+  color: var(--color-black);
 }
 
 .btn_outline__grey {
-    border: 0.1rem solid var(--color-grey-100);
-    background: var(--color-white);
-    color: var(--color-grey-400);
+  border: 0.1rem solid var(--color-grey-100);
+  background: var(--color-white);
+  color: var(--color-grey-400);
 }
 
 .btn_back {
-    width: 4.4rem;
-    height: 4.4rem;
-    padding: 0;
-    font-size: var(--font-size-4xl);
-    border: 0.1rem solid var(--color-grey-100);
-    background: var(--color-white);
-    color: var(--color-black);
-    border-radius: 0.8rem;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  font-size: var(--font-size-4xl);
+  border: 0.1rem solid var(--color-grey-100);
+  background: var(--color-white);
+  color: var(--color-black);
+  border-radius: 0.8rem;
 }
 
 .btn_menu {
-    width: 4.4rem;
-    height: 4.4rem;
-    padding: 0;
-    font-size: var(--font-size-4xl);
-    border: 0.1rem solid var(--color-grey-100);
-    background: var(--color-white);
-    color: var(--color-black);
-    border-radius: 0.8rem;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  font-size: var(--font-size-4xl);
+  border: 0.1rem solid var(--color-grey-100);
+  background: var(--color-white);
+  color: var(--color-black);
+  border-radius: 0.8rem;
 }
 
 .btn_captcha {
-    height: 2.4rem;
-    padding: 0 0.8rem;
-    font-size: var(--font-size-2xs);
-    border: 0.1rem solid var(--color-grey-100);
-    background: var(--color-white);
-    color: var(--color-black);
-    border-radius: 0.6rem;
+  height: 2.4rem;
+  padding: 0 0.8rem;
+  font-size: var(--font-size-2xs);
+  border: 0.1rem solid var(--color-grey-100);
+  background: var(--color-white);
+  color: var(--color-black);
+  border-radius: 0.6rem;
 }
 
 .btn_bank {
-    flex-direction: column;
-    padding-top: 2rem;
-    padding-bottom: 1.4rem;
-    font-size: var(--font-size-2xl);
-    border: 0.1rem solid var(--color-surface-ghost);
-    background: var(--color-white);
-    justify-content: flex-start;
-    color: var(--color-black);
-    gap: 0.35rem;
-    border-radius: 0.8rem;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 1.4rem;
+  font-size: var(--font-size-2xl);
+  border: 0.1rem solid var(--color-surface-ghost);
+  background: var(--color-white);
+  justify-content: flex-start;
+  color: var(--color-black);
+  gap: 0.35rem;
+  border-radius: 0.8rem;
 }
 
 .btn_bank img {
-    width: 4rem;
+  width: 4rem;
 }
 
 .btn_icon {
 }
 
 .btn_inline {
-    width: auto;
-    height: auto;
-    padding: 0.6rem 1.2rem;
+  width: auto;
+  height: auto;
+  padding: 0.6rem 1.2rem;
 }
 
 /* .btn_ghost {
@@ -127,21 +127,21 @@
 } */
 
 .btn_line__primary {
-    background-color: var(--color-white);
-    border: 0.1rem solid var(--color-primary);
-    color: var(--color-primary);
+  background-color: var(--color-white);
+  border: 0.1rem solid var(--color-primary);
+  color: var(--color-primary);
 }
 
 .btn_line__black {
-    background: var(--color-white);
-    border: 0.1rem solid var(--color-grey-100);
-    color: var(--color-black);
+  background: var(--color-white);
+  border: 0.1rem solid var(--color-grey-100);
+  color: var(--color-black);
 }
 
 .btn_email_join_submit,
 .btn_google_join {
-    max-width: 32rem;
-    margin: 0 auto;
+  max-width: 32rem;
+  margin: 0 auto;
 }
 
 /* .btn_text {

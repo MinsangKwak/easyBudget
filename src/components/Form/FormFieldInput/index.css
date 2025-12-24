@@ -3,15 +3,15 @@
   flex-direction: column;
   gap: 0.35rem;
 }
-.form_field + .form_field{
-  margin-top:1rem;
+.form_field + .form_field {
+  margin-top: 1rem;
 }
 
 .input_container {
-    position:relative;
+  position: relative;
   display: flex;
   align-items: flex-start;
-  flex-direction:column;
+  flex-direction: column;
   gap: 0.6rem;
 }
 
@@ -23,7 +23,7 @@
 
 .form_field__input {
   flex: 1;
-  display:inline-flex;
+  display: inline-flex;
   width: 100%;
   min-height: 4.4rem;
   padding: 1.1rem 1.4rem;
@@ -34,7 +34,10 @@
   background-clip: padding-box;
   font-size: var(--font-size-2xl);
   color: var(--color-primary);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .form_field__input:focus {
@@ -49,9 +52,9 @@
 }
 
 .form_field__clear {
-    position:absolute;
-    right:1rem;
-    top:1.2rem;
+  position: absolute;
+  right: 1rem;
+  top: 1.2rem;
   width: auto;
   height: auto;
   align-self: center;
