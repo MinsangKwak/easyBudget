@@ -24,15 +24,14 @@ export default defineConfig(() => {
   const isStorybook = process.env.STORYBOOK === "true";
   const isGithubPages = process.env.GITHUB_ACTIONS === "true";
 
-  // ✅ 앱 배포(GH Pages)에서는 /easyBudget/
-  // ✅ Storybook에서는 항상 / (루트)로 고정해야 preview 로딩 404가 안 남
+  // 앱 배포(GH Pages)에서는 /easyBudget/
+  // Storybook에서는 항상 / (루트)로 고정해야 preview 로딩 404가 안 남
   const base = isStorybook ? "/" : isGithubPages ? "/easyBudget/" : "/";
-
   return {
     base,
     plugins: [react(), copyIndexTo404()],
 
-    // ✅ Codespaces 포함 원격 환경에서 dev server 안정화
+    // Codespaces 포함 원격 환경에서 dev server 안정화
     server: {
       host: true,
       strictPort: false,
