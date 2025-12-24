@@ -5,6 +5,7 @@ import Title from "../../../Content/Title";
 import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
 import BaseButton from "../../../Form/BaseButton";
+import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 import { useAuth } from "../../../../contexts/AuthContext";
 
 const ProfileField = ({ label, value }) => {
@@ -23,7 +24,7 @@ const ProfileScreen = ({ onGoHome, onDeleteAccount }) => {
   return (
     <Screen className="screen_profile">
       <Title>마이프로필</Title>
-      <Subtitle>현재 세션 정보를 확인할 수 있어요.</Subtitle>
+      <Subtitle>회원님의 가입 정보는 아래와 같습니다.</Subtitle>
 
       <Inner>
         {currentUser ? (
@@ -40,27 +41,26 @@ const ProfileScreen = ({ onGoHome, onDeleteAccount }) => {
             <p>로그인된 계정을 찾지 못했습니다.</p>
           </div>
         )}
-
-        <BaseButton
-          type="button"
-          size="md"
-          style="line__black"
-          className="btn_profile_home"
-          onClick={onGoHome}
-        >
-          메인으로 돌아가기
-        </BaseButton>
-        {currentUser && (
+        <BaseButtonContainer>
           <BaseButton
             type="button"
             size="md"
-            style="outline__grey"
-            className="btn_profile_delete"
-            onClick={onDeleteAccount}
+            style="solid__primary"
+            onClick={onGoHome}
           >
-            회원 탈퇴 (세션 제거)
+            메인으로 돌아가기
           </BaseButton>
-        )}
+          {currentUser && (
+            <BaseButton
+              type="button"
+              size="md"
+              style="outline__black"
+              onClick={onDeleteAccount}
+            >
+              회원 탈퇴 (세션 제거)
+            </BaseButton>
+          )}
+        </BaseButtonContainer>
       </Inner>
     </Screen>
   );
