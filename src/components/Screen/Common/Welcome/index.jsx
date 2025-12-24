@@ -1,27 +1,34 @@
 import "./index.css";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
 import Subtitle from "../../../Content/SubTitle";
 import Inner from "../../../Content/Inner";
+import BaseButton from "../../../Form/BaseButton";
+import BaseButtonContainer from "../../../Form/BaseButtonContainer";
 
 import IconLock from "../../../Common/IconLock";
 
 const ScreenWelcome = ({ onTimeout }) => {
-  const [seconds, setSeconds] = useState(2);
+  const INITIAL_SECONDS = 2;
+  const [seconds, setSeconds] = useState(INITIAL_SECONDS);
 
   useEffect(() => {
-    if (seconds <= 0) {
-      onTimeout?.();
-      return;
-    }
+    setSeconds(INITIAL_SECONDS);
 
-    const timerId = setTimeout(() => {
-      setSeconds((prev) => prev - 1);
+    const intervalId = setInterval(() => {
+      setSeconds((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
-    return () => clearTimeout(timerId);
-  }, [seconds, onTimeout]);
+    const timeoutId = setTimeout(() => {
+      onTimeout?.();
+    }, INITIAL_SECONDS * 1000);
+
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+    };
+  }, [onTimeout]);
 
   return (
     <Screen className="screen_welcome">
@@ -30,6 +37,11 @@ const ScreenWelcome = ({ onTimeout }) => {
       <Inner>
         <IconLock />
         <p className="welcome_message">{seconds}초 후 메인 페이지로 이동합니다.</p>
+        <BaseButtonContainer>
+          <BaseButton type="button" size="md" style="solid__primary" onClick={onTimeout}>
+            메인으로 이동
+          </BaseButton>
+        </BaseButtonContainer>
       </Inner>
     </Screen>
   );
