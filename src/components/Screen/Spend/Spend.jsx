@@ -12,6 +12,7 @@ import SeedDataSheet from "../../Main/SeedDataSheet";
 import TransactionSheet from "../../Main/TransactionSheet";
 import AuthRequiredModal from "../../Main/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
+import BaseButton from "../../Form/BaseButton";
 import BaseSelectBox from "../../Form/BaseSelectBox";
 
 const ScreenSpend = ({
@@ -135,7 +136,6 @@ const ScreenSpend = ({
                   paymentGroups={paymentGroups}
                   totalSpend={report.spendTotal}
                   formatMaskedKoreanWon={formatMaskedKoreanWon}
-                  onClickAdd={handleClickAddMyData}
                   onClickPayment={handleClickPaymentItem}
                 />
                 <CategorySection
@@ -157,6 +157,17 @@ const ScreenSpend = ({
                   onCategoryEnter={handleEnterCommit}
                   onClickCategory={handleClickCategoryRow}
                 />
+                <div className="pay_add">
+                  <BaseButton
+                    type="button"
+                    size="md"
+                    style="btn_solid__primary"
+                    className="add_btn"
+                    onClick={handleClickAddMyData}
+                  >
+                    마이데이터 추가/수정 <span className="add_plus">+</span>
+                  </BaseButton>
+                </div>
               </div>
             ))}
           </div>
