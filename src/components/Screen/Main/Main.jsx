@@ -31,6 +31,8 @@ const ScreenMain = ({
     commitBudgetInput,
     reportStatusFilter,
     setReportStatusFilter,
+    regularStatusFilter,
+    setRegularStatusFilter,
     isAddSheetOpen,
     setIsAddSheetOpen,
     newEntryDraft,
@@ -89,6 +91,8 @@ const ScreenMain = ({
           onBudgetCommit={commitBudgetInput}
           reportStatusFilter={reportStatusFilter}
           onChangeReportStatusFilter={setReportStatusFilter}
+          regularStatusFilter={regularStatusFilter}
+          onChangeRegularStatusFilter={setRegularStatusFilter}
         />
       </Inner>
 

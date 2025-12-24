@@ -123,6 +123,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
   const [incomeEntries, setIncomeEntries] = useState(DEFAULT_INCOME_ENTRIES);
   const [spendEntries, setSpendEntries] = useState(DEFAULT_SPEND_ENTRIES);
   const [reportStatusFilter, setReportStatusFilter] = useState("all");
+  const [regularStatusFilter, setRegularStatusFilter] = useState("all");
   const [planBudget, setPlanBudget] = useState({
     incomeBudget: 3780000,
     spendBudget: 15950000,
@@ -207,11 +208,8 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
   }, [reportStatusFilter, spendEntries]);
 
   const spendTotal = useMemo(() => {
-    return filteredSpendEntries.reduce(
-      (accumulator, entry) => accumulator + Math.max(0, entry.amount),
-      0,
-    );
-  }, [filteredSpendEntries]);
+    return computeEntriesTotal(spendEntries);
+  }, [spendEntries]);
 
   const periodFilters = useMemo(() => {
     return monthlyReports.map((period) => {
@@ -351,7 +349,6 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
       regularCountPaid: regularStats.paidCount,
       variablePlanned: variableStats.plannedAmount,
       variablePaid: variableStats.paidAmount,
-      variableHint: planBudget.variableBudget,
     };
   }, [incomeTotal, planBudget, regularStats, spendTotal, variableStats]);
 
@@ -724,6 +721,8 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     yearlySummary,
     reportStatusFilter,
     setReportStatusFilter,
+    regularStatusFilter,
+    setRegularStatusFilter,
     filteredSpendEntries,
     periodFilters,
     isSeedSheetOpen,
