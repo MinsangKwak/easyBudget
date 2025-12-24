@@ -8,3 +8,26 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-grey-200);
 }
+
+.seed_section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.seed_section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-grey-300);
+}
+
+.seed_section__title {
+  color: var(--color-grey-200);
+}
+
+.seed_section__total {
+  color: var(--color-grey-0);
+}
