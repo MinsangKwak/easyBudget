@@ -7,8 +7,6 @@
 
 .profile_card {
   width: 100%;
-  max-width: 36rem;
-  margin: 0 auto 2rem;
   padding: 1.6rem;
   border: 0.1rem solid var(--color-grey-100);
   border-radius: 1.2rem;
@@ -46,12 +44,13 @@
   word-break: break-all;
 }
 
-.btn_profile_home {
-  max-width: 36rem;
-  margin: 0 auto;
+.screen_profile .btn_container {
+  width: 100%;
+  flex-direction: row;
 }
 
-.btn_profile_delete {
-  max-width: 36rem;
-  margin: 1rem auto 0;
+@media all and (max-width: 520px) {
+  .screen_profile .btn_container {
+    flex-direction: column;
+  }
 }
