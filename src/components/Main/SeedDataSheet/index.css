@@ -31,3 +31,19 @@
 .seed_section__total {
   color: var(--color-grey-0);
 }
+
+.seed_category {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.seed_category__meta {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.seed_select {
+  display: grid;
+  gap: 0.4rem;
+}
