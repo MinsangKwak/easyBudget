@@ -23,12 +23,27 @@ const ReportSection = ({
   onBudgetCommit,
   reportStatusFilter,
   onChangeReportStatusFilter,
+  regularStatusFilter,
+  onChangeRegularStatusFilter,
 }) => {
   const statusOptions = [
     { key: "all", label: "전체" },
     { key: "paid", label: "지출 완료" },
     { key: "planned", label: "지출 예정" },
   ];
+  const regularStatusOptions = [
+    { key: "all", label: "전체" },
+    { key: "planned", label: "지출 예정" },
+    { key: "paid", label: "지출 완료" },
+  ];
+  const regularRows = [
+    { key: "planned", label: "지출 예정", value: report.regularPlanned },
+    { key: "paid", label: "지출 완료", value: report.regularPaid },
+  ];
+  const visibleRegularRows =
+    regularStatusFilter === "all"
+      ? regularRows
+      : regularRows.filter((row) => row.key === regularStatusFilter);
 
   const handleBudgetKeyDown = (event, key) => {
     if (event.key !== "Enter") return;
@@ -175,15 +190,27 @@ const ReportSection = ({
             </div>
           </div>
 
+          <div className="report_filters" role="group" aria-label="정기지출 상태 필터">
+            {regularStatusOptions.map((option) => (
+              <button
+                key={option.key}
+                type="button"
+                className={`filter_chip ${regularStatusFilter === option.key ? "is_active" : ""}`}
+                onClick={() => onChangeRegularStatusFilter?.(option.key)}
+                aria-pressed={regularStatusFilter === option.key}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
           <div className="block_rows">
-            <div className="row">
-              <span className="row_label muted">지출 예정</span>
-              <b className="row_value">{formatMaskedKoreanWon(report.regularPlanned)}</b>
-            </div>
-            <div className="row">
-              <span className="row_label muted">지출 완료</span>
-              <b className="row_value">{formatMaskedKoreanWon(report.regularPaid)}</b>
-            </div>
+            {visibleRegularRows.map((row) => (
+              <div key={row.key} className="row">
+                <span className="row_label muted">{row.label}</span>
+                <b className="row_value">{formatMaskedKoreanWon(row.value)}</b>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -194,16 +221,12 @@ const ReportSection = ({
 
           <div className="block_rows">
             <div className="row">
-              <span className="row_label muted">지출 예산</span>
+              <span className="row_label muted">지출 예정</span>
               <b className="row_value">{formatMaskedKoreanWon(report.variablePlanned)}</b>
             </div>
             <div className="row">
               <span className="row_label muted">지출</span>
               <b className="row_value">{formatMaskedKoreanWon(report.variablePaid)}</b>
-            </div>
-            <div className="row row_hint">
-              <span className="row_label muted">예상</span>
-              <b className="row_value muted">{formatMaskedKoreanWon(report.variableHint)}</b>
             </div>
           </div>
         </div>

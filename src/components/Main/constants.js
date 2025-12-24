@@ -5,6 +5,7 @@ export const CATEGORY_OPTIONS = [
   { key: "cat_house", label: "주거·관리", defaultTone: "lilac" },
   { key: "cat_save", label: "저축", defaultTone: "emerald" },
   { key: "cat_misc", label: "결제·소통", defaultTone: "plum" },
+  { key: "cat_other", label: "기타", defaultTone: "lilac" },
 ];
 
 export const PAYMENT_GROUP_META = {
