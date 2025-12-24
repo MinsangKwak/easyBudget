@@ -11,26 +11,6 @@ import { useAnimationFrameLoop } from "./useAnimationFrameLoop";
 
 const LEDGER_STORAGE_KEY = "demo-ledger-data";
 
-const buildSpendStats = (entries, targetType) => {
-  const targetEntries = entries.filter((entry) => entry.spendType === targetType);
-  const plannedEntries = targetEntries.filter((entry) => entry.status === "planned");
-  const paidEntries = targetEntries.filter((entry) => entry.status !== "planned");
-
-  const plannedAmount = plannedEntries.reduce((accumulator, entry) => {
-    return accumulator + Math.max(0, entry.amount);
-  }, 0);
-  const paidAmount = paidEntries.reduce((accumulator, entry) => {
-    return accumulator + Math.max(0, entry.amount);
-  }, 0);
-
-  return {
-    plannedAmount,
-    paidAmount,
-    plannedCount: plannedEntries.length,
-    paidCount: paidEntries.length,
-  };
-};
-
 const computeEntriesTotal = (entries) =>
   entries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
 
@@ -123,7 +103,6 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
   const [incomeEntries, setIncomeEntries] = useState(DEFAULT_INCOME_ENTRIES);
   const [spendEntries, setSpendEntries] = useState(DEFAULT_SPEND_ENTRIES);
   const [reportStatusFilter, setReportStatusFilter] = useState("all");
-  const [regularStatusFilter, setRegularStatusFilter] = useState("all");
   const [planBudget, setPlanBudget] = useState({
     incomeBudget: 3780000,
     spendBudget: 15950000,
@@ -328,29 +307,29 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     }));
   }, [filteredSpendEntries]);
 
-  const regularStats = useMemo(
-    () => buildSpendStats(filteredSpendEntries, "regular"),
+  const regularPaidEntries = useMemo(
+    () =>
+      filteredSpendEntries.filter(
+        (entry) => entry.spendType === "regular" && entry.status !== "planned",
+      ),
     [filteredSpendEntries],
   );
-  const variableStats = useMemo(
-    () => buildSpendStats(filteredSpendEntries, "variable"),
+  const variablePaidEntries = useMemo(
+    () =>
+      filteredSpendEntries.filter(
+        (entry) => entry.spendType === "variable" && entry.status !== "planned",
+      ),
     [filteredSpendEntries],
   );
 
-  const report = useMemo(() => {
-    return {
-      incomeTotal,
-      incomeHint: planBudget.incomeBudget,
-      spendTotal,
-      spendHint: planBudget.spendBudget,
-      regularPlanned: regularStats.plannedAmount,
-      regularPaid: regularStats.paidAmount,
-      regularCountPlanned: regularStats.plannedCount,
-      regularCountPaid: regularStats.paidCount,
-      variablePlanned: variableStats.plannedAmount,
-      variablePaid: variableStats.paidAmount,
-    };
-  }, [incomeTotal, planBudget, regularStats, spendTotal, variableStats]);
+  const regularPaidTotal = useMemo(
+    () => computeEntriesTotal(regularPaidEntries),
+    [regularPaidEntries],
+  );
+  const variablePaidTotal = useMemo(
+    () => computeEntriesTotal(variablePaidEntries),
+    [variablePaidEntries],
+  );
 
   const resolveCategoryLabel = (categoryKey) =>
     CATEGORY_OPTIONS.find((option) => option.key === categoryKey)?.label || "카테고리";
@@ -365,6 +344,29 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
         entry.spendType === "regular" ? "정기" : "변동"
       }${entry.status === "planned" ? " 예정" : ""}`,
     }));
+
+  const report = useMemo(() => {
+    return {
+      incomeTotal,
+      incomeHint: planBudget.incomeBudget,
+      spendTotal,
+      spendHint: planBudget.spendBudget,
+      regularPaid: regularPaidTotal,
+      regularCountPaid: regularPaidEntries.length,
+      regularPaidDetails: buildSheetItems(regularPaidEntries),
+      variablePaid: variablePaidTotal,
+      variableCountPaid: variablePaidEntries.length,
+      variablePaidDetails: buildSheetItems(variablePaidEntries),
+    };
+  }, [
+    incomeTotal,
+    planBudget,
+    regularPaidEntries,
+    regularPaidTotal,
+    spendTotal,
+    variablePaidEntries,
+    variablePaidTotal,
+  ]);
 
   const openSheet = ({ title, items }) => {
     setSheetState({ isOpen: true, title, items });
@@ -721,8 +723,6 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     yearlySummary,
     reportStatusFilter,
     setReportStatusFilter,
-    regularStatusFilter,
-    setRegularStatusFilter,
     filteredSpendEntries,
     periodFilters,
     isSeedSheetOpen,

@@ -23,27 +23,34 @@ const ReportSection = ({
   onBudgetCommit,
   reportStatusFilter,
   onChangeReportStatusFilter,
-  regularStatusFilter,
-  onChangeRegularStatusFilter,
+  onOpenSpendEditGuide,
 }) => {
   const statusOptions = [
     { key: "all", label: "전체" },
     { key: "paid", label: "지출 완료" },
     { key: "planned", label: "지출 예정" },
   ];
-  const regularStatusOptions = [
-    { key: "all", label: "전체" },
-    { key: "planned", label: "지출 예정" },
-    { key: "paid", label: "지출 완료" },
-  ];
-  const regularRows = [
-    { key: "planned", label: "지출 예정", value: report.regularPlanned },
-    { key: "paid", label: "지출 완료", value: report.regularPaid },
-  ];
-  const visibleRegularRows =
-    regularStatusFilter === "all"
-      ? regularRows
-      : regularRows.filter((row) => row.key === regularStatusFilter);
+  const renderDetailList = (items, emptyLabel) => {
+    if (!items.length) {
+      return <div className="report_detail_empty muted">{emptyLabel}</div>;
+    }
+
+    return (
+      <ul className="report_detail_list">
+        {items.map((item) => (
+          <li key={item.id} className="report_detail_row">
+            <div>
+              <div className="report_detail_title">{item.title}</div>
+              <div className="report_detail_meta muted">
+                {item.sub} · {item.date}
+              </div>
+            </div>
+            <b className="report_detail_amount">{formatMaskedKoreanWon(item.amount)}</b>
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   const handleBudgetKeyDown = (event, key) => {
     if (event.key !== "Enter") return;
@@ -145,10 +152,10 @@ const ReportSection = ({
               <BaseButton
                 type="button"
                 size="xs"
-                style={isEditMode ? "btn_solid__primary" : "btn_outline__grey"}
-                onClick={onToggleEditMode}
-                aria-label="예산 편집"
-                title="예산 편집"
+                style="btn_outline__grey"
+                onClick={onOpenSpendEditGuide}
+                aria-label="총 지출 편집 안내"
+                title="총 지출 편집 안내"
               >
                 <FiEdit3 />
               </BaseButton>
@@ -157,21 +164,7 @@ const ReportSection = ({
           <div className="item_value">{formatMaskedKoreanWon(report.spendTotal)}</div>
           <div className="item_hint muted">
             <span className="item_hint__title">예산</span>
-            {isEditMode && (
-              <FormFieldInput
-                id="spend-budget"
-                label="총 지출 예산"
-                wrapperClassName="form_field inline_field"
-                inputMode="numeric"
-                value={budgetInputs.spendBudget}
-                onChange={(event) => onBudgetChange("spendBudget", event.target.value)}
-                onBlur={() => onBudgetCommit("spendBudget")}
-                onKeyDown={(event) => handleBudgetKeyDown(event, "spendBudget")}
-              />
-            )}
-            {!isEditMode && (
-              <span className="item_subtitle">{formatMaskedKoreanWon(report.spendHint)}</span>
-            )}
+            <span className="item_subtitle">{formatMaskedKoreanWon(report.spendHint)}</span>
           </div>
         </div>
       </div>
@@ -182,53 +175,45 @@ const ReportSection = ({
             <div className="block_title">정기지출</div>
             <div className="block_badges">
               <span className="badge">
-                지출 예정 {formatMaskedCount(report.regularCountPlanned)}건
-              </span>
-              <span className="badge">
                 지출 완료 {formatMaskedCount(report.regularCountPaid)}건
               </span>
             </div>
           </div>
 
-          <div className="report_filters" role="group" aria-label="정기지출 상태 필터">
-            {regularStatusOptions.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                className={`filter_chip ${regularStatusFilter === option.key ? "is_active" : ""}`}
-                onClick={() => onChangeRegularStatusFilter?.(option.key)}
-                aria-pressed={regularStatusFilter === option.key}
-              >
-                {option.label}
-              </button>
-            ))}
+          <div className="block_rows">
+            <div className="row">
+              <span className="row_label muted">지출 완료</span>
+              <b className="row_value">{formatMaskedKoreanWon(report.regularPaid)}</b>
+            </div>
           </div>
 
-          <div className="block_rows">
-            {visibleRegularRows.map((row) => (
-              <div key={row.key} className="row">
-                <span className="row_label muted">{row.label}</span>
-                <b className="row_value">{formatMaskedKoreanWon(row.value)}</b>
-              </div>
-            ))}
-          </div>
+          <details className="report_accordion">
+            <summary className="report_accordion_summary">상세 내역 보기</summary>
+            {renderDetailList(report.regularPaidDetails, "정기지출 내역이 없습니다.")}
+          </details>
         </div>
 
         <div className="report_block">
           <div className="block_head">
             <div className="block_title">변동지출</div>
+            <div className="block_badges">
+              <span className="badge">
+                지출 완료 {formatMaskedCount(report.variableCountPaid)}건
+              </span>
+            </div>
           </div>
 
           <div className="block_rows">
             <div className="row">
-              <span className="row_label muted">지출 예정</span>
-              <b className="row_value">{formatMaskedKoreanWon(report.variablePlanned)}</b>
-            </div>
-            <div className="row">
-              <span className="row_label muted">지출</span>
+              <span className="row_label muted">지출 완료</span>
               <b className="row_value">{formatMaskedKoreanWon(report.variablePaid)}</b>
             </div>
           </div>
+
+          <details className="report_accordion">
+            <summary className="report_accordion_summary">상세 내역 보기</summary>
+            {renderDetailList(report.variablePaidDetails, "변동지출 내역이 없습니다.")}
+          </details>
         </div>
       </div>
     </section>
