@@ -1,16 +1,16 @@
 .card_item {
     border-radius: var(--radius-md);
-    padding: 14px;
-    border: 2px solid var(--color-black-100);
+    padding: 1.4rem;
+    border: 0.2rem solid var(--color-black-100);
     /* background: color-mix(
         in srgb,
         var(--color-secondary-amber) 10%,
         color-mix(in srgb, var(--color-white) 78%, var(--color-secondary-royal) 22%) 90%
     ); */
     background-color:var(--color-white);
-    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-secondary-midnight) 14%, transparent);
+    box-shadow: 0.6rem 0.6rem 0 color-mix(in srgb, var(--color-secondary-midnight) 14%, transparent);
     display: grid;
-    gap: 6px;
+    gap: 0.6rem;
 }
 
 .card_item .item_title {
@@ -23,14 +23,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 0.8rem;
 }
 
 .inline_input {
     width: 100%;
     min-height: 3.6rem;
     border-radius: var(--radius-md);
-    border: 2px solid var(--color-black-100);
+    border: 0.2rem solid var(--color-black-100);
     background-color: rgba(255, 255, 255, 0.95);
     background-clip: padding-box;
     padding: 0.6rem 0.9rem;
@@ -49,7 +49,7 @@
 }
 
 .inline_field {
-    min-width: 160px;
+    min-width: 16rem;
 }
 
 .inline_field .form_label {
@@ -61,7 +61,7 @@
     width: 100%;
     min-height: 3.6rem;
     border-radius: var(--radius-md);
-    border: 2px solid var(--color-black-100);
+    border: 0.2rem solid var(--color-black-100);
     background-color: rgba(255, 255, 255, 0.95);
     background-clip: padding-box;
     padding: 0.6rem 0.9rem;
@@ -105,29 +105,29 @@
 }
 
 .report_blocks {
-    margin-top: 12px;
+    margin-top: 1.2rem;
     display: grid;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 .report_block {
-    border-radius: 16px;
-    padding: 14px;
-    border: 2px dashed var(--color-black-100);
+    border-radius: 1.6rem;
+    padding: 1.4rem;
+    border: 0.2rem dashed var(--color-black-100);
     /* background: color-mix(
         in srgb,
         var(--color-secondary-amber) 8%,
         color-mix(in srgb, var(--color-white) 80%, var(--color-secondary-vivid) 20%) 92%
     ); */
     background-color:var(--color-surface-ghost);
-    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-secondary-midnight) 12%, transparent);
+    box-shadow: 0.6rem 0.6rem 0 color-mix(in srgb, var(--color-secondary-midnight) 12%, transparent);
 }
 
 .block_head {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 .block_title {
@@ -139,31 +139,31 @@
 .block_badges {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 0.6rem;
     justify-content: flex-end;
 }
 
 .badge {
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-black);
-    padding: 4px 8px;
-    border-radius: 999px;
-    border: 2px solid var(--color-black-100);
+    padding: 0.4rem 0.8rem;
+    border-radius: 99.9rem;
+    border: 0.2rem solid var(--color-black-100);
     background: rgba(255, 255, 255, 0.9);
     color: var(--color-black-100);
 }
 
 .block_rows {
-    margin-top: 10px;
+    margin-top: 1rem;
     display: grid;
-    gap: 8px;
+    gap: 0.8rem;
 }
 
 .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .row_label {

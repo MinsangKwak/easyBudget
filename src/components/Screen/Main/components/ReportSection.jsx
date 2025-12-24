@@ -1,8 +1,8 @@
 import BaseButton from "../../../Form/BaseButton";
-import { FiChevronDown, FiEdit3 } from "react-icons/fi";
+import { FiEdit3 } from "react-icons/fi";
+import BaseSelectBox from "../../../Form/BaseSelectBox";
 
 const ReportSection = ({
-    monthLabel,
     monthKey,
     monthOptions,
     onChangeMonth,
@@ -40,22 +40,14 @@ const ReportSection = ({
             <div className="card_filters">
                 <div className="report_filters period_filters" role="group" aria-label="기간 필터">
                     
-                    <label className="month_btn" aria-label="월 선택">
-                        <span className="month_btn__label">{monthLabel}</span>
-                        <FiChevronDown />
-                        <select
-                            className="month_select"
-                            value={monthKey}
-                            onChange={(event) => onChangeMonth?.(event.target.value)}
-                            aria-label="월 선택"
-                        >
-                            {monthOptions.map((option) => (
-                                <option key={option.key} value={option.key}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                    <BaseSelectBox
+                        id="month-select-report"
+                        className="month_select_box"
+                        options={monthOptions}
+                        value={monthKey}
+                        onChange={(event) => onChangeMonth?.(event.target.value)}
+                        aria-label="월 선택"
+                    />
 
                     {/* {periodFilters.map((option) => (
                         <button

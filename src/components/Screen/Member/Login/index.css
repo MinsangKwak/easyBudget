@@ -2,7 +2,7 @@
 }
 .screen_join__email .content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
     gap: 2rem;
 }
 .screen_join__email .content_inner {
@@ -20,7 +20,7 @@
     margin: 0.6rem 0 1.2rem;
     min-height: 4.4rem;
     padding: 1.1rem 1.4rem;
-    border: 1px solid var(--color-border-muted);
+    border: 0.1rem solid var(--color-border-muted);
     border-radius: 0.8rem;
     font-size: var(--font-size-lg);
     line-height: 1.5;
@@ -30,7 +30,7 @@
         linear-gradient(45deg, transparent 50%, var(--color-black-100) 50%),
         linear-gradient(135deg, var(--color-black-100) 50%, transparent 50%);
     background-position: calc(100% - 1.6rem) 50%, calc(100% - 1.2rem) 50%;
-    background-size: 8px 8px, 8px 8px;
+    background-size: 0.8rem 0.8rem, 0.8rem 0.8rem;
     background-repeat: no-repeat;
 }
 

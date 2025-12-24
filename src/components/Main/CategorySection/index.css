@@ -9,31 +9,31 @@
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 8px;
+    gap: 0.8rem;
 }
 
 .category_row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    padding: 12px;
-    border-radius: 14px;
-    border:2px solid var(--color-black-100);
-    box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
+    gap: 1rem;
+    padding: 1.2rem;
+    border-radius: 1.4rem;
+    border:0.2rem solid var(--color-black-100);
+    box-shadow: 0.6rem 0.6rem 0 color-mix(in srgb, var(--color-secondary-midnight) 16%, transparent);
 }
 
 .category_left {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
     min-width: 0;
 }
 
 .category_right {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .category_label {
@@ -53,10 +53,10 @@
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 999px;
-    border: 2px solid var(--color-black-100);
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 99.9rem;
+    border: 0.2rem solid var(--color-black-100);
     display: inline-block;
 }
 
@@ -86,7 +86,7 @@
 
 .category_text {
     display: grid;
-    gap: 2px;
+    gap: 0.2rem;
 }
 
 .category_meta {
@@ -95,7 +95,7 @@
 }
 
 .category_input_wrapper {
-    width: 110px;
+    width: 11rem;
 }
 
 .category_input_wrapper .form_label {
@@ -105,8 +105,8 @@
 .category_input_wrapper .form_field__input {
     width: 100%;
     min-height: 3.4rem;
-    border-radius: 12px;
-    border: 2px solid var(--color-black-100);
+    border-radius: 1.2rem;
+    border: 0.2rem solid var(--color-black-100);
     background-color: rgba(255, 255, 255, 0.95);
     background-clip: padding-box;
     padding: 0.6rem 1rem;

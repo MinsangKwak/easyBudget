@@ -12,7 +12,7 @@
 .donut_seg {
     fill: none;
     stroke-linecap: round;
-    stroke-width: 18px;
+    stroke-width: 1.8rem;
     transition:
         stroke-dasharray 0.35s ease,
         stroke-dashoffset 0.35s ease;
@@ -52,7 +52,7 @@
 }
 
 .donut_top {
-    margin-top: 10px;
+    margin-top: 1rem;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-extrabold);
 }
@@ -66,7 +66,7 @@
 }
 
 .donut_bottom {
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-extrabold);
 }
