@@ -22,6 +22,11 @@
   color: var(--color-black-100);
 }
 
+.pay_group__summary {
+  font-size: var(--font-size-sm);
+  padding: 0.4rem 0;
+}
+
 .avatar {
   width: 2.8rem;
   height: 2.8rem;
