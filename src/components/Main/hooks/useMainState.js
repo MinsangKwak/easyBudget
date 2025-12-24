@@ -36,7 +36,11 @@ const computeEntriesTotal = (entries) =>
 
 const buildSeedCategoryInputs = () =>
   CATEGORY_OPTIONS.reduce((accumulator, option) => {
-    accumulator[option.key] = "";
+    accumulator[option.key] = {
+      amount: "",
+      paymentGroupKey: "card",
+      spendType: "variable",
+    };
     return accumulator;
   }, {});
 
@@ -518,7 +522,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
       setMonthKey(resolveInitialMonthKey(MONTHLY_REPORTS));
       setIsSeedSheetOpen(false);
       setIsSeededData(false);
-      setSeedInputs({ incomeTotal: "", spendTotal: "" });
+      setSeedInputs({ incomeTotal: "", spendCategories: buildSeedCategoryInputs() });
       return;
     }
 
@@ -527,7 +531,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
       setMonthKey(resolveInitialMonthKey(MONTHLY_REPORTS));
       setIsSeedSheetOpen(false);
       setIsSeededData(false);
-      setSeedInputs({ incomeTotal: "", spendTotal: "" });
+      setSeedInputs({ incomeTotal: "", spendCategories: buildSeedCategoryInputs() });
       return;
     }
 
@@ -560,9 +564,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
         incomeTotal: storedLedger.planBudget?.incomeBudget
           ? String(storedLedger.planBudget.incomeBudget)
           : "",
-        spendTotal: storedLedger.planBudget?.spendBudget
-          ? String(storedLedger.planBudget.spendBudget)
-          : "",
+        spendCategories: buildSeedCategoryInputs(),
       });
       return;
     }
@@ -616,21 +618,27 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
 
     const parsedIncome = clampValue(parseNumberSafely(seedInputs.incomeTotal), 0, 20000000);
     const spendSeedEntries = CATEGORY_OPTIONS.flatMap((option) => {
-      const rawValue = seedInputs.spendCategories?.[option.key];
+      const categorySeed = seedInputs.spendCategories?.[option.key];
+      const rawValue = categorySeed?.amount;
       const parsedSpend = clampValue(parseNumberSafely(rawValue), 0, 20000000);
       if (!parsedSpend) return [];
+      const paymentGroupKey = categorySeed?.paymentGroupKey || "card";
+      const paymentGroupLabel = PAYMENT_GROUP_META[paymentGroupKey]?.label || "지출수단";
+      const spendType = categorySeed?.spendType || "variable";
+      const paymentLabel = paymentGroupLabel;
+      const paymentKey = `${paymentGroupKey}_seed`;
       return [
         {
           id: `spend-seed-${option.key}-${Date.now()}`,
           categoryKey: option.key,
           categoryLabel: option.label,
           amount: parsedSpend,
-          paymentKey: "card_seed",
-          paymentLabel: "초기 지출",
-          paymentLogo: "W",
-          paymentGroupKey: "card",
-          paymentGroupLabel: "카드지출",
-          spendType: "variable",
+          paymentKey,
+          paymentLabel,
+          paymentLogo: paymentLabel[0] || "•",
+          paymentGroupKey,
+          paymentGroupLabel,
+          spendType,
           status: "paid",
           dateLabel: currentPeriod.label,
         },
@@ -638,6 +646,11 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     });
     const parsedSpendTotal = spendSeedEntries.reduce(
       (accumulator, entry) => accumulator + entry.amount,
+      0,
+    );
+    const parsedVariableTotal = spendSeedEntries.reduce(
+      (accumulator, entry) =>
+        entry.spendType === "variable" ? accumulator + entry.amount : accumulator,
       0,
     );
 
@@ -658,7 +671,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     const nextBudget = {
       incomeBudget: parsedIncome,
       spendBudget: parsedSpendTotal,
-      variableBudget: parsedSpendTotal,
+      variableBudget: parsedVariableTotal,
     };
 
     setMonthlyReports(
