@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Screen from "../../../Layout/Screen";
 import Title from "../../../Content/Title";
@@ -12,6 +12,7 @@ import ErrorMessage from "../../../Form/ErrorMessage";
 import FormFieldInput from "../../../Form/FormFieldInput";
 import FormFieldWrapper from "../../../Form/FormFieldWrapper";
 import { useAuth } from "../../../../contexts/AuthContext";
+import ScreenLoading from "../../Common/Loading";
 
 const ScreenJoinEmail = ({ onSignUpComplete }) => {
   const { registerEmailUser } = useAuth();
@@ -19,9 +20,42 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (submitTimeoutRef.current) {
+        clearTimeout(submitTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleRegister = (payload, { duplicateMessage, genericMessage }) => {
+    if (isSubmitting) return;
+    setError("");
+    setIsSubmitting(true);
+
+    submitTimeoutRef.current = setTimeout(() => {
+      try {
+        registerEmailUser(payload);
+        onSignUpComplete?.();
+      } catch (registerError) {
+        if (registerError.message === "DUPLICATE_ACCOUNT") {
+          setError(duplicateMessage);
+        } else {
+          setError(genericMessage);
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, 800);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (isSubmitting) return;
 
     if (!email.includes("@")) {
       setError("올바른 이메일 주소를 입력해주세요.");
@@ -38,20 +72,18 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
       return;
     }
 
-    try {
-      setError("");
-      registerEmailUser({ email, password, connectionType: "email" });
-      onSignUpComplete?.();
-    } catch (registerError) {
-      if (registerError.message === "DUPLICATE_ACCOUNT") {
-        setError("이미 가입된 이메일입니다. 로그인해주세요.");
-      } else {
-        setError("가입에 실패했습니다. 잠시 후 다시 시도해주세요.");
-      }
-    }
+    handleRegister(
+      { email, password, connectionType: "email" },
+      {
+        duplicateMessage: "이미 가입된 이메일입니다. 로그인해주세요.",
+        genericMessage: "가입에 실패했습니다. 잠시 후 다시 시도해주세요.",
+      },
+    );
   };
 
   const handleGmailConnect = () => {
+    if (isSubmitting) return;
+
     if (!email) {
       setError("G-Mail 연동을 위해 이메일을 입력해주세요.");
       return;
@@ -64,18 +96,18 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
 
     const nextPassword = password.length >= 8 ? password : "gmail-connect";
 
-    try {
-      setError("");
-      registerEmailUser({ email, password: nextPassword, connectionType: "gmail" });
-      onSignUpComplete?.();
-    } catch (registerError) {
-      if (registerError.message === "DUPLICATE_ACCOUNT") {
-        setError("이미 G-Mail로 가입된 계정입니다.");
-      } else {
-        setError("G-Mail 연동에 실패했습니다. 잠시 후 다시 시도해주세요.");
-      }
-    }
+    handleRegister(
+      { email, password: nextPassword, connectionType: "gmail" },
+      {
+        duplicateMessage: "이미 G-Mail로 가입된 계정입니다.",
+        genericMessage: "G-Mail 연동에 실패했습니다. 잠시 후 다시 시도해주세요.",
+      },
+    );
   };
+
+  if (isSubmitting) {
+    return <ScreenLoading message="가입 처리 중입니다. 잠시만 기다려 주세요." />;
+  }
 
   return (
     <Screen className="screen_join__email">
@@ -91,6 +123,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               placeholder="example@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={isSubmitting}
             />
 
             <FormFieldInput
@@ -100,6 +133,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               placeholder="비밀번호 (8자 이상)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={isSubmitting}
             />
 
             <FormFieldInput
@@ -109,6 +143,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               placeholder="비밀번호를 한 번 더 입력해주세요"
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
+              disabled={isSubmitting}
             />
           </FormFieldWrapper>
 
@@ -120,6 +155,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               size="md"
               style="solid__primary"
               className="btn_email_join_submit"
+              disabled={isSubmitting}
             >
               이메일로 가입하기
             </BaseButton>
@@ -130,6 +166,7 @@ const ScreenJoinEmail = ({ onSignUpComplete }) => {
               style="line__black"
               className="btn_email_join_submit"
               onClick={handleGmailConnect}
+              disabled={isSubmitting}
             >
               빠르게 GMAIL 연동하기
             </BaseButton>
