@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 const AUTH_STORAGE_KEY = "demo-auth-state";
+const SIGNUP_COMPLETE_STORAGE_KEY = "demo-signup-complete";
 const DEFAULT_USERS_ENDPOINT = "/api/auth/default-users";
 const API_BASE_URL = (import.meta.env?.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
@@ -305,6 +306,12 @@ const loadAuthState = () => {
   }
 };
 
+const markSignupComplete = (userId) => {
+  if (typeof sessionStorage === "undefined") return;
+  if (!userId) return;
+  sessionStorage.setItem(SIGNUP_COMPLETE_STORAGE_KEY, userId);
+};
+
 const formatPhone = (value = "") => {
   const digits = String(value).replace(/\D/g, "");
   if (digits.length < 10) return digits;
@@ -554,6 +561,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     setState((previous) => ({ ...previous, currentUserId: matchedUser.id }));
+    markSignupComplete(matchedUser.id);
     return normalizeUserShape(matchedUser);
   };
 
@@ -628,6 +636,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const savedUser = upsertUser(newUser);
+    markSignupComplete(savedUser?.id);
     return normalizeUserShape(savedUser);
   };
 
@@ -691,6 +700,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const savedUser = upsertUser(resolvedUser);
+    markSignupComplete(savedUser?.id);
     return normalizeUserShape(savedUser);
   };
 
@@ -701,6 +711,7 @@ export const AuthProvider = ({ children }) => {
   const deleteAccount = () => {
     if (typeof sessionStorage !== "undefined") {
       sessionStorage.removeItem(AUTH_STORAGE_KEY);
+      sessionStorage.removeItem(SIGNUP_COMPLETE_STORAGE_KEY);
     }
 
     shouldPersistRef.current = false;
