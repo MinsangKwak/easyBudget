@@ -1,36 +1,37 @@
 .base_select {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .base_select__label {
-  font-size: var(--font-size-3xs);
+    font-size: var(--font-size-3xs);
 }
 
 .base_select__control {
-  position: relative;
-  display: flex;
-  align-items: center;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .base_select__field {
-  width: 100%;
-  border: 0.1rem solid var(--color-border-light);
-  border-radius: 1rem;
-  padding: 1.2rem 3.6rem 1.2rem 1.2rem;
-  background: var(--color-white);
-  appearance: none;
-  font-size:1.4rem;
+    width: 100%;
+    padding: 1.4rem 3.6rem 1.4rem 1rem;
+    border-radius: var(--radius-md);
+    border: 0.2rem dashed var(--color-black-100);
+    background: color-mix(in srgb, var(--color-white) 80%, var(--color-white-100) 20%);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-black);
+    color: var(--color-black-100);
 }
 
 .base_select__field:disabled {
-  opacity: 0.5;
+    opacity: 0.5;
 }
 
 .base_select__icon {
-  position: absolute;
-  right: 1.2rem;
-  pointer-events: none;
-  color: var(--color-grey-600);
+    position: absolute;
+    right: 1rem;
+    font-size: var(--font-size-2xl);
+    color: var(--color-black-100);
 }

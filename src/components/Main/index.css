@@ -52,22 +52,6 @@
     width: 100%;
 }
 
-.month_select_box .base_select__field {
-    height: 4.4rem;
-    padding: 1.4rem 3.6rem 1.4rem 1rem;
-    border-radius: var(--radius-md);
-    border: 0.2rem dashed var(--color-black-100);
-    background: color-mix(in srgb, var(--color-white) 80%, var(--color-white-100) 20%);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-black);
-    color: var(--color-black-100);
-}
-
-.month_select_box .base_select__icon {
-    right: 1rem;
-    font-size: var(--font-size-2xl);
-    color: var(--color-black-100);
-}
 
 .card_body {
     margin-top: 1.2rem;
