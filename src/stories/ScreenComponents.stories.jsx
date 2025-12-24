@@ -139,9 +139,7 @@ export const Category = {
 
 export const Join = {
   name: "Join",
-  render: () => (
-    <ScreenJoin onClickCert={() => {}} onClickEmail={() => {}} />
-  ),
+  render: () => <ScreenJoin onClickCert={() => {}} onClickEmail={() => {}} />,
 };
 
 export const JoinEmail = {
@@ -161,9 +159,7 @@ export const CertificateFlow = {
 
 export const CertificateSelect = {
   name: "ScreenCertSelect",
-  render: () => (
-    <ScreenCertSelect bankList={bankList} onSelectBank={() => {}} />
-  ),
+  render: () => <ScreenCertSelect bankList={bankList} onSelectBank={() => {}} />,
 };
 
 export const CertificateUserForm = {

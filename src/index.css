@@ -1,142 +1,142 @@
 :root {
-    --color-white: #ffffff;
-    --color-white-100: #f5f5f5;
+  --color-white: #ffffff;
+  --color-white-100: #f5f5f5;
 
-    --color-grey-100: #dddaf0;
-    --color-grey-200: #cfcbe2;
-    --color-grey-400: #6b6789;
+  --color-grey-100: #dddaf0;
+  --color-grey-200: #cfcbe2;
+  --color-grey-400: #6b6789;
 
-    --color-border-light: #e8e5fa;
-    --color-border-muted: #d9d3ef;
-    --color-grey-600: #534f70;
+  --color-border-light: #e8e5fa;
+  --color-border-muted: #d9d3ef;
+  --color-grey-600: #534f70;
 
-    --color-black: #08072d;
-    --color-black-100: #120f3f;
-    --color-black-200: #4f4875;
+  --color-black: #08072d;
+  --color-black-100: #120f3f;
+  --color-black-200: #4f4875;
 
-    --color-primary: #6c3ffe;
-    --color-primary-200: #cbbafd;
-    --color-primary-600: #5126d6;
+  --color-primary: #6c3ffe;
+  --color-primary-200: #cbbafd;
+  --color-primary-600: #5126d6;
 
-    --color-secondary-midnight: #090040;
-    --color-secondary-royal: #471396;
-    --color-secondary-vivid: #b13bff;
-    --color-secondary-amber: #ffcc00;
+  --color-secondary-midnight: #090040;
+  --color-secondary-royal: #471396;
+  --color-secondary-vivid: #b13bff;
+  --color-secondary-amber: #ffcc00;
 
-    --color-surface-ghost: #f7f7f7c1;
-    --color-surface-info: color-mix(in srgb, var(--color-secondary-vivid) 8%, #f3f6ff 92%);
-    --color-surface-success: color-mix(in srgb, var(--color-secondary-amber) 16%, #f7fee7 84%);
-    --muted: var(--color-black-200);
+  --color-surface-ghost: #f7f7f7c1;
+  --color-surface-info: color-mix(in srgb, var(--color-secondary-vivid) 8%, #f3f6ff 92%);
+  --color-surface-success: color-mix(in srgb, var(--color-secondary-amber) 16%, #f7fee7 84%);
+  --muted: var(--color-black-200);
 
-    --color-tone-iris: var(--color-primary);
-    --color-tone-lilac: var(--color-secondary-royal);
-    --color-tone-amethyst: var(--color-secondary-vivid);
-    --color-tone-plum: var(--color-secondary-midnight);
-    --color-tone-blush: var(--color-secondary-amber);
-    --color-tone-emerald: #1fa66c;
+  --color-tone-iris: var(--color-primary);
+  --color-tone-lilac: var(--color-secondary-royal);
+  --color-tone-amethyst: var(--color-secondary-vivid);
+  --color-tone-plum: var(--color-secondary-midnight);
+  --color-tone-blush: var(--color-secondary-amber);
+  --color-tone-emerald: #1fa66c;
 
-    --color-indigo-500: #4b4fa6;
-    --color-indigo-300: #88a5f2;
-    --color-success-text: #2f6e1a;
-    --color-link: #4c7bff;
-    --color-text-strong: var(--color-black-100);
-    --color-text-muted-400: #4b4c64;
-    --color-grey-500: #8b88a6;
+  --color-indigo-500: #4b4fa6;
+  --color-indigo-300: #88a5f2;
+  --color-success-text: #2f6e1a;
+  --color-link: #4c7bff;
+  --color-text-strong: var(--color-black-100);
+  --color-text-muted-400: #4b4c64;
+  --color-grey-500: #8b88a6;
 
-    --shadow-primary-focus: 0 0 0 3px rgba(108, 63, 254, 0.2);
+  --shadow-primary-focus: 0 0 0 3px rgba(108, 63, 254, 0.2);
 
-    --font-size-3xs: 0.875rem;
-    --font-size-2xs: 1rem;
-    --font-size-xs: 1.1rem;
-    --font-size-sm: 1.2rem;
-    --font-size-md: 1.3rem;
-    --font-size-lg: 1.4rem;
-    --font-size-xl: 1.5rem;
-    --font-size-2xl: 1.6rem;
-    --font-size-3xl: 1.8rem;
-    --font-size-4xl: 2rem;
-    --font-size-5xl: 2.6rem;
-    --font-size-6xl: 2.4rem;
-    --font-size-7xl: 3.2rem;
-    --font-size-8xl: 4rem;
+  --font-size-3xs: 0.875rem;
+  --font-size-2xs: 1rem;
+  --font-size-xs: 1.1rem;
+  --font-size-sm: 1.2rem;
+  --font-size-md: 1.3rem;
+  --font-size-lg: 1.4rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 1.6rem;
+  --font-size-3xl: 1.8rem;
+  --font-size-4xl: 2rem;
+  --font-size-5xl: 2.6rem;
+  --font-size-6xl: 2.4rem;
+  --font-size-7xl: 3.2rem;
+  --font-size-8xl: 4rem;
 
-    --shadow-soft: 0 16px 40px rgba(9, 0, 64, 0.16);
+  --shadow-soft: 0 16px 40px rgba(9, 0, 64, 0.16);
 
-    --radius-lg: 18px;
-    --radius-md: 14px;
-    --radius-sm: 10px;
-    --radius-xs: 5px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 5px;
 
-    --font-weight-regular: 400;
-    --font-weight-medium: 500;
-    --font-weight-bold: 700;
-    --font-weight-extrabold: 800;
-    --font-weight-black: 900;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
 
-    font-family:
-        "Pretendard",
-        "Noto Sans KR",
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Oxygen,
-        Ubuntu,
-        Cantarell,
-        "Fira Sans",
-        "Droid Sans",
-        "Helvetica Neue",
-        sans-serif;
-    line-height: 1.6;
-    font-weight: var(--font-weight-regular);
-    color: var(--color-black-100);
-    background-color: var(--color-white);
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-text-size-adjust: 100%;
+  font-family:
+    "Pretendard",
+    "Noto Sans KR",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
+    sans-serif;
+  line-height: 1.6;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black-100);
+  background-color: var(--color-white);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
 }
 
 button,
 input,
 select,
 textarea {
-    font: inherit;
-    color: inherit;
-    -webkit-appearance: none;
-    appearance: none;
-    -webkit-tap-highlight-color: transparent;
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 input,
 select,
 textarea {
-    background-color: var(--color-white);
-    border-radius: 0;
+  background-color: var(--color-white);
+  border-radius: 0;
 }
 
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 img {
-    vertical-align:top;
-    max-width: 100%;
+  vertical-align: top;
+  max-width: 100%;
 }
 
 ul,
 ol,
 li {
-    list-style: none;
+  list-style: none;
 }

@@ -4,14 +4,14 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  width:14rem;
-  height:14rem;
+  width: 14rem;
+  height: 14rem;
 }
 
 .status_item {
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   position: absolute;
   z-index: 1;
   display: inline-flex;
@@ -36,7 +36,7 @@
 }
 
 .bg_spinner {
-    box-sizing:border-box;
+  box-sizing: border-box;
   width: 12.8rem;
   height: 12.8rem;
   border-radius: 50%;

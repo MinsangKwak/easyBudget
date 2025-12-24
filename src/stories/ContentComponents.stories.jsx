@@ -31,10 +31,7 @@ export const InnerBox = {
 export const SimpleList = {
   name: "List",
   render: () => (
-    <List
-      items={["첫 번째", "두 번째", "세 번째"]}
-      renderItem={(item) => <span>{item}</span>}
-    />
+    <List items={["첫 번째", "두 번째", "세 번째"]} renderItem={(item) => <span>{item}</span>} />
   ),
 };
 

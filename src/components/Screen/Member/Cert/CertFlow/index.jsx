@@ -88,8 +88,7 @@ const CertFlow = ({ onComplete, onExit }) => {
     }
 
     if (requiresCaptcha) {
-      const isCaptchaValid =
-        captchaValue.trim().toUpperCase() === captchaCode.toUpperCase();
+      const isCaptchaValid = captchaValue.trim().toUpperCase() === captchaCode.toUpperCase();
 
       if (!isCaptchaValid) {
         setErrorMessage("보안문자를 정확히 입력해주세요.");
@@ -136,7 +135,6 @@ const CertFlow = ({ onComplete, onExit }) => {
 
   return (
     <>
-
       {step === CERT_STEPS.STEP1 && (
         <ScreenCertSelect bankList={bankList} onSelectBank={handleSelectBank} />
       )}
