@@ -1,6 +1,5 @@
 import "../../Main/index.css";
 import { useRef } from "react";
-import { FiChevronDown } from "react-icons/fi";
 
 import Screen from "../../Layout/Screen";
 import Title from "../../Content/Title";
@@ -11,6 +10,7 @@ import AddDataSheet from "../../Main/AddDataSheet";
 import TransactionSheet from "../../Main/TransactionSheet";
 import AuthRequiredModal from "../../Main/AuthRequiredModal";
 import { formatKoreanWon } from "../../Main/utils";
+import BaseSelectBox from "../../Form/BaseSelectBox";
 
 const ScreenSpend = ({
     onRequestSignUp,
@@ -23,7 +23,6 @@ const ScreenSpend = ({
     const swipeStartX = useRef(null);
     const { paymentMethods } = sectionIds;
     const {
-        monthLabel,
         monthKey,
         monthOptions,
         setMonthKey,
@@ -81,22 +80,14 @@ const ScreenSpend = ({
             <Inner>
                 <div className="card_filters">
                     <div className="report_filters period_filters" role="group" aria-label="기간 필터">
-                        <label className="month_btn" aria-label="월 선택">
-                            <span className="month_btn__label">{monthLabel}</span>
-                            <FiChevronDown />
-                            <select
-                                className="month_select"
-                                value={monthKey}
-                                onChange={(event) => setMonthKey?.(event.target.value)}
-                                aria-label="월 선택"
-                            >
-                                {monthOptions.map((option) => (
-                                    <option key={option.key} value={option.key}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
+                        <BaseSelectBox
+                            id="month-select-spend"
+                            className="month_select_box"
+                            options={monthOptions}
+                            value={monthKey}
+                            onChange={(event) => setMonthKey?.(event.target.value)}
+                            aria-label="월 선택"
+                        />
                     </div>
                 </div>
 

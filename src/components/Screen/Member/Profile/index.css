@@ -7,13 +7,13 @@
 
 .profile_card {
     width: 100%;
-    max-width: 360px;
+    max-width: 36rem;
     margin: 0 auto 2rem;
     padding: 1.6rem;
-    border: 1px solid var(--color-grey-100);
-    border-radius: 12px;
+    border: 0.1rem solid var(--color-grey-100);
+    border-radius: 1.2rem;
     background: var(--color-white);
-    box-shadow: 0 10px 22px rgba(66, 83, 99, 0.08);
+    box-shadow: 0 1rem 2.2rem rgba(66, 83, 99, 0.08);
 }
 
 .profile_card--empty {
@@ -26,7 +26,7 @@
     justify-content: space-between;
     gap: 1.2rem;
     padding: 0.8rem 0;
-    border-bottom: 1px dashed var(--color-grey-100);
+    border-bottom: 0.1rem dashed var(--color-grey-100);
 }
 
 .profile_field:last-child {
@@ -47,11 +47,11 @@
 }
 
 .btn_profile_home {
-    max-width: 360px;
+    max-width: 36rem;
     margin: 0 auto;
 }
 
 .btn_profile_delete {
-    max-width: 360px;
+    max-width: 36rem;
     margin: 1rem auto 0;
 }
