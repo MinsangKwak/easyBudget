@@ -70,7 +70,7 @@ const ScreenMain = ({
       </Title>
       <SubTitle>수치부터 보여주는 시원한 가계부</SubTitle>
       <Inner>
-        <YearlySummary summary={yearlySummary} />
+        <YearlySummary summary={yearlySummary} isLinkedAccount={isLinkedAccount} />
         <ReportSection
           monthLabel={monthLabel}
           monthKey={monthKey}

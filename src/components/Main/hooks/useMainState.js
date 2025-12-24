@@ -34,6 +34,12 @@ const buildSpendStats = (entries, targetType) => {
 const computeEntriesTotal = (entries) =>
   entries.reduce((accumulator, entry) => accumulator + Math.max(0, entry.amount), 0);
 
+const buildSeedCategoryInputs = () =>
+  CATEGORY_OPTIONS.reduce((accumulator, option) => {
+    accumulator[option.key] = "";
+    return accumulator;
+  }, {});
+
 const readLedgerMap = () => {
   if (typeof sessionStorage === "undefined") return {};
   try {
@@ -145,7 +151,10 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     items: [],
   });
   const [isSeedSheetOpen, setIsSeedSheetOpen] = useState(false);
-  const [seedInputs, setSeedInputs] = useState({ incomeTotal: "", spendTotal: "" });
+  const [seedInputs, setSeedInputs] = useState({
+    incomeTotal: "",
+    spendCategories: buildSeedCategoryInputs(),
+  });
   const [isSeededData, setIsSeededData] = useState(false);
 
   const [animationTime, setAnimationTime] = useState(0);
@@ -574,7 +583,7 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     setMonthKey(currentPeriod.key);
     setIsSeedSheetOpen(true);
     setIsSeededData(false);
-    setSeedInputs({ incomeTotal: "", spendTotal: "" });
+    setSeedInputs({ incomeTotal: "", spendCategories: buildSeedCategoryInputs() });
   }, [currentPeriod.key, currentPeriod.label, currentUser, shouldSkipSeed]);
 
   useEffect(() => {
@@ -606,9 +615,33 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
     if (!currentUser || shouldSkipSeed) return;
 
     const parsedIncome = clampValue(parseNumberSafely(seedInputs.incomeTotal), 0, 20000000);
-    const parsedSpend = clampValue(parseNumberSafely(seedInputs.spendTotal), 0, 20000000);
+    const spendSeedEntries = CATEGORY_OPTIONS.flatMap((option) => {
+      const rawValue = seedInputs.spendCategories?.[option.key];
+      const parsedSpend = clampValue(parseNumberSafely(rawValue), 0, 20000000);
+      if (!parsedSpend) return [];
+      return [
+        {
+          id: `spend-seed-${option.key}-${Date.now()}`,
+          categoryKey: option.key,
+          categoryLabel: option.label,
+          amount: parsedSpend,
+          paymentKey: "card_seed",
+          paymentLabel: "초기 지출",
+          paymentLogo: "W",
+          paymentGroupKey: "card",
+          paymentGroupLabel: "카드지출",
+          spendType: "variable",
+          status: "paid",
+          dateLabel: currentPeriod.label,
+        },
+      ];
+    });
+    const parsedSpendTotal = spendSeedEntries.reduce(
+      (accumulator, entry) => accumulator + entry.amount,
+      0,
+    );
 
-    if (!parsedIncome && !parsedSpend) return;
+    if (!parsedIncome && !parsedSpendTotal) return;
 
     const incomeSeedEntries =
       parsedIncome > 0
@@ -621,30 +654,11 @@ export const useMainState = ({ isLinkedAccount, ensureLinkedAccount, currentUser
             },
           ]
         : [];
-    const spendSeedEntries =
-      parsedSpend > 0
-        ? [
-            {
-              id: `spend-seed-${Date.now()}`,
-              categoryKey: "cat_misc",
-              categoryLabel: "결제·소통",
-              amount: parsedSpend,
-              paymentKey: "card_seed",
-              paymentLabel: "초기 지출",
-              paymentLogo: "W",
-              paymentGroupKey: "card",
-              paymentGroupLabel: "카드지출",
-              spendType: "variable",
-              status: "paid",
-              dateLabel: currentPeriod.label,
-            },
-          ]
-        : [];
 
     const nextBudget = {
       incomeBudget: parsedIncome,
-      spendBudget: parsedSpend,
-      variableBudget: parsedSpend,
+      spendBudget: parsedSpendTotal,
+      variableBudget: parsedSpendTotal,
     };
 
     setMonthlyReports(

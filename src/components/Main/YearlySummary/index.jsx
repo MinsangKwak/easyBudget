@@ -2,7 +2,7 @@ import "./index.css";
 
 import { formatKoreanWon } from "../utils";
 
-const YearlySummary = ({ summary }) => {
+const YearlySummary = ({ summary, isLinkedAccount }) => {
   if (!summary) return null;
 
   const maxValue = Math.max(summary.income, summary.spend, 1);
@@ -10,6 +10,8 @@ const YearlySummary = ({ summary }) => {
     { key: "income", label: "총 수입", value: summary.income },
     { key: "spend", label: "총 지출", value: summary.spend },
   ];
+  const maskText = "??";
+  const isMasked = isLinkedAccount === false;
 
   return (
     <section className="card yearly_summary" aria-label="연간 요약">
@@ -22,12 +24,14 @@ const YearlySummary = ({ summary }) => {
           <div key={item.key} className="yearly_row">
             <div className="yearly_row__head">
               <span>{item.label}</span>
-              <span>{formatKoreanWon(item.value)}</span>
+              <span>{isMasked ? maskText : formatKoreanWon(item.value)}</span>
             </div>
             <div className="yearly_row__bar" role="presentation">
               <div
                 className="yearly_row__fill"
-                style={{ width: `${(item.value / maxValue) * 100}%` }}
+                style={{
+                  width: `${((isMasked ? 0 : item.value) / maxValue) * 100}%`,
+                }}
                 aria-hidden="true"
               />
             </div>
