@@ -27,8 +27,6 @@ const ReportSection = ({
 }) => {
   const statusOptions = [
     { key: "all", label: "전체" },
-    { key: "paid", label: "지출 완료" },
-    { key: "planned", label: "지출 예정" },
   ];
   const renderDetailList = (items, emptyLabel) => {
     if (!items.length) {
